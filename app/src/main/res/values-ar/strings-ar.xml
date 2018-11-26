@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">"ABS - التدقيق"</string>
+
+    <string name="mTextTitle_app">"الوصول 4 mii"</string>
+    <string name="mTextTitle_login">"تسجيل الدخول"</string>
+    <string name="mTextTitle_forget">"هل نسيت كلمة المرور؟"</string>
+    <string name="mTextTitle_inspector">"مفتش"</string>
+    <string name="mTextTitle_auditor">"مدقق حسابات"</string>
+    <string name="mTextTitle_agent_list">"قائمة الوكلاء"</string>
+    <string name="mTextTitle_submit">"خضع"</string>
+    <string name="mTextTitle_new_password">"كلمة السر الجديدة"</string>
+    <string name="mTextTitle_confirm_password">"تأكيد كلمة المرور"</string>
+    <string name="mTextTitle_update_profile">"تحديث الملف"</string>
+    <string name="mTextTitle_contact_us">"اتصل بنا"</string>
+    <string name="mTextTitle_sugesstion">"اقتراحات / تعليقات"</string>
+    <string name="mTextTitle_profile">"الملف الشخصي"</string>
+    <string name="mTextTitle_messages">"رسائل"</string>
+    <string name="mTextTile_forgot_your_password">"نسيت رقمك السري؟"</string>
+    <string name="mTextTitle_notification">"إعلام"</string>
+    <string name="mTextTitle_Setting">"ضبط"</string>
+    <string name="mTextTitle_my_audit">"التدقيق الخاص بي"</string>
+    <string name="mTextTitle_audit_overview">"نظرة عامة على التدقيق"</string>
+    <string name="mTextTitle_email_text">"أدخل عنوان البريد الإلكتروني الخاص بك لإعادة تعيين كلمة المرور الخاصة بك"</string>
+
+    <string name="mTextMenu_Account">"الحساب"</string>
+    <string name="mTextMenu_History">"التاريخ"</string>
+    <string name="mTextMenu_Reports">"تقارير"</string>
+    <string name="mTextMenu_language">"لغة"</string>
+    <string name="mTextMenu_Help">"مساعدة"</string>
+    <string name="mTextMenu_Logout">"الخروج"</string>
+
+    <string name="mText_forgot_your_password">"نسيت رقمك السري"</string>
+    <string name="mText_reset_password">"اعد ضبط كلمه السر"</string>
+    <string name="mText_enter_password_here">"أدخل كلمة المرور الخاصة بك هنا"</string>
+    <string name="mText_old_password">"كلمة المرور القديمة"</string>
+    <string name="mText_update">"تحديث"</string>
+    <string name="mText_send">"إرسال"</string>
+    <string name="mText_update_details">"تحديث التفاصيل"</string>
+    <string name="mText_chat_with_admin">"الدردشة مع المسؤول"</string>
+    <string name="mText_share_audit">"حصة التدقيق"</string>
+    <string name="mText_how_to_use">"كيف تستعمل"</string>
+    <string name="mText_language">"لغة"</string>
+
+    <string name="mTextFile_error_valid_email">"الرجاء إدخال عنوان بريد إلكتروني صالح"</string>
+    <string name="mTextFile_error_enter_email">"الرجاء إدخال عنوان البريد الإلكتروني الخاص بك"</string>
+    <string name="mTextFile_error_enter_subject">"يرجى إدخال الموضوع"</string>
+    <string name="mTextFile_error_enter_description">"يرجى إدخال الوصف"</string>
+    <string name="mTextFile_error_enter_password">"من فضلك أدخل رقمك السري"</string>
+    <string name="mTextFile_error_enter_first_name">"يرجى ادخال الاسم الاول"</string>
+    <string name="mTextFile_error_enter_last_name">"يرجى إدخال اسمك الأخير"</string>
+    <string name="mTextFile_error_enter_contact">"الرجاء إدخال رقم الاتصال الخاص بك"</string>
+    <string name="mTextFile_error_something_went_wrong">"هناك خطأ ما"</string>
+    <string name="mTextFile_error_no_record_found">"لا يوجد سجلات"</string>
+
+    <string name="mHint_search_by_agent_name">"البحث عن طريق اسم الوكيل"</string>
+    <string name="mHint_search_by_user">"البحث عن طريق المستخدم"</string>
+
+    <string name="mEditHint_password">"كلمه السر"</string>
+    <string name="mEditHint_useremail">"البريد الإلكتروني"</string>
+    <string name="mEditHint_username">"اسم المستخدم"</string>
+    <string name="mEditHint_email_address">"أدخل عنوان بريدك الالكتروني"</string>
+    <string name="mEditHint_first_name">"الاسم الاول"</string>
+    <string name="mEditHint_last_name">"الكنية"</string>
+    <string name="mEditHint_email">"عنوان بريد الكتروني"</string>
+    <string name="mEditHint_contact_number">"رقم الاتصال"</string>
+    <string name="mEditHint_subject">"موضوع"</string>
+    <string name="mEditHint_Description">"وصف"</string>
+    <string name="mEditHint_name">"اسم"</string>
+
+    <string name="mText_push_notification">"دفع الإخطار"</string>
+    <string name="mText_audit">"تدقيق"</string>
+    <string name="mText_message">"رسالة"</string>
+    <string name="mText_report">"أبلغ عن"</string>
+    <string name="mText_pages">"صفحات"</string>
+    <string name="mText_about_us">"معلومات عنا"</string>
+    <string name="mText_term_and_condition">"الأحكام والشروط"</string>
+    <string name="mtext_standard_and_good_practices">"الممارسات القياسية والحسنة"</string>
+    <string name="mText_news">"أخبار"</string>
+    <string name="mText_contact_us">"اتصل بنا"</string>
+    <string name="mText_field_contact_us">"اتصل بنا"</string>
+    <string name="mText_help">"مساعدة"</string>
+    <string name="mText_logout">"الخروج"</string>
+
+    <string name="mText_assign_by">"تخصيص حسب: -"</string>
+    <string name="mText_title">"عنوان:-"</string>
+    <string name="mText_target_date">"تاريخ التسليم:-"</string>
+    <string name="mText_view">"رأي"</string>
+    <string name="mText_reject">"رفض"</string>
+    <string name="mText_accept">"قبول"</string>
+    <string name="mText_agent_detail">"تفاصيل الوكيل"</string>
+    <string name="mText_client_detail">"تفاصيل العميل"</string>
+    <string name="mText_attachment_details">"تفاصيل المرفقات"</string>
+    <string name="mText_back_again">"اضغط مرة أخرى للخروج"</string>
+
+</resources>

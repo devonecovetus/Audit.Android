@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/colorOffWhite"
+    android:layout_height="200dp">
+
+    <View
+        android:layout_alignParentLeft="true"
+        android:id="@+id/mStatusLine"
+        android:background="#ff0000"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"/>
+
+
+
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:id="@+id/mCenterLayout"
+        android:layout_marginLeft="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/mStatusLine"
+        android:orientation="vertical">
+
+        <ABS_CUSTOM_VIEW.TextViewSemiBold
+            android:text="@string/mText_assign_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+        <ABS_CUSTOM_VIEW.TextViewSemiBold
+            android:text="@string/mText_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+        <ABS_CUSTOM_VIEW.TextViewSemiBold
+            android:text="@string/mText_target_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/mCenterLayout"
+        android:orientation="vertical">
+
+        <ABS_CUSTOM_VIEW.TextViewSemiBold
+            android:text="@string/mText_assign_by"
+            android:id="@+id/mTxtAgentName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+        <ABS_CUSTOM_VIEW.TextViewSemiBold
+            android:text="@string/mText_title"
+            android:id="@+id/mTxtAuditTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+        <ABS_CUSTOM_VIEW.TextViewSemiBold
+            android:text="@string/mText_target_date"
+            android:id="@+id/mTxtAuditDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+
+    </LinearLayout>
+
+
+
+    <RelativeLayout
+        android:layout_marginRight="40dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/mLayoutSignIn"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_corner_signin_button">
+
+        <ABS_CUSTOM_VIEW.TextViewSemiBold
+            android:id="@+id/mTextNormal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/mText_view"
+            android:textColor="@color/white"
+            android:textSize="25dp" />
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

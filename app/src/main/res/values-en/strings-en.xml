@@ -1,0 +1,105 @@
+<resources>
+    <string name="app_name">ABS - Audit</string>
+
+    <string name="mTextTitle_app">a c c e s s 4 m i i</string>
+    <string name="mTextTitle_login">SIGN IN</string>
+    <string name="mTextTitle_forget">Forgot Password?</string>
+    <string name="mTextTitle_inspector">Inspector</string>
+    <string name="mTextTitle_auditor">Auditor</string>
+    <string name="mTextTitle_agent_list">Agent List</string>
+    <string name="mTextTitle_submit">SUBMIT</string>
+    <string name="mTextTitle_new_password">New Password</string>
+    <string name="mTextTitle_confirm_password">Confirm Password</string>
+    <string name="mTextTitle_update_profile">Update Profile</string>
+    <string name="mTextTitle_contact_us">Contact Us</string>
+    <string name="mTextTitle_sugesstion">Suggestions / Feedback</string>
+    <string name="mTextTitle_profile">Profile</string>
+    <string name="mTextTitle_messages">Messages</string>
+    <string name="mTextTitle_audit_overview">Audit Overview</string>
+    <string name="mTextTile_forgot_your_password">forgot your password?</string>
+    <string name="mTextTitle_notification">Notification</string>
+    <string name="mTextTitle_Setting">Settings</string>
+    <string name="mTextTitle_my_audit">My Audit</string>
+    <string name="mTextTitle_email_text">Enter your email address to reset your password</string>
+
+    <string name="mTextMenu_Account">Account</string>
+    <string name="mTextMenu_History">History</string>
+    <string name="mTextMenu_Reports">Reports</string>
+    <string name="mTextMenu_language">Language</string>
+    <string name="mTextMenu_Help">Help</string>
+    <string name="mTextMenu_Logout">Logout</string>
+
+    <string name="mText_forgot_your_password">Forgot your password?</string>
+    <string name="mText_reset_password">Reset your password</string>
+    <string name="mText_enter_password_here">Enter your password here</string>
+    <string name="mText_old_password">Old Password</string>
+    <string name="mText_update">Update</string>
+    <string name="mText_send">Send</string>
+    <string name="mText_update_details">Update Details</string>
+    <string name="mText_chat_with_admin">Chat With Admin</string>
+    <string name="mText_share_audit">Share ACCESS4MII</string>
+    <string name="mText_how_to_use">How To Use</string>
+    <string name="mText_language">Language</string>
+
+    <string name="mTextFile_error_valid_email">Please enter valid email address.</string>
+    <string name="mTextFile_error_enter_email">Please enter your email address.</string>
+    <string name="mTextFile_error_enter_subject">Please enter the subject.</string>
+    <string name="mTextFile_error_enter_description">Please enter the description.</string>
+    <string name="mTextFile_error_enter_password">Please enter your password.</string>
+    <string name="mTextFile_error_enter_first_name">Please enter your first name.</string>
+    <string name="mTextFile_error_enter_name">Please enter your name.</string>
+    <string name="mTextFile_error_enter_last_name">Please enter your last name.</string>
+    <string name="mTextFile_error_enter_contact">Please enter your contact number.</string>
+    <string name="mTextFile_error_something_went_wrong">Something went wrong</string>
+    <string name="mTextFile_error_no_record_found">No Record Found</string>
+
+    <string name="mHint_search_by_agent_name">Search by agent name</string>
+    <string name="mHint_search_by_user">Search by user</string>
+
+    <string name="mEditHint_password">Password</string>
+    <string name="mEditHint_useremail">Email</string>
+    <string name="mEditHint_username">Email</string>
+    <string name="mEditHint_email_address">Enter Your Email Address</string>
+    <string name="mEditHint_first_name">First Name</string>
+    <string name="mEditHint_last_name">Last Name</string>
+    <string name="mEditHint_email">Email Address</string>
+    <string name="mEditHint_contact_number">Contact Number</string>
+    <string name="mEditHint_subject">Subject</string>
+    <string name="mEditHint_Description">Description</string>
+    <string name="mEditHint_name">Name</string>
+
+    <string name="mText_push_notification">Push Notification</string>
+    <string name="mText_audit">Audit</string>
+    <string name="mText_message">Message</string>
+    <string name="mText_report">Report</string>
+    <string name="mText_pages">Pages</string>
+    <string name="mText_about_us">About Us</string>
+    <string name="mText_term_and_condition">Term and Condition</string>
+    <string name="mtext_standard_and_good_practices">Standard and Good Practices</string>
+    <string name="mText_news">News</string>
+    <string name="mText_contact_us">Contact Us</string>
+    <string name="mText_field_contact_us">Contact Us</string>
+    <string name="mText_help">Help</string>
+
+    <string name="mText_target_date">Target Date:</string>
+    <string name="mText_assign_by">Assigned By:</string>
+    <string name="mText_title">Title:</string>
+
+    <string name="mText_view">View</string>
+    <string name="mText_reject">Reject</string>
+    <string name="mText_accept">Accept</string>
+    <string name="mText_agent_detail">Agent Detail</string>
+    <string name="mText_client_detail">Contact Person</string>
+    <string name="mText_attachment_details">Attachment Details</string>
+    <string name="mText_back_again">Press again to exit</string>
+    <string name="mText_success">Your profile has been updated successfully.</string>
+
+    <string name="mText_Thanku">Thank You !</string>
+    <string name="mText_Thanku_content">Thank you for contacting us !</string>
+    <string name="mText_home">Home</string>
+    <string name="mText_sessionexpire">Your account is already logged in on another device. Try logging in again !</string>
+    <string name="mTextAlert_logout">Are you sure you want to logout ?</string>
+    <string name="mText_logout">Logout</string>
+    <string name="mText_yes">Yes</string>
+    <string name="mText_no">No</string>
+</resources>
