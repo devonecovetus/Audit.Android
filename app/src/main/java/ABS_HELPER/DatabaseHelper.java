@@ -15,8 +15,11 @@ import static ABS_HELPER.StringUtils.audit_due_date;
 import static ABS_HELPER.StringUtils.audit_id;
 import static ABS_HELPER.StringUtils.audit_title;
 import static ABS_HELPER.StringUtils.audit_work_status;
+import static ABS_HELPER.StringUtils.ct_tb_audit_main_location;
+import static ABS_HELPER.StringUtils.ct_tb_audit_question;
+import static ABS_HELPER.StringUtils.ct_tb_audit_sub_location;
+import static ABS_HELPER.StringUtils.ct_tb_list_audit;
 import static ABS_HELPER.StringUtils.database_name;
-import static ABS_HELPER.StringUtils.mDBStoreAudit;
 import static ABS_HELPER.StringUtils.tb_list_audit;
 import static ABS_HELPER.StringUtils.user_id;
 
@@ -30,13 +33,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 //        sqLiteDatabase.execSQL(tb_list_audit);
-        sqLiteDatabase.execSQL(mDBStoreAudit);
+        sqLiteDatabase.execSQL(ct_tb_list_audit);
+        sqLiteDatabase.execSQL(ct_tb_audit_main_location);
+        sqLiteDatabase.execSQL(ct_tb_audit_sub_location);
+        sqLiteDatabase.execSQL(ct_tb_audit_question);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tb_list_audit);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + mDBStoreAudit);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ct_tb_list_audit);
         onCreate(sqLiteDatabase);
     }
 

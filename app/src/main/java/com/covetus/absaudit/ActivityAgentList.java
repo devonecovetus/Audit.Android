@@ -27,6 +27,11 @@ public class ActivityAgentList extends Activity {
     @BindView(R.id.mImgBack)
     ImageView mImgBack;
 
+
+
+
+
+
     /*click for going back*/
     @OnClick(R.id.mImgBack)
     void mClose() {

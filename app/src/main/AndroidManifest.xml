@@ -18,10 +18,7 @@
 
         <activity android:name=".ActivitySplash">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
 
         </activity>
 
@@ -69,6 +66,15 @@
         <activity android:name=".ActivityResetPassword"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".ActivityThankYou" />
+
+        <activity android:name=".ActivitySelectCountryStandard">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
 
 
     </application>
