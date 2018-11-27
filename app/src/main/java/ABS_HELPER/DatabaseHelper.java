@@ -9,10 +9,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 import ABS_GET_SET.Audit;
+import ABS_GET_SET.AuditMainLocation;
+import ABS_GET_SET.AuditSubLocation;
 
 import static ABS_HELPER.StringUtils.audit_assign_by;
 import static ABS_HELPER.StringUtils.audit_due_date;
 import static ABS_HELPER.StringUtils.audit_id;
+import static ABS_HELPER.StringUtils.audit_location_desc;
+import static ABS_HELPER.StringUtils.audit_location_id;
+import static ABS_HELPER.StringUtils.audit_location_server_id;
+import static ABS_HELPER.StringUtils.audit_location_title;
+import static ABS_HELPER.StringUtils.audit_main_location_id;
+import static ABS_HELPER.StringUtils.audit_sub_location_server_id;
+import static ABS_HELPER.StringUtils.audit_sub_location_title;
 import static ABS_HELPER.StringUtils.audit_title;
 import static ABS_HELPER.StringUtils.audit_work_status;
 import static ABS_HELPER.StringUtils.ct_tb_audit_main_location;
@@ -57,6 +66,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(audit_work_status, audit.getmStatus());
         db.insert(tb_list_audit, null, values);
     }
+
+
+    //Insert tb_audit_main_location
+    public void insert_tb_audit_main_location(AuditMainLocation auditMainLocation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(user_id,auditMainLocation.getmStrUserId());
+        values.put(audit_id, auditMainLocation.getmStrAuditId());
+        values.put(audit_location_title, auditMainLocation.getmStrLocationTitle());
+        values.put(audit_location_id, auditMainLocation.getmStrLocationId());
+        values.put(audit_location_desc, auditMainLocation.getmStrLocationDesc());
+        values.put(audit_location_server_id, auditMainLocation.getmStrLocationServerId());
+        db.insert(ct_tb_audit_main_location, null, values);
+    }
+
+
+
+    //Insert tb_audit_sub_location
+    public void insert_tb_audit_sub_location(AuditSubLocation auditSubLocation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(user_id,auditSubLocation.getmStrUserId());
+        values.put(audit_id, auditSubLocation.getmStrAuditId());
+        values.put(audit_main_location_id, auditSubLocation.getmStrMainLocationId());
+        values.put(audit_sub_location_server_id, auditSubLocation.getmStrSubLocationServerId());
+        values.put(audit_sub_location_title, auditSubLocation.getmStrSubLocationTitle());
+        db.insert(ct_tb_audit_sub_location, null, values);
+    }
+
+
+
+
+
 
     //get all tb_list_audit
     public ArrayList<Audit> get_all_tb_list_audit(String mUserId) {
