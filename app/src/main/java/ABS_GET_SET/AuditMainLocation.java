@@ -10,7 +10,6 @@ public class AuditMainLocation {
     String mStrAuditId;
     String mStrUserId;
     String mStrLocationTitle;
-    String mStrLocationId;
     String mStrLocationDesc;
     String mStrLocationServerId;
 
@@ -47,13 +46,7 @@ public class AuditMainLocation {
         this.mStrLocationTitle = mStrLocationTitle;
     }
 
-    public String getmStrLocationId() {
-        return mStrLocationId;
-    }
 
-    public void setmStrLocationId(String mStrLocationId) {
-        this.mStrLocationId = mStrLocationId;
-    }
 
     public String getmStrLocationDesc() {
         return mStrLocationDesc;

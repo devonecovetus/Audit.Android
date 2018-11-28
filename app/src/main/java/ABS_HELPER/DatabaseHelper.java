@@ -10,8 +10,13 @@ import java.util.ArrayList;
 
 import ABS_GET_SET.Audit;
 import ABS_GET_SET.AuditMainLocation;
+import ABS_GET_SET.AuditQuestion;
 import ABS_GET_SET.AuditSubLocation;
+import ABS_GET_SET.AuditSubQuestion;
 
+import static ABS_HELPER.StringUtils.audit_answer;
+import static ABS_HELPER.StringUtils.audit_answer_id;
+import static ABS_HELPER.StringUtils.audit_answer_type;
 import static ABS_HELPER.StringUtils.audit_assign_by;
 import static ABS_HELPER.StringUtils.audit_due_date;
 import static ABS_HELPER.StringUtils.audit_id;
@@ -20,15 +25,27 @@ import static ABS_HELPER.StringUtils.audit_location_id;
 import static ABS_HELPER.StringUtils.audit_location_server_id;
 import static ABS_HELPER.StringUtils.audit_location_title;
 import static ABS_HELPER.StringUtils.audit_main_location_id;
+import static ABS_HELPER.StringUtils.audit_main_question_id;
+import static ABS_HELPER.StringUtils.audit_main_question_server_id;
+import static ABS_HELPER.StringUtils.audit_question;
+import static ABS_HELPER.StringUtils.audit_question_server_id;
+import static ABS_HELPER.StringUtils.audit_question_type;
+import static ABS_HELPER.StringUtils.audit_sub_location_id;
 import static ABS_HELPER.StringUtils.audit_sub_location_server_id;
 import static ABS_HELPER.StringUtils.audit_sub_location_title;
+import static ABS_HELPER.StringUtils.audit_sub_question_server_id;
 import static ABS_HELPER.StringUtils.audit_title;
 import static ABS_HELPER.StringUtils.audit_work_status;
 import static ABS_HELPER.StringUtils.ct_tb_audit_main_location;
 import static ABS_HELPER.StringUtils.ct_tb_audit_question;
 import static ABS_HELPER.StringUtils.ct_tb_audit_sub_location;
+import static ABS_HELPER.StringUtils.ct_tb_audit_sub_questions;
 import static ABS_HELPER.StringUtils.ct_tb_list_audit;
 import static ABS_HELPER.StringUtils.database_name;
+import static ABS_HELPER.StringUtils.tb_audit_main_location;
+import static ABS_HELPER.StringUtils.tb_audit_question;
+import static ABS_HELPER.StringUtils.tb_audit_sub_location;
+import static ABS_HELPER.StringUtils.tb_audit_sub_questions;
 import static ABS_HELPER.StringUtils.tb_list_audit;
 import static ABS_HELPER.StringUtils.user_id;
 
@@ -46,6 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(ct_tb_audit_main_location);
         sqLiteDatabase.execSQL(ct_tb_audit_sub_location);
         sqLiteDatabase.execSQL(ct_tb_audit_question);
+        sqLiteDatabase.execSQL(ct_tb_audit_sub_questions);
     }
 
     @Override
@@ -69,22 +87,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //Insert tb_audit_main_location
-    public void insert_tb_audit_main_location(AuditMainLocation auditMainLocation) {
+    public int insert_tb_audit_main_location(AuditMainLocation auditMainLocation) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(user_id,auditMainLocation.getmStrUserId());
         values.put(audit_id, auditMainLocation.getmStrAuditId());
         values.put(audit_location_title, auditMainLocation.getmStrLocationTitle());
-        values.put(audit_location_id, auditMainLocation.getmStrLocationId());
         values.put(audit_location_desc, auditMainLocation.getmStrLocationDesc());
         values.put(audit_location_server_id, auditMainLocation.getmStrLocationServerId());
-        db.insert(ct_tb_audit_main_location, null, values);
+        db.insert(tb_audit_main_location, null, values);
+        Cursor cur = db.rawQuery("select last_insert_rowid()", null);
+        cur.moveToFirst();
+        int ID = cur.getInt(0);
+        return ID;
     }
 
 
 
     //Insert tb_audit_sub_location
-    public void insert_tb_audit_sub_location(AuditSubLocation auditSubLocation) {
+    public int insert_tb_audit_sub_location(AuditSubLocation auditSubLocation) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(user_id,auditSubLocation.getmStrUserId());
@@ -92,10 +113,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(audit_main_location_id, auditSubLocation.getmStrMainLocationId());
         values.put(audit_sub_location_server_id, auditSubLocation.getmStrSubLocationServerId());
         values.put(audit_sub_location_title, auditSubLocation.getmStrSubLocationTitle());
-        db.insert(ct_tb_audit_sub_location, null, values);
+        db.insert(tb_audit_sub_location, null, values);
+        Cursor cur = db.rawQuery("select last_insert_rowid()", null);
+        cur.moveToFirst();
+        int ID = cur.getInt(0);
+        return ID;
     }
 
 
+    //Insert tb_audit_question
+    public int insert_tb_audit_question(AuditQuestion auditQuestion) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(user_id,auditQuestion.getmStrUserId());
+        values.put(audit_id,auditQuestion.getmStrAuditId());
+        values.put(audit_main_location_id, auditQuestion.getmStrMainLocationId());
+        values.put(audit_sub_location_id, auditQuestion.getmStrSubLocationId());
+        values.put(audit_question_server_id, auditQuestion.getmStrQuestionServerId());
+        values.put(audit_question, auditQuestion.getmStrQuestion());
+        values.put(audit_answer, auditQuestion.getmStrAnswer());
+        values.put(audit_answer_id, auditQuestion.getmStrAnswerId());
+        values.put(audit_answer_type, auditQuestion.getmStrQuestionType());
+        values.put(audit_question_type, auditQuestion.getmStrQuestionType());
+        db.insert(tb_audit_question, null, values);
+        Cursor cur = db.rawQuery("select last_insert_rowid()", null);
+        cur.moveToFirst();
+        int ID = cur.getInt(0);
+        return ID;
+    }
+
+    //Insert tb_audit_sub_questions
+    public void insert_tb_audit_sub_questions(AuditSubQuestion auditSubQuestion) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(user_id,auditSubQuestion.getmStrUserId());
+        values.put(audit_id,auditSubQuestion.getmStrAuditId());
+        values.put(audit_main_question_id, auditSubQuestion.getmStrMainQuestionId());
+        values.put(audit_main_question_server_id,auditSubQuestion.getmStrMainQuestionServerId());
+        values.put(audit_sub_question_server_id, auditSubQuestion.getmStrSubQuestionServerId());
+        values.put(audit_question,auditSubQuestion.getmStrQuestion());
+        values.put(audit_answer, auditSubQuestion.getmStrAnswer());
+        values.put(audit_answer_id, auditSubQuestion.getmStrAnswerId());
+        values.put(audit_answer_type,auditSubQuestion.getmStrAnswerType());
+        db.insert(tb_audit_sub_questions, null, values);
+    }
 
 
 

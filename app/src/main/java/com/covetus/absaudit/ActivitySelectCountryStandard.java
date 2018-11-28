@@ -54,6 +54,10 @@ import ABS_ADAPTER.DocumentList;
 import ABS_CUSTOM_VIEW.TextViewBold;
 import ABS_CUSTOM_VIEW.TextViewSemiBold;
 import ABS_GET_SET.Audit;
+import ABS_GET_SET.AuditMainLocation;
+import ABS_GET_SET.AuditQuestion;
+import ABS_GET_SET.AuditSubLocation;
+import ABS_GET_SET.AuditSubQuestion;
 import ABS_HELPER.AppController;
 import ABS_HELPER.CommonUtils;
 import ABS_HELPER.DatabaseHelper;
@@ -88,6 +92,7 @@ public class ActivitySelectCountryStandard extends Activity {
     String mStrCountryId,mStrLanguageCode;
 
     String mAuditId;
+    DatabaseHelper db;
 
 
 
@@ -98,6 +103,7 @@ public class ActivitySelectCountryStandard extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_country_language);
         ButterKnife.bind(this);
+        db = new DatabaseHelper(ActivitySelectCountryStandard.this);
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
         mAuditId = bundle.getString("mAuditId");
@@ -174,9 +180,7 @@ public class ActivitySelectCountryStandard extends Activity {
     return;
     }
     CommonUtils.show(ActivitySelectCountryStandard.this);
-
-
-
+    mToGetDetaAndInsertInDatabase();
     }
 
 
@@ -249,12 +253,193 @@ public class ActivitySelectCountryStandard extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("id", PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
-                params.put("auth_token", PreferenceManager.getFormiiAuthToken(ActivitySelectCountryStandard.this));params.put("id", PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
+                /*params.put("id", PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
+                params.put("auth_token", PreferenceManager.getFormiiAuthToken(ActivitySelectCountryStandard.this));params.put("id", PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));*/
+                params.put("id", "70");
+                params.put("auth_token","fXQah0GZxq9+Rex3DUoLKTiTq9wQ24148LPnG1R7lek=1543235134");
                 return params;
             }
         };
         strRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 48, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(strRequest);
     }
+
+
+
+
+
+    /*api cal to get audit detail*/
+    void mToGetDetaAndInsertInDatabase() {
+        StringRequest strRequest = new StringRequest(Request.Method.POST, CommonUtils.mStrBaseUrl + "getQuestion",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String str) {
+                        hidePDialog();
+                        try {
+                            System.out.println("<><><>" + str);
+                            JSONObject response = new JSONObject(str);
+                            String mStrStatus = response.getString("status");
+                            if (mStrStatus.equals("1")) {
+                                JSONArray jsonArray = response.getJSONArray("response");
+                                for (int i =0;i<jsonArray.length();i++){
+                                JSONObject jsonArrayObject = jsonArray.getJSONObject(i);
+                                JSONArray JAMiltiLangModules = jsonArrayObject.getJSONArray("Milti_lang_modules");
+                                for (int j =0;j<JAMiltiLangModules.length();j++){
+                                JSONObject JOMainCategory = JAMiltiLangModules.getJSONObject(j);
+                                // main category
+                                String mStrMainCatID = JOMainCategory.getString("id");
+                                String mStrMainCatTitle = JOMainCategory.getString("title");
+                                String mStrMainCatDesc = JOMainCategory.getString("desc");
+
+                                AuditMainLocation auditMainLocation = new AuditMainLocation();
+                                auditMainLocation.setmStrAuditId("73");//audit id
+                                auditMainLocation.setmStrUserId("70");//user id
+                                auditMainLocation.setmStrLocationServerId(mStrMainCatID);
+                                auditMainLocation.setmStrLocationTitle(mStrMainCatTitle);
+                                auditMainLocation.setmStrLocationDesc(mStrMainCatDesc);
+                                int mainLocationLocalID = db.insert_tb_audit_main_location(auditMainLocation);
+                                JSONArray JASubCat = JOMainCategory.getJSONArray("categories");
+                                for (int k =0;k<JASubCat.length();k++){
+                                JSONObject JOSubCategory = JASubCat.getJSONObject(k);
+                                //sub category
+                                String mStrSubCatID = JOSubCategory.getString("id");
+                                String mStrSubCatTitle = JOSubCategory.getString("title");
+                                AuditSubLocation auditSubLocation = new AuditSubLocation();
+                                auditSubLocation.setmStrAuditId("73");
+                                auditSubLocation.setmStrUserId("70");
+                                auditSubLocation.setmStrMainLocationId(mainLocationLocalID+"");
+                                auditSubLocation.setmStrSubLocationServerId(mStrSubCatID);
+                                auditSubLocation.setmStrSubLocationTitle(mStrSubCatTitle);
+                                int subLocationLocalID = db.insert_tb_audit_sub_location(auditSubLocation);
+                                JSONArray JANormalQuestion = JOSubCategory.getJSONArray("normal_questions");
+                                for (int l =0;l<JANormalQuestion.length();l++){
+                                JSONObject JONormalQuestion = JANormalQuestion.getJSONObject(l);
+                                // normal question
+                                String mStrNormalQuestionID = JONormalQuestion.getString("id");
+                                String mStrNormalQuestion = JONormalQuestion.getString("question");
+                                String mStrNormalQuesAnswer = JONormalQuestion.getString("answer");
+                                String mStrNormalAnswerID = JONormalQuestion.getString("answernum");
+                                String mStrAnswerType = JONormalQuestion.getString("type");
+                                AuditQuestion auditQuestion = new AuditQuestion();
+                                auditQuestion.setmStrAuditId("73");
+                                auditQuestion.setmStrUserId("70");
+                                auditQuestion.setmStrMainLocationId(mainLocationLocalID+"");
+                                auditQuestion.setmStrSubLocationId(subLocationLocalID+"");
+                                auditQuestion.setmStrQuestion(mStrNormalQuestion);
+                                auditQuestion.setmStrQuestionServerId(mStrNormalQuestionID);
+                                auditQuestion.setmStrAnswer(mStrNormalQuesAnswer.replace("\r\n","#"));
+                                auditQuestion.setmStrAnswerId(mStrNormalAnswerID.replace(",","#"));
+                                auditQuestion.setmStrQuestionType("normal");
+                                auditQuestion.setmStrAnswerType(mStrAnswerType);
+                                int normalLocationLocalID = db.insert_tb_audit_question(auditQuestion);
+
+                                // sub question for normal question
+                                JSONArray JASubQuestion = JONormalQuestion.getJSONArray("sub_questions");
+                                for (int m = 0;m<JASubQuestion.length();m++){
+                                JSONObject JOSubQuestion = JASubQuestion.getJSONObject(m);
+                                String mStrSubQuestionId = JOSubQuestion.getString("id");
+                                String mStrSubQuestion = JOSubQuestion.getString("question");
+                                String mStrSubQuestionAns = JOSubQuestion.getString("answer");
+                                String mStrSubQuestionAnsID = JOSubQuestion.getString("answernum");
+                                String mStrSubAnsType = JOSubQuestion.getString("type");
+                                AuditSubQuestion auditSubQuestion = new AuditSubQuestion();
+                                auditSubQuestion.setmStrUserId("");
+                                auditSubQuestion.setmStrAuditId("");
+                                auditSubQuestion.setmStrSubQuestionServerId(mStrSubQuestionId);
+                                auditSubQuestion.setmStrQuestion(mStrSubQuestion);
+                                auditSubQuestion.setmStrAnswer(mStrSubQuestionAns.replace("\r\n","#"));
+                                auditSubQuestion.setmStrAnswerId(mStrSubQuestionAnsID.replace(",","#"));
+                                auditSubQuestion.setmStrAnswerType(mStrSubAnsType);
+                                auditSubQuestion.setmStrMainQuestionId(normalLocationLocalID+"");
+                                auditSubQuestion.setmStrMainQuestionServerId(mStrNormalQuestionID);
+                                db.insert_tb_audit_sub_questions(auditSubQuestion);
+                                }
+                                }
+                                    JSONArray JAMeasurementQuestion = JOSubCategory.getJSONArray("measurement_questions");
+                                    for (int n =0;n<JAMeasurementQuestion.length();n++){
+                                        JSONObject JOMeasurementQuestion = JAMeasurementQuestion.getJSONObject(n);
+                                        String mStrNormalQuestionID = JOMeasurementQuestion.getString("id");
+                                        String mStrNormalQuestion = JOMeasurementQuestion.getString("question");
+                                        String mStrNormalQuesAnswer = JOMeasurementQuestion.getString("answer");
+                                        String mStrNormalAnswerID = JOMeasurementQuestion.getString("answernum");
+                                        String mStrAnswerType = JOMeasurementQuestion.getString("type");
+                                        AuditQuestion auditQuestion = new AuditQuestion();
+                                        auditQuestion.setmStrAuditId("73");
+                                        auditQuestion.setmStrUserId("70");
+                                        auditQuestion.setmStrMainLocationId(mainLocationLocalID+"");
+                                        auditQuestion.setmStrSubLocationId(subLocationLocalID+"");
+                                        auditQuestion.setmStrQuestion(mStrNormalQuestion);
+                                        auditQuestion.setmStrQuestionServerId(mStrNormalQuestionID);
+                                        auditQuestion.setmStrAnswer(mStrNormalQuesAnswer.replace("\r\n","#"));
+                                        auditQuestion.setmStrAnswerId(mStrNormalAnswerID.replace(",","#"));
+                                        auditQuestion.setmStrQuestionType("measurement");
+                                        auditQuestion.setmStrAnswerType(mStrAnswerType);
+                                        int measurementLocationLocalID = db.insert_tb_audit_question(auditQuestion);
+                                        JSONArray JASubQuestion = JOMeasurementQuestion.getJSONArray("sub_questions");
+                                        for (int m = 0;m<JASubQuestion.length();m++){
+                                            JSONObject JOSubQuestion = JASubQuestion.getJSONObject(m);
+                                            String mStrSubQuestionId = JOSubQuestion.getString("id");
+                                            String mStrSubQuestion = JOSubQuestion.getString("question");
+                                            String mStrSubQuestionAns = JOSubQuestion.getString("answer");
+                                            String mStrSubQuestionAnsID = JOSubQuestion.getString("answernum");
+                                            String mStrSubAnsType = JOSubQuestion.getString("type");
+                                            AuditSubQuestion auditSubQuestion = new AuditSubQuestion();
+                                            auditSubQuestion.setmStrUserId("");
+                                            auditSubQuestion.setmStrAuditId("");
+                                            auditSubQuestion.setmStrSubQuestionServerId(mStrSubQuestionId);
+                                            auditSubQuestion.setmStrQuestion(mStrSubQuestion);
+                                            auditSubQuestion.setmStrAnswer(mStrSubQuestionAns.replace("\r\n","#"));
+                                            auditSubQuestion.setmStrAnswerId(mStrSubQuestionAnsID.replace(",","#"));
+                                            auditSubQuestion.setmStrAnswerType(mStrSubAnsType);
+                                            auditSubQuestion.setmStrMainQuestionId(measurementLocationLocalID+"");
+                                            auditSubQuestion.setmStrMainQuestionServerId(mStrNormalQuestionID);
+                                            db.insert_tb_audit_sub_questions(auditSubQuestion);
+                                        }
+                                    }
+                                }
+                                }
+
+                                }
+                            } else if (mStrStatus.equals("2")) {
+                                CommonUtils.showSessionExp(ActivitySelectCountryStandard.this);
+                            } else {
+                                mShowAlert(response.getString("message"), ActivitySelectCountryStandard.this);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        hidePDialog();
+                        Toast.makeText(ActivitySelectCountryStandard.this, getString(R.string.mTextFile_error_something_went_wrong) + error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id","70");
+                params.put("auth_token","fXQah0GZxq9+Rex3DUoLKTiTq9wQ24148LPnG1R7lek=1543235134");
+                params.put("audit_id", "73");
+                params.put("lang","en");
+                params.put("country_id","231");
+                return params;
+            }
+        };
+        strRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 48, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(strRequest);
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

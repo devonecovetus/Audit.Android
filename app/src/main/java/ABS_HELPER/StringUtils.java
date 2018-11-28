@@ -39,10 +39,20 @@ public class StringUtils {
     //Keys For tb_audit_question
     public static String tb_audit_question = "tb_audit_question";
     public static String audit_question_server_id = "question_server_id";
-    public static String audit_question = "question";
-    public static String audit_answer = "answer";
+    public static String audit_question_type = "question_type";
     public static String audit_sub_location_id = "sub_location_id";
 
+    //Common Keys For tb_audit_question And tb_audit_sub_questions
+    public static String audit_question = "question";
+    public static String audit_answer = "answer";
+    public static String audit_answer_id = "answer_id";
+    public static String audit_answer_type = "answer_type";
+
+    //Keys For tb_audit_sub_questions
+    public static String tb_audit_sub_questions = "tb_audit_sub_questions";
+    public static String audit_main_question_id = "main_question_id";
+    public static String audit_main_question_server_id = "main_question_server_id";
+    public static String audit_sub_question_server_id = "question_id";
 
 
 
@@ -51,9 +61,11 @@ public class StringUtils {
 
     //CREATE TABLE Queries
     public static String ct_tb_list_audit = "CREATE TABLE "+tb_list_audit+" ("+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"+user_id+ " TEXT NOT NULL, "+audit_id+ " TEXT NOT NULL, "+audit_assign_by+ " TEXT NOT NULL, "+audit_title+ " TEXT NOT NULL, "+audit_due_date+ " TEXT NOT NULL, "+audit_work_status+ " TEXT NOT NULL )";
-    public static String ct_tb_audit_main_location = "CREATE TABLE "+tb_audit_main_location+" ("+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_id+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_location_title+" TEXT NOT NULL, "+audit_location_id+" TEXT NOT NULL, "+audit_location_desc+" TEXT NOT NULL, "+audit_location_server_id+" TEXT NOT NULL )";
+    public static String ct_tb_audit_main_location = "CREATE TABLE "+tb_audit_main_location+" ("+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_id+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_location_title+" TEXT NOT NULL, "+audit_location_desc+" TEXT NOT NULL, "+audit_location_server_id+" TEXT NOT NULL )";
     public static String ct_tb_audit_sub_location = "CREATE TABLE "+tb_audit_sub_location+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+audit_main_location_id+" TEXT NOT NULL, "+audit_sub_location_server_id+" TEXT NOT NULL, "+audit_sub_location_title+" TEXT NOT NULL )";
-    public static String ct_tb_audit_question = "CREATE TABLE "+tb_audit_question+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_question_server_id+" TEXT NOT NULL, "+audit_question+" TEXT NOT NULL, "+audit_answer+" TEXT NOT NULL, "+audit_main_location_id+" TEXT NOT NULL, "+audit_sub_location_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL )";
+    public static String ct_tb_audit_question = "CREATE TABLE "+tb_audit_question+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_question_server_id+" TEXT NOT NULL, "+audit_question+" TEXT NOT NULL, "+audit_answer+" TEXT NOT NULL, "+audit_main_location_id+" TEXT NOT NULL, "+audit_answer_id+" TEXT NOT NULL, "+audit_sub_location_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_answer_type+" TEXT NOT NULL, "+audit_question_type+" TEXT NOT NULL )";
+    public static String ct_tb_audit_sub_questions = "CREATE TABLE "+tb_audit_sub_questions+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+audit_main_question_id+" TEXT NOT NULL, "+audit_main_question_server_id+" TEXT NOT NULL, "+audit_sub_question_server_id+" TEXT NOT NULL, "+audit_question+" TEXT NOT NULL, 'answer' TEXT NOT NULL, "+audit_answer_id+" TEXT NOT NULL, "+audit_answer_type+" TEXT NOT NULL )";
+
 
 
 
