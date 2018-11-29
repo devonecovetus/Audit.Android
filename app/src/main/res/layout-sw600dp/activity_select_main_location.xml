@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <RelativeLayout
+        android:id="@+id/mLayoutTop"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/mImageBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/ic_actionbar_back" />
+
+        <ABS_CUSTOM_VIEW.TextViewSemiBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Build Audit"
+            android:textColor="@color/white"
+            android:textSize="25dp" />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/mActionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@+id/mLayoutTop"
+        android:background="@color/colorPrimary">
+
+
+        <RelativeLayout
+            android:id="@+id/mLayoutDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/rounded_corner_audit_accept"
+            android:paddingBottom="10dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="10dp">
+
+            <ABS_CUSTOM_VIEW.TextViewSemiBold
+                android:id="@+id/mTextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:textColor="@color/white"
+                android:textSize="25dp" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/mLayoutNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/rounded_corner_auditer_button"
+            android:paddingBottom="10dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="10dp">
+
+            <ABS_CUSTOM_VIEW.TextViewSemiBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                android:textColor="@color/white"
+                android:textSize="25dp" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/mLayoutBottomBox"
+        android:layout_below="@+id/mActionLayout"
+        android:layout_margin="10dp"
+        android:background="#ff0000"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.4"
+            android:background="#eaeaea"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvEmptyListTop"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:background="#cccccc"
+                android:gravity="center"
+                android:text="Top List is Empty!"
+                android:textSize="20sp"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvTop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/mLocationTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#313b6f"
+                android:padding="10dp">
+
+                <ABS_CUSTOM_VIEW.TextViewSemiBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="Location"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+            </RelativeLayout>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/mLocationTitle"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/tvEmptyListBottom"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:background="#cccccc"
+                android:gravity="center"
+                android:text="Bottom List is Empty!"
+                android:textSize="20sp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/mLayoutBottomBox"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:padding="15dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_corner_information_box"
+            android:padding="5dp">
+
+            <ABS_CUSTOM_VIEW.TextViewSemiBold
+                android:id="@+id/mInfoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:text="Information Box"
+                android:textColor="#3c3c3c"
+                android:textSize="25dp" />
+
+            <ABS_CUSTOM_VIEW.TextViewRegular
+                android:id="@+id/mTxtLocationDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mInfoText"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:text="Shivaji Rao Gaekwad (born 12 December 1950), known by his mononymous stage name Rajinikanth, is an Indian film actor and politician who works primarily"
+                android:textColor="#3c3c3c"
+                android:textSize="20dp" />
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
+

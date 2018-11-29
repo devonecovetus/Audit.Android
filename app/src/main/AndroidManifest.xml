@@ -69,6 +69,12 @@
 
         <activity android:name=".ActivitySelectCountryStandard">
 
+
+
+        </activity>
+
+        <activity android:name=".SelectMainLocationActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
