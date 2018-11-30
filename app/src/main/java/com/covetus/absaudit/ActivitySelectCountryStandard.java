@@ -75,8 +75,6 @@ import static ABS_HELPER.CommonUtils.show;
 
 public class ActivitySelectCountryStandard extends Activity {
 
-
-
     @BindView(R.id.mImageBack)
     ImageView mImageBack;
     @BindView(R.id.mLayoutDone)
@@ -341,6 +339,7 @@ public class ActivitySelectCountryStandard extends Activity {
                                 String mStrSubQuestion = JOSubQuestion.getString("question");
                                 String mStrSubQuestionAns = JOSubQuestion.getString("answer");
                                 String mStrSubQuestionAnsID = JOSubQuestion.getString("answernum");
+                                String mStrQuestionCondition = JOSubQuestion.getString("answer_id");
                                 String mStrSubAnsType = JOSubQuestion.getString("type");
                                 AuditSubQuestion auditSubQuestion = new AuditSubQuestion();
                                 auditSubQuestion.setmStrUserId("");
@@ -352,6 +351,7 @@ public class ActivitySelectCountryStandard extends Activity {
                                 auditSubQuestion.setmStrAnswerType(mStrSubAnsType);
                                 auditSubQuestion.setmStrMainQuestionId(normalLocationLocalID+"");
                                 auditSubQuestion.setmStrMainQuestionServerId(mStrNormalQuestionID);
+                                auditSubQuestion.setmStrQuestionCondition(mStrQuestionCondition);
                                 db.insert_tb_audit_sub_questions(auditSubQuestion);
                                 }
                                 }
@@ -382,6 +382,7 @@ public class ActivitySelectCountryStandard extends Activity {
                                             String mStrSubQuestion = JOSubQuestion.getString("question");
                                             String mStrSubQuestionAns = JOSubQuestion.getString("answer");
                                             String mStrSubQuestionAnsID = JOSubQuestion.getString("answernum");
+                                            String mStrQuestionCondition = JOSubQuestion.getString("answer_id");
                                             String mStrSubAnsType = JOSubQuestion.getString("type");
                                             AuditSubQuestion auditSubQuestion = new AuditSubQuestion();
                                             auditSubQuestion.setmStrUserId("");
@@ -393,6 +394,7 @@ public class ActivitySelectCountryStandard extends Activity {
                                             auditSubQuestion.setmStrAnswerType(mStrSubAnsType);
                                             auditSubQuestion.setmStrMainQuestionId(measurementLocationLocalID+"");
                                             auditSubQuestion.setmStrMainQuestionServerId(mStrNormalQuestionID);
+                                            auditSubQuestion.setmStrQuestionCondition(mStrQuestionCondition);
                                             db.insert_tb_audit_sub_questions(auditSubQuestion);
                                         }
                                     }
@@ -400,6 +402,9 @@ public class ActivitySelectCountryStandard extends Activity {
                                 }
 
                                 }
+                            Intent i = new Intent(ActivitySelectCountryStandard.this,SelectMainLocationActivity.class);
+                            startActivity(i);
+                            finish();
                             } else if (mStrStatus.equals("2")) {
                                 CommonUtils.showSessionExp(ActivitySelectCountryStandard.this);
                             } else {

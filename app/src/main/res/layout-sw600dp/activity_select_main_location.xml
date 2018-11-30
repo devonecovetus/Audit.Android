@@ -201,7 +201,6 @@
                 android:layout_below="@+id/mInfoText"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:text="Shivaji Rao Gaekwad (born 12 December 1950), known by his mononymous stage name Rajinikanth, is an Indian film actor and politician who works primarily"
                 android:textColor="#3c3c3c"
                 android:textSize="20dp" />
 

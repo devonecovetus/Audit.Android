@@ -16,6 +16,16 @@ public class AuditSubQuestion {
   String mStrAnswer;
   String mStrAnswerId;
   String mStrAnswerType;
+  String mStrQuestionCondition;
+
+
+    public String getmStrQuestionCondition() {
+        return mStrQuestionCondition;
+    }
+
+    public void setmStrQuestionCondition(String mStrQuestionCondition) {
+        this.mStrQuestionCondition = mStrQuestionCondition;
+    }
 
     public String getmStrId() {
         return mStrId;

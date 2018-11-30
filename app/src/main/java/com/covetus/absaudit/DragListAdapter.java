@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
         this.list = list;
         this.listener = listener;
         this.mStatus = mStr;
+
     }
 
     @Override
@@ -42,23 +44,56 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
     @Override
     public void onBindViewHolder(final ListViewHolder holder, final int position) {
         holder.text.setText(list.get(position));
-        holder.count.setText("0");
+        if(SelectMainLocationActivity.meMap.get(list.get(position)).equals("0")){
+        holder.count.setVisibility(View.GONE);
+        holder.count.setText(SelectMainLocationActivity.meMap.get(list.get(position)));
+        }else {
+        holder.count.setVisibility(View.VISIBLE);
+        holder.count.setText(SelectMainLocationActivity.meMap.get(list.get(position)));
+        }
+
         holder.mTextPlus.setText("+");
         holder.mTextMin.setText("-");
         holder.frameLayout.setTag(position);
+
         if(mStatus.equals("1")){
         holder.mCountButtonLayout.setVisibility(View.VISIBLE);
         holder.frameLayout.setEnabled(false);
         }else {
+        //holder.count.setText("0");
         holder.mCountButtonLayout.setVisibility(View.GONE);
         holder.frameLayout.setEnabled(true);
         }
 
+        if(SelectMainLocationActivity.mStrDelete.equals("1") && mStatus.equals("1")){
+        holder.mImgRemove.setVisibility(View.VISIBLE);
+        }else{
+        holder.mImgRemove.setVisibility(View.GONE);
+        }
+
+        holder.mImgRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            SelectMainLocationActivity.getRemove(position);
+            }
+        });
+
         holder.mLayoutAddCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(holder.count.getText().length()<=0){
+                holder.count.setVisibility(View.VISIBLE);
+                holder.count.setText("0");
                 int a = Integer.parseInt(holder.count.getText().toString());
                 holder.count.setText(a+1+"");
+                SelectMainLocationActivity.meMap.put(list.get(position),a+1+"");
+                }else {
+                holder.count.setVisibility(View.VISIBLE);
+                int a = Integer.parseInt(holder.count.getText().toString());
+                holder.count.setText(a+1+"");
+                SelectMainLocationActivity.meMap.put(list.get(position),a+1+"");
+                }
+
             }
         });
 
@@ -66,7 +101,13 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
             @Override
             public void onClick(View view) {
                 int a = Integer.parseInt(holder.count.getText().toString());
+                if(a!=0){
                 holder.count.setText(a-1+"");
+                SelectMainLocationActivity.meMap.put(list.get(position),a-1+"");
+                }else {
+                    holder.count.setVisibility(View.GONE);
+                }
+
 
             }
         });
@@ -148,6 +189,9 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
         TextViewBold mTextMin;
         @BindView(R.id.mCountButtonLayout)
         LinearLayout mCountButtonLayout;
+        @BindView(R.id.mImgRemove)
+        ImageView mImgRemove;
+
 
         ListViewHolder(View itemView) {
             super(itemView);

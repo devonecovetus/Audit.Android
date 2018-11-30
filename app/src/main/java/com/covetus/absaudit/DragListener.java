@@ -6,6 +6,9 @@ import android.view.View;
 
 import java.util.List;
 
+import static com.covetus.absaudit.SelectMainLocationActivity.mTxtLocationDesc;
+import static com.covetus.absaudit.SelectMainLocationActivity.meMapDesc;
+
 public class DragListener implements View.OnDragListener {
 
     private boolean isDropped = false;
@@ -61,7 +64,6 @@ public class DragListener implements View.OnDragListener {
 
                             String list = adapterSource.getList().get(positionSource);
                             List<String> listSource = adapterSource.getList();
-
                             listSource.remove(positionSource);
                             adapterSource.updateList(listSource);
                             adapterSource.notifyDataSetChanged();
@@ -70,9 +72,12 @@ public class DragListener implements View.OnDragListener {
                             List<String> customListTarget = adapterTarget.getList();
                             if (positionTarget >= 0) {
                                 customListTarget.add(positionTarget, list);
+                                SelectMainLocationActivity.meMap.put(list,"0");
                             } else {
                                 customListTarget.add(list);
+                                SelectMainLocationActivity.meMap.put(list,"0");
                             }
+                            mTxtLocationDesc.setText(meMapDesc.get(list));
                             adapterTarget.updateList(customListTarget);
                             adapterTarget.notifyDataSetChanged();
 

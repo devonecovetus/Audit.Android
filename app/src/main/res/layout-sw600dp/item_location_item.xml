@@ -2,99 +2,109 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frame_layout_item"
-    android:layout_width="200dp"
+    android:layout_width="220dp"
     android:layout_height="75dp"
-    android:layout_margin="5dp"
     android:layout_gravity="center_horizontal"
-    android:background="@drawable/rounded_corner_location_box">
+    android:background="@color/transparent">
 
-    <LinearLayout
+
+    <RelativeLayout
+        android:layout_width="200dp"
+        android:layout_height="65dp"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/mCountButtonLayout"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:background="@drawable/rounded_corner_location_box">
 
-        <TextView
-            android:layout_gravity="center_horizontal"
-            android:textSize="18dp"
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            tools:text="Car" />
-
-        <TextView
-            android:layout_gravity="center_horizontal"
-            android:textSize="15dp"
-            android:id="@+id/count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="#ffffff"
-            tools:text="10" />
-
-    </LinearLayout>
-
-
-
-    <LinearLayout
-        android:id="@+id/mCountButtonLayout"
-        android:orientation="vertical"
-        android:weightSum="2"
-        android:layout_alignParentRight="true"
-        android:layout_width="45dp"
-        android:layout_height="fill_parent">
-
-        <RelativeLayout
-            android:id="@+id/mLayoutAddCount"
-            android:background="@drawable/one_corner_top_right"
-            android:layout_weight="1"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/mCountButtonLayout"
+            android:orientation="vertical">
 
-            <ABS_CUSTOM_VIEW.TextViewBold
-                android:id="@+id/mTextPlus"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:textSize="16dp"
-                android:textColor="@color/white"
+            <TextView
+                android:id="@+id/text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="18dp"
                 android:textStyle="bold"
-                tools:text="+" />
+                tools:text="Car" />
 
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/mLayoutMinCount"
-            android:background="@drawable/one_corner_bottom_right"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
-
-            <ABS_CUSTOM_VIEW.TextViewBold
-                android:id="@+id/mTextMin"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:textSize="16dp"
+            <TextView
+                android:id="@+id/count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:textColor="#ffffff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:textSize="15dp"
                 android:textStyle="bold"
-                tools:text="-" />
+                tools:text="10" />
 
-        </RelativeLayout>
-
-
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:id="@+id/mCountButtonLayout"
+            android:layout_width="45dp"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <RelativeLayout
+                android:id="@+id/mLayoutAddCount"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/one_corner_top_right">
+
+                <ABS_CUSTOM_VIEW.TextViewBold
+                    android:id="@+id/mTextPlus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    tools:text="+" />
 
 
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/mLayoutMinCount"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/one_corner_bottom_right">
+
+                <ABS_CUSTOM_VIEW.TextViewBold
+                    android:id="@+id/mTextMin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    tools:text="-" />
+
+            </RelativeLayout>
 
 
-    </LinearLayout>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/mImgRemove"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_cross_mark" />
 
 </RelativeLayout>
+
+

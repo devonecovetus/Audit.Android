@@ -33,6 +33,7 @@ import static ABS_HELPER.StringUtils.audit_question_type;
 import static ABS_HELPER.StringUtils.audit_sub_location_id;
 import static ABS_HELPER.StringUtils.audit_sub_location_server_id;
 import static ABS_HELPER.StringUtils.audit_sub_location_title;
+import static ABS_HELPER.StringUtils.audit_sub_question_condition;
 import static ABS_HELPER.StringUtils.audit_sub_question_server_id;
 import static ABS_HELPER.StringUtils.audit_title;
 import static ABS_HELPER.StringUtils.audit_work_status;
@@ -42,6 +43,7 @@ import static ABS_HELPER.StringUtils.ct_tb_audit_sub_location;
 import static ABS_HELPER.StringUtils.ct_tb_audit_sub_questions;
 import static ABS_HELPER.StringUtils.ct_tb_list_audit;
 import static ABS_HELPER.StringUtils.database_name;
+import static ABS_HELPER.StringUtils.id;
 import static ABS_HELPER.StringUtils.tb_audit_main_location;
 import static ABS_HELPER.StringUtils.tb_audit_question;
 import static ABS_HELPER.StringUtils.tb_audit_sub_location;
@@ -155,9 +157,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(audit_answer, auditSubQuestion.getmStrAnswer());
         values.put(audit_answer_id, auditSubQuestion.getmStrAnswerId());
         values.put(audit_answer_type,auditSubQuestion.getmStrAnswerType());
+        values.put(audit_sub_question_condition,auditSubQuestion.getmStrQuestionCondition());
         db.insert(tb_audit_sub_questions, null, values);
     }
 
+
+    //get all tb_audit_main_location
+    public ArrayList<AuditMainLocation> get_all_tb_audit_main_location() {
+        ArrayList<AuditMainLocation> mAuditList = new ArrayList<AuditMainLocation>();
+        String selectQuery = "SELECT  * FROM  " + tb_audit_main_location;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            do {
+                AuditMainLocation auditMainLocation = new AuditMainLocation();
+                auditMainLocation.setmStrId(c.getString((c.getColumnIndex(id))));
+                auditMainLocation.setmStrAuditId(c.getString((c.getColumnIndex(audit_id))));
+                auditMainLocation.setmStrUserId(c.getString((c.getColumnIndex(user_id))));
+                auditMainLocation.setmStrLocationTitle(c.getString((c.getColumnIndex(audit_location_title))));
+                auditMainLocation.setmStrLocationDesc(c.getString((c.getColumnIndex(audit_location_desc))));
+                auditMainLocation.setmStrLocationServerId(c.getString((c.getColumnIndex(audit_location_server_id))));
+                mAuditList.add(auditMainLocation);
+            } while (c.moveToNext());
+        }
+        return mAuditList;
+    }
 
 
 
@@ -180,6 +204,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return mAuditList;
     }
+
+
+
+
+
 
  /*   //get single data
     public String getNotificationName(String id) {
