@@ -1,6 +1,7 @@
 package com.covetus.absaudit;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +18,7 @@ import java.util.List;
 import ABS_CUSTOM_VIEW.TextViewRegular;
 import ABS_CUSTOM_VIEW.TextViewSemiBold;
 import ABS_GET_SET.AuditMainLocation;
+import ABS_GET_SET.SelectedLocation;
 import ABS_HELPER.DatabaseHelper;
 import ABS_HELPER.PreferenceManager;
 import butterknife.BindView;
@@ -30,6 +32,8 @@ public class SelectMainLocationActivity extends Activity implements Listener {
     public static String mStrDelete = "0";
     public static HashMap<String, String> meMap = new HashMap<String, String>();
     public static HashMap<String, String> meMapDesc = new HashMap<String, String>();
+    public static HashMap<String, String> meMapServerId = new HashMap<String, String>();
+    public static HashMap<String, String> meMapLocalId = new HashMap<String, String>();
     @BindView(R.id.tvEmptyListTop)
     TextView tvEmptyListTop;
     @BindView(R.id.tvEmptyListBottom)
@@ -37,12 +41,44 @@ public class SelectMainLocationActivity extends Activity implements Listener {
     @BindView(R.id.mLayoutDelete)
     RelativeLayout mLayoutDelete;
 
+    @BindView(R.id.mLayoutNext)
+    RelativeLayout mLayoutNext;
+
 
     public static TextViewRegular mTxtLocationDesc;
 
     public static TextViewSemiBold mTextNormal;
 
     ArrayList<AuditMainLocation> mListArry = new ArrayList<>();
+    DatabaseHelper db;
+
+
+    @OnClick(R.id.mLayoutNext)
+    public void mLayoutGoNext() {
+    DragListAdapter adapterSource = (DragListAdapter) rvTop.getAdapter();
+    List<String> listSource = adapterSource.getList();
+    if(listSource.size()>0){
+
+        for(int i = 0;i<listSource.size();i++){
+            SelectedLocation selectedLocation = new SelectedLocation();
+            selectedLocation.setmStrAuditId("73");
+            selectedLocation.setmStrUserId("44");
+            selectedLocation.setmStrMainLocationLocalId(meMapLocalId.get(listSource.get(i)));
+            selectedLocation.setmStrMainLocationServerId(meMapServerId.get(listSource.get(i)));
+            selectedLocation.setmStrMainLocationTitle(listSource.get(i));
+            selectedLocation.setmStrMainLocationCount(meMap.get(listSource.get(i)));
+            //insert
+            db.insert_tb_selected_main_location(selectedLocation);
+        }
+        Intent intent = new Intent(SelectMainLocationActivity.this,LocationSubFolder.class);
+        startActivity(intent);
+        
+    }
+
+
+
+
+    }
 
 
     @OnClick(R.id.mLayoutDelete)
@@ -69,6 +105,7 @@ public class SelectMainLocationActivity extends Activity implements Listener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_main_location);
         ButterKnife.bind(this);
+        db = new DatabaseHelper(SelectMainLocationActivity.this);
         rvTop = (RecyclerView) findViewById(R.id.rvTop);
         rvBottom = (RecyclerView) findViewById(R.id.rvBottom);
         mTextNormal = (TextViewSemiBold) findViewById(R.id.mTextNormal);
@@ -87,6 +124,8 @@ public class SelectMainLocationActivity extends Activity implements Listener {
         topList.add(mListArry.get(i).getmStrLocationTitle());
         meMap.put(mListArry.get(i).getmStrLocationTitle(), "0");
         meMapDesc.put(mListArry.get(i).getmStrLocationTitle(),mListArry.get(i).getmStrLocationDesc());
+        meMapServerId.put(mListArry.get(i).getmStrLocationTitle(),mListArry.get(i).getmStrLocationServerId());
+        meMapLocalId.put(mListArry.get(i).getmStrLocationTitle(),mListArry.get(i).getmStrId());
         }
         rvBottom.setLayoutManager(new LinearLayoutManager(
                 this, LinearLayoutManager.VERTICAL, false));

@@ -13,6 +13,8 @@ import ABS_GET_SET.AuditMainLocation;
 import ABS_GET_SET.AuditQuestion;
 import ABS_GET_SET.AuditSubLocation;
 import ABS_GET_SET.AuditSubQuestion;
+import ABS_GET_SET.MainLocationSubFolder;
+import ABS_GET_SET.SelectedLocation;
 
 import static ABS_HELPER.StringUtils.audit_answer;
 import static ABS_HELPER.StringUtils.audit_answer_id;
@@ -21,15 +23,19 @@ import static ABS_HELPER.StringUtils.audit_assign_by;
 import static ABS_HELPER.StringUtils.audit_due_date;
 import static ABS_HELPER.StringUtils.audit_id;
 import static ABS_HELPER.StringUtils.audit_location_desc;
-import static ABS_HELPER.StringUtils.audit_location_id;
 import static ABS_HELPER.StringUtils.audit_location_server_id;
 import static ABS_HELPER.StringUtils.audit_location_title;
+import static ABS_HELPER.StringUtils.audit_main_location_count;
 import static ABS_HELPER.StringUtils.audit_main_location_id;
+import static ABS_HELPER.StringUtils.audit_main_location_server_id;
+import static ABS_HELPER.StringUtils.audit_main_location_title;
 import static ABS_HELPER.StringUtils.audit_main_question_id;
 import static ABS_HELPER.StringUtils.audit_main_question_server_id;
 import static ABS_HELPER.StringUtils.audit_question;
 import static ABS_HELPER.StringUtils.audit_question_server_id;
 import static ABS_HELPER.StringUtils.audit_question_type;
+import static ABS_HELPER.StringUtils.audit_sub_folder_count;
+import static ABS_HELPER.StringUtils.audit_sub_folder_name;
 import static ABS_HELPER.StringUtils.audit_sub_location_id;
 import static ABS_HELPER.StringUtils.audit_sub_location_server_id;
 import static ABS_HELPER.StringUtils.audit_sub_location_title;
@@ -42,6 +48,8 @@ import static ABS_HELPER.StringUtils.ct_tb_audit_question;
 import static ABS_HELPER.StringUtils.ct_tb_audit_sub_location;
 import static ABS_HELPER.StringUtils.ct_tb_audit_sub_questions;
 import static ABS_HELPER.StringUtils.ct_tb_list_audit;
+import static ABS_HELPER.StringUtils.ct_tb_location_sub_folder;
+import static ABS_HELPER.StringUtils.ct_tb_selected_main_location;
 import static ABS_HELPER.StringUtils.database_name;
 import static ABS_HELPER.StringUtils.id;
 import static ABS_HELPER.StringUtils.tb_audit_main_location;
@@ -49,6 +57,8 @@ import static ABS_HELPER.StringUtils.tb_audit_question;
 import static ABS_HELPER.StringUtils.tb_audit_sub_location;
 import static ABS_HELPER.StringUtils.tb_audit_sub_questions;
 import static ABS_HELPER.StringUtils.tb_list_audit;
+import static ABS_HELPER.StringUtils.tb_location_sub_folder;
+import static ABS_HELPER.StringUtils.tb_selected_main_location;
 import static ABS_HELPER.StringUtils.user_id;
 
 
@@ -66,6 +76,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(ct_tb_audit_sub_location);
         sqLiteDatabase.execSQL(ct_tb_audit_question);
         sqLiteDatabase.execSQL(ct_tb_audit_sub_questions);
+        sqLiteDatabase.execSQL(ct_tb_location_sub_folder);
+        sqLiteDatabase.execSQL(ct_tb_selected_main_location);
     }
 
     @Override
@@ -162,6 +174,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+
+
+
+
+
+
+    //Insert tb_location_sub_folder
+    public int insert_tb_location_sub_folder(MainLocationSubFolder mainLocationSubFolder) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(user_id, mainLocationSubFolder.getmStrUserId());
+        values.put(audit_id, mainLocationSubFolder.getmStrAuditId());
+        values.put(audit_main_location_id, mainLocationSubFolder.getmStrMainLocationId());
+        values.put(audit_sub_folder_name, mainLocationSubFolder.getmStrSubFolderName());
+        values.put(audit_sub_folder_count, mainLocationSubFolder.getmStrSubFolderCont());
+        db.insert(tb_location_sub_folder, null, values);
+        Cursor cur = db.rawQuery("select last_insert_rowid()", null);
+        cur.moveToFirst();
+        int ID = cur.getInt(0);
+        return ID;
+    }
+
+
+
+    //Update tb_location_sub_folder
+    public void update_tb_location_sub_folder(MainLocationSubFolder mainLocationSubFolder) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(audit_sub_folder_name, mainLocationSubFolder.getmStrSubFolderName());
+        values.put(audit_sub_folder_count, mainLocationSubFolder.getmStrSubFolderCont());
+        db.update(tb_location_sub_folder, values, "id="+mainLocationSubFolder.getmStrId(), null);
+    }
+
+
+
+
+
+    //Insert tb_selected_main_location
+    public void insert_tb_selected_main_location(SelectedLocation selectedLocation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(user_id,selectedLocation.getmStrUserId());
+        values.put(audit_id,selectedLocation.getmStrAuditId());
+        values.put(audit_main_location_title, selectedLocation.getmStrMainLocationTitle());
+        values.put(audit_main_location_count, selectedLocation.getmStrMainLocationCount());
+        values.put(audit_main_location_server_id, selectedLocation.getmStrMainLocationServerId());
+        values.put(audit_main_location_id, selectedLocation.getmStrMainLocationLocalId());
+        db.insert(tb_selected_main_location, null, values);
+
+    }
+
+
+
+
+
+
+
+
     //get all tb_audit_main_location
     public ArrayList<AuditMainLocation> get_all_tb_audit_main_location() {
         ArrayList<AuditMainLocation> mAuditList = new ArrayList<AuditMainLocation>();
@@ -182,6 +252,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return mAuditList;
     }
+
+
+
+
+
+
+
+
 
 
 
