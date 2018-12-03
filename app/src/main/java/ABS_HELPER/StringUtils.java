@@ -71,6 +71,12 @@ public class StringUtils {
     public static String audit_main_location_decs = "main_location_decs";
 
 
+    //Keys For tb_sub_folder_explation_list
+    public static String tb_sub_folder_explation_list = "tb_sub_folder_explation_list";
+    public static String audit_sub_folder_id = "sub_folder_id";
+    public static String audit_sub_folder_title = "sub_folder_title";
+    public static String audit_layer_title = "layer_title";
+    public static String audit_layer_desc = "layer_desc";
 
 
 
@@ -86,6 +92,9 @@ public class StringUtils {
     public static String ct_tb_audit_sub_questions = "CREATE TABLE "+tb_audit_sub_questions+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+audit_main_question_id+" TEXT NOT NULL, "+audit_main_question_server_id+" TEXT NOT NULL, "+audit_sub_question_server_id+" TEXT NOT NULL, "+audit_question+" TEXT NOT NULL, 'answer' TEXT NOT NULL, "+audit_answer_id+" TEXT NOT NULL, "+audit_answer_type+" TEXT NOT NULL, "+audit_sub_question_condition+" TEXT NOT NULL )";
     public static String ct_tb_location_sub_folder = "CREATE TABLE "+tb_location_sub_folder+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_main_location_id+" TEXT NOT NULL, "+audit_sub_folder_name+" TEXT NOT NULL, "+audit_sub_folder_count+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL )";
     public static String ct_tb_selected_main_location = "CREATE TABLE "+tb_selected_main_location+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_main_location_id+" TEXT NOT NULL, "+audit_main_location_title+" TEXT NOT NULL, "+audit_main_location_server_id+" TEXT NOT NULL, "+audit_main_location_count+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+audit_main_location_decs+" TEXT NOT NULL )";
+    public static String ct_tb_sub_folder_explation_list = "CREATE TABLE "+tb_sub_folder_explation_list+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_main_location_id+" TEXT NOT NULL, "+audit_main_location_title+" TEXT NOT NULL, "+audit_sub_folder_id+" TEXT NOT NULL, "+audit_sub_folder_title+" TEXT NOT NULL, "+audit_layer_title+" TEXT NOT NULL, "+audit_layer_desc+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL )";
+
+
 
 
 

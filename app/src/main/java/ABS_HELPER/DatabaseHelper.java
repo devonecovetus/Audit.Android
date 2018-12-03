@@ -13,6 +13,7 @@ import ABS_GET_SET.AuditMainLocation;
 import ABS_GET_SET.AuditQuestion;
 import ABS_GET_SET.AuditSubLocation;
 import ABS_GET_SET.AuditSubQuestion;
+import ABS_GET_SET.LayerList;
 import ABS_GET_SET.MainLocationSubFolder;
 import ABS_GET_SET.SelectedLocation;
 
@@ -22,6 +23,8 @@ import static ABS_HELPER.StringUtils.audit_answer_type;
 import static ABS_HELPER.StringUtils.audit_assign_by;
 import static ABS_HELPER.StringUtils.audit_due_date;
 import static ABS_HELPER.StringUtils.audit_id;
+import static ABS_HELPER.StringUtils.audit_layer_desc;
+import static ABS_HELPER.StringUtils.audit_layer_title;
 import static ABS_HELPER.StringUtils.audit_location_desc;
 import static ABS_HELPER.StringUtils.audit_location_server_id;
 import static ABS_HELPER.StringUtils.audit_location_title;
@@ -36,7 +39,9 @@ import static ABS_HELPER.StringUtils.audit_question;
 import static ABS_HELPER.StringUtils.audit_question_server_id;
 import static ABS_HELPER.StringUtils.audit_question_type;
 import static ABS_HELPER.StringUtils.audit_sub_folder_count;
+import static ABS_HELPER.StringUtils.audit_sub_folder_id;
 import static ABS_HELPER.StringUtils.audit_sub_folder_name;
+import static ABS_HELPER.StringUtils.audit_sub_folder_title;
 import static ABS_HELPER.StringUtils.audit_sub_location_id;
 import static ABS_HELPER.StringUtils.audit_sub_location_server_id;
 import static ABS_HELPER.StringUtils.audit_sub_location_title;
@@ -51,6 +56,7 @@ import static ABS_HELPER.StringUtils.ct_tb_audit_sub_questions;
 import static ABS_HELPER.StringUtils.ct_tb_list_audit;
 import static ABS_HELPER.StringUtils.ct_tb_location_sub_folder;
 import static ABS_HELPER.StringUtils.ct_tb_selected_main_location;
+import static ABS_HELPER.StringUtils.ct_tb_sub_folder_explation_list;
 import static ABS_HELPER.StringUtils.database_name;
 import static ABS_HELPER.StringUtils.id;
 import static ABS_HELPER.StringUtils.tb_audit_main_location;
@@ -60,6 +66,7 @@ import static ABS_HELPER.StringUtils.tb_audit_sub_questions;
 import static ABS_HELPER.StringUtils.tb_list_audit;
 import static ABS_HELPER.StringUtils.tb_location_sub_folder;
 import static ABS_HELPER.StringUtils.tb_selected_main_location;
+import static ABS_HELPER.StringUtils.tb_sub_folder_explation_list;
 import static ABS_HELPER.StringUtils.user_id;
 
 
@@ -79,6 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(ct_tb_audit_sub_questions);
         sqLiteDatabase.execSQL(ct_tb_location_sub_folder);
         sqLiteDatabase.execSQL(ct_tb_selected_main_location);
+        sqLiteDatabase.execSQL(ct_tb_sub_folder_explation_list);
     }
 
     @Override
@@ -115,6 +123,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cur.moveToFirst();
         int ID = cur.getInt(0);
         return ID;
+    }
+
+
+    //Insert tb_sub_folder_explation_list
+    public void insert_tb_sub_folder_explation_list(LayerList layerList) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(user_id,layerList.getmStrUserId());
+        values.put(audit_id, layerList.getmStrAuditId());
+        values.put(audit_layer_desc, layerList.getmStrLayerDesc());
+        values.put(audit_layer_title, layerList.getmStrLayerTitle());
+        values.put(audit_sub_folder_title, layerList.getmStrSubFolderTitle());
+        values.put(audit_sub_folder_id, layerList.getmStrSubFolderId());
+        values.put(audit_main_location_title, layerList.getmStrMainLocationTitle());
+        values.put(audit_main_location_id, layerList.getmStrMainLocationId());
+        db.insert(tb_sub_folder_explation_list, null, values);
+    }
+
+    //Delete tb_sub_folder_explation_list
+    public void delete_tb_sub_folder_explation_list(String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(tb_sub_folder_explation_list, audit_sub_folder_id + "=" + id, null);
     }
 
 

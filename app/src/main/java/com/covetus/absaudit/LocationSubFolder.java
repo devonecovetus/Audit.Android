@@ -25,6 +25,7 @@ import ABS_CUSTOM_VIEW.TextViewBold;
 import ABS_CUSTOM_VIEW.TextViewRegular;
 import ABS_CUSTOM_VIEW.TextViewSemiBold;
 import ABS_GET_SET.AuditMainLocation;
+import ABS_GET_SET.LayerList;
 import ABS_GET_SET.MainLocationSubFolder;
 import ABS_GET_SET.SelectedLocation;
 import ABS_HELPER.DatabaseHelper;
@@ -39,16 +40,12 @@ public class LocationSubFolder extends Activity {
     LinearLayout mLayoutAddLocation;
     @BindView(R.id.mImageBack)
     ImageView mImageBack;
-
-
+    DatabaseHelper db;
+    ArrayList<SelectedLocation> mAuditList;
     @OnClick(R.id.mImageBack)
     public void mImageBack() {
 
-
     }
-
-    DatabaseHelper db;
-    ArrayList<SelectedLocation> mAuditList;
 
 
     @Override
@@ -58,7 +55,6 @@ public class LocationSubFolder extends Activity {
         ButterKnife.bind(this);
         db = new DatabaseHelper(LocationSubFolder.this);
         mAuditList = db.get_all_tb_selected_main_location();
-
 
         for (int i = 0; i < mAuditList.size(); i++) {
             final SelectedLocation selectedLocation = mAuditList.get(i);
@@ -81,7 +77,7 @@ public class LocationSubFolder extends Activity {
                     }
                     int newCount = Integer.parseInt(mTxtMainLocationCount.getText().toString()) - a;
                     if (newCount > 0) {
-                        mAddUpdateSubFolder(mLayoutForSubFolder, mTxtMainLocationCount, newCount,selectedLocation.getmStrId());
+                        mAddUpdateSubFolder(mLayoutForSubFolder,mTxtMainLocation, mTxtMainLocationCount, newCount,selectedLocation.getmStrId());
                     }
                 }
             });
@@ -109,24 +105,20 @@ public class LocationSubFolder extends Activity {
                             a = a + Integer.parseInt(mTxtCount.getText().toString());
                         }
                         int newCount = Integer.parseInt(mTxtMainLocationCount.getText().toString()) - a;
-                        updateDialog(mTxtSubGroupFolder, mTxtCount, Integer.parseInt(mTxtCount.getText().toString()) + newCount,mTxtFolderId.getText().toString());
+                        updateDialog(selectedLocation.getmStrId(),mTxtSubGroupFolder,mTxtMainLocation, mTxtCount, Integer.parseInt(mTxtCount.getText().toString()) + newCount,mTxtFolderId.getText().toString());
                     }
                 });
                 mLayoutForSubFolder.addView(subConvertView);
             }
             }
             ///////////////////////////////////////////////////////////////
-
-
-
-
             mLayoutAddLocation.addView(convertView);
         }
 
     }
 
 
-    public void mAddUpdateSubFolder(final LinearLayout linearLayout, final TextViewSemiBold mTxtMainLocationCount, final int Count,final String mLocationId) {
+    public void mAddUpdateSubFolder(final LinearLayout linearLayout,final TextViewSemiBold mTxtMainLocation, final TextViewSemiBold mTxtMainLocationCount, final int Count,final String mLocationId) {
         final Dialog dialog = new Dialog(LocationSubFolder.this, R.style.Theme_Dialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_add_update_sub_folder);
@@ -185,7 +177,7 @@ public class LocationSubFolder extends Activity {
                                 a = a + Integer.parseInt(mTxtCount.getText().toString());
                             }
                             int newCount = Integer.parseInt(mTxtMainLocationCount.getText().toString()) - a;
-                            updateDialog(mTxtSubGroupFolder, mTxtCount, Integer.parseInt(mTxtCount.getText().toString()) + newCount,mTxtFolderId.getText().toString());
+                            updateDialog(mLocationId,mTxtSubGroupFolder,mTxtMainLocation,mTxtCount, Integer.parseInt(mTxtCount.getText().toString()) + newCount,mTxtFolderId.getText().toString());
                         }
                     });
                     //insert
@@ -197,6 +189,19 @@ public class LocationSubFolder extends Activity {
                     mainLocationSubFolder.setmStrSubFolderCont(mDiaTxtCount.getText().toString());
                     int Id = db.insert_tb_location_sub_folder(mainLocationSubFolder);
                     mTxtFolderId.setText(Id+"");
+
+                    for (int j=0;j<Integer.parseInt(mDiaTxtCount.getText().toString());j++){
+                        LayerList layerList = new LayerList();
+                        layerList.setmStrUserId("44");
+                        layerList.setmStrAuditId("73");
+                        layerList.setmStrLayerDesc(mTxtSubGroupFolder.getText().toString()+" Name");
+                        layerList.setmStrLayerTitle(mTxtSubGroupFolder.getText().toString()+" "+j);
+                        layerList.setmStrMainLocationId(mLocationId);
+                        layerList.setmStrMainLocationTitle(mTxtMainLocation.getText().toString());
+                        layerList.setmStrSubFolderTitle(mDiaEditFolderName.getText().toString());
+                        layerList.setmStrSubFolderId(mTxtFolderId.getText().toString());
+                        db.insert_tb_sub_folder_explation_list(layerList);
+                    }
                     linearLayout.addView(convertView);
                     dialog.dismiss();
                 }
@@ -207,7 +212,7 @@ public class LocationSubFolder extends Activity {
         dialog.show();
     }
 
-    void updateDialog(final TextViewSemiBold mDiaTxtSubGroupFolder, final TextViewSemiBold mDiaTxtCount, final int Count,final String mIdForUpdate) {
+    void updateDialog(final String mLocationId,final TextViewSemiBold mDiaTxtSubGroupFolder,final TextViewSemiBold mTxtMainLocation, final TextViewSemiBold mDiaTxtCount, final int Count,final String mIdForUpdate) {
         final Dialog dialog = new Dialog(LocationSubFolder.this, R.style.Theme_Dialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_add_update_sub_folder);
@@ -254,6 +259,22 @@ public class LocationSubFolder extends Activity {
                     mainLocationSubFolder.setmStrSubFolderCont(mTxtCount.getText().toString());
                     mainLocationSubFolder.setmStrSubFolderName(mEditFolderName.getText().toString());
                     db.update_tb_location_sub_folder(mainLocationSubFolder);
+                    db.delete_tb_sub_folder_explation_list(mIdForUpdate);
+                    for (int j=0;j<Integer.parseInt(mTxtCount.getText().toString());j++){
+                        LayerList layerList = new LayerList();
+                        layerList.setmStrUserId("44");
+                        layerList.setmStrAuditId("73");
+                        layerList.setmStrLayerDesc(mEditFolderName.getText().toString()+" Name");
+                        layerList.setmStrLayerTitle(mEditFolderName.getText().toString()+" "+j);
+                        layerList.setmStrMainLocationId(mLocationId);
+                        layerList.setmStrMainLocationTitle(mTxtMainLocation.getText().toString());
+                        layerList.setmStrSubFolderTitle(mEditFolderName.getText().toString());
+                        layerList.setmStrSubFolderId(mIdForUpdate);
+                        db.insert_tb_sub_folder_explation_list(layerList);
+                    }
+
+
+
                     dialog.dismiss();
                 }
             }
@@ -261,6 +282,4 @@ public class LocationSubFolder extends Activity {
         dialog.show();
 
     }
-
-
 }
