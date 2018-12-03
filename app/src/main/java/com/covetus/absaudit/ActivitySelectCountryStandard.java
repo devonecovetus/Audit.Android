@@ -254,7 +254,7 @@ public class ActivitySelectCountryStandard extends Activity {
                 /*params.put("id", PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
                 params.put("auth_token", PreferenceManager.getFormiiAuthToken(ActivitySelectCountryStandard.this));params.put("id", PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));*/
                 params.put("id", "70");
-                params.put("auth_token","fXQah0GZxq9+Rex3DUoLKTiTq9wQ24148LPnG1R7lek=1543235134");
+                params.put("auth_token","fXQah0GZxq9+Rex3DUoLKTiTq9wQ24148LPnG1R7lek=1543821114");
                 return params;
             }
         };
@@ -426,7 +426,7 @@ public class ActivitySelectCountryStandard extends Activity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("id","70");
-                params.put("auth_token","fXQah0GZxq9+Rex3DUoLKTiTq9wQ24148LPnG1R7lek=1543235134");
+                params.put("auth_token","fXQah0GZxq9+Rex3DUoLKTiTq9wQ24148LPnG1R7lek=1543821114");
                 params.put("audit_id", "73");
                 params.put("lang","en");
                 params.put("country_id","231");

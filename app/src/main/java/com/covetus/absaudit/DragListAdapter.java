@@ -1,6 +1,8 @@
 package com.covetus.absaudit;
 
+import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ABS_CUSTOM_VIEW.TextViewBold;
+import ABS_HELPER.DatabaseHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -26,11 +29,13 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
     private List<String> list;
     private Listener listener;
     String mStatus;
+    Activity context;
 
-    DragListAdapter(List<String> list, Listener listener, String mStr) {
+    DragListAdapter(Activity context, List<String> list, Listener listener, String mStr) {
         this.list = list;
         this.listener = listener;
         this.mStatus = mStr;
+        this.context = context;
 
     }
 
@@ -44,54 +49,59 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
     @Override
     public void onBindViewHolder(final ListViewHolder holder, final int position) {
         holder.text.setText(list.get(position));
-        if(SelectMainLocationActivity.meMap.get(list.get(position)).equals("0")){
-        holder.count.setVisibility(View.GONE);
-        holder.count.setText(SelectMainLocationActivity.meMap.get(list.get(position)));
-        }else {
-        holder.count.setVisibility(View.VISIBLE);
-        holder.count.setText(SelectMainLocationActivity.meMap.get(list.get(position)));
+        if (SelectMainLocationActivity.meMap.get(list.get(position)).equals("0")) {
+            holder.count.setVisibility(View.GONE);
+            holder.count.setText(SelectMainLocationActivity.meMap.get(list.get(position)));
+        } else {
+            holder.count.setVisibility(View.VISIBLE);
+            holder.count.setText(SelectMainLocationActivity.meMap.get(list.get(position)));
         }
 
         holder.mTextPlus.setText("+");
         holder.mTextMin.setText("-");
         holder.frameLayout.setTag(position);
 
-        if(mStatus.equals("1")){
-        holder.mCountButtonLayout.setVisibility(View.VISIBLE);
-        holder.frameLayout.setEnabled(false);
-        }else {
-        //holder.count.setText("0");
-        holder.mCountButtonLayout.setVisibility(View.GONE);
-        holder.frameLayout.setEnabled(true);
+        if (mStatus.equals("1")) {
+            holder.mCountButtonLayout.setVisibility(View.VISIBLE);
+            holder.frameLayout.setEnabled(false);
+        } else {
+            //holder.count.setText("0");
+            holder.mCountButtonLayout.setVisibility(View.GONE);
+            holder.frameLayout.setEnabled(true);
         }
 
-        if(SelectMainLocationActivity.mStrDelete.equals("1") && mStatus.equals("1")){
-        holder.mImgRemove.setVisibility(View.VISIBLE);
-        }else{
-        holder.mImgRemove.setVisibility(View.GONE);
+        if (SelectMainLocationActivity.mStrDelete.equals("1") && mStatus.equals("1")) {
+            holder.mImgRemove.setVisibility(View.VISIBLE);
+        } else {
+            holder.mImgRemove.setVisibility(View.GONE);
         }
 
         holder.mImgRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            SelectMainLocationActivity.getRemove(position);
+                DatabaseHelper db = new DatabaseHelper(context);
+                if (!db.isExistNotification(SelectMainLocationActivity.meMapLocalId.get(list.get(position)))) {
+                    SelectMainLocationActivity.getRemove(position);
+                }else {
+                    //alert and delete from selected location and sub folder
+                }
             }
         });
 
         holder.mLayoutAddCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(holder.count.getText().length()<=0){
-                holder.count.setVisibility(View.VISIBLE);
-                holder.count.setText("0");
-                int a = Integer.parseInt(holder.count.getText().toString());
-                holder.count.setText(a+1+"");
-                SelectMainLocationActivity.meMap.put(list.get(position),a+1+"");
-                }else {
-                holder.count.setVisibility(View.VISIBLE);
-                int a = Integer.parseInt(holder.count.getText().toString());
-                holder.count.setText(a+1+"");
-                SelectMainLocationActivity.meMap.put(list.get(position),a+1+"");
+                if (holder.count.getText().length() <= 0) {
+                    holder.count.setVisibility(View.VISIBLE);
+                    holder.count.setText("0");
+                    int a = Integer.parseInt(holder.count.getText().toString());
+                    holder.count.setText(a + 1 + "");
+                    SelectMainLocationActivity.meMap.put(list.get(position), a + 1 + "");
+                } else {
+                    holder.count.setVisibility(View.VISIBLE);
+                    int a = Integer.parseInt(holder.count.getText().toString());
+                    holder.count.setText(a + 1 + "");
+                    SelectMainLocationActivity.meMap.put(list.get(position), a + 1 + "");
                 }
 
             }
@@ -100,12 +110,33 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
         holder.mLayoutMinCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int a = Integer.parseInt(holder.count.getText().toString());
-                if(a!=0){
-                holder.count.setText(a-1+"");
-                SelectMainLocationActivity.meMap.put(list.get(position),a-1+"");
-                }else {
-                    holder.count.setVisibility(View.GONE);
+                DatabaseHelper db = new DatabaseHelper(context);
+                if (!db.isExistNotification(SelectMainLocationActivity.meMapLocalId.get(list.get(position)))) {
+                    int a = Integer.parseInt(holder.count.getText().toString());
+
+                    if (a != 0) {
+                        holder.count.setText(a - 1 + "");
+                        SelectMainLocationActivity.meMap.put(list.get(position), a - 1 + "");
+                    } else {
+                        holder.count.setVisibility(View.GONE);
+                    }
+
+
+                } else {
+                    int existing = db.get_existing_location_count(SelectMainLocationActivity.meMapLocalId.get(list.get(position)));
+                    int a = Integer.parseInt(holder.count.getText().toString());
+                    if (a == existing) {
+                        //alert and delete from selected location and sub folder
+                    } else {
+                        if (a != 0) {
+                            holder.count.setText(a - 1 + "");
+                            SelectMainLocationActivity.meMap.put(list.get(position), a - 1 + "");
+                        } else {
+                            holder.count.setVisibility(View.GONE);
+                        }
+
+                    }
+
                 }
 
 
@@ -115,8 +146,6 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
         holder.frameLayout.setOnLongClickListener(this);
         holder.frameLayout.setOnDragListener(new DragListener(listener));
     }
-
-
 
 
     @Override
@@ -169,7 +198,6 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
 
         return true;
     }
-
 
 
     class ListViewHolder extends RecyclerView.ViewHolder {

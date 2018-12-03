@@ -26,6 +26,7 @@ import static ABS_HELPER.StringUtils.audit_location_desc;
 import static ABS_HELPER.StringUtils.audit_location_server_id;
 import static ABS_HELPER.StringUtils.audit_location_title;
 import static ABS_HELPER.StringUtils.audit_main_location_count;
+import static ABS_HELPER.StringUtils.audit_main_location_decs;
 import static ABS_HELPER.StringUtils.audit_main_location_id;
 import static ABS_HELPER.StringUtils.audit_main_location_server_id;
 import static ABS_HELPER.StringUtils.audit_main_location_title;
@@ -221,11 +222,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(audit_main_location_count, selectedLocation.getmStrMainLocationCount());
         values.put(audit_main_location_server_id, selectedLocation.getmStrMainLocationServerId());
         values.put(audit_main_location_id, selectedLocation.getmStrMainLocationLocalId());
+        values.put(audit_main_location_decs, selectedLocation.getmStrMainLocationDesc());
         db.insert(tb_selected_main_location, null, values);
 
     }
 
 
+    public void update_tb_selected_main_location(SelectedLocation selectedLocation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(audit_main_location_count, selectedLocation.getmStrMainLocationCount());
+        db.update(tb_selected_main_location, values, audit_main_location_id+"="+selectedLocation.getmStrMainLocationLocalId(), null);
+    }
+
+
+    public ArrayList<SelectedLocation> get_all_tb_selected_main_location() {
+        ArrayList<SelectedLocation> mAuditList = new ArrayList<SelectedLocation>();
+        String selectQuery = "SELECT  * FROM  " + tb_selected_main_location;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            do {
+                SelectedLocation selectedLocation = new SelectedLocation();
+                selectedLocation.setmStrId(c.getString((c.getColumnIndex(id))));
+                selectedLocation.setmStrAuditId(c.getString((c.getColumnIndex(audit_id))));
+                selectedLocation.setmStrUserId(c.getString((c.getColumnIndex(user_id))));
+                selectedLocation.setmStrMainLocationTitle(c.getString((c.getColumnIndex(audit_main_location_title))));
+                selectedLocation.setmStrMainLocationCount(c.getString((c.getColumnIndex(audit_main_location_count))));
+                selectedLocation.setmStrMainLocationServerId(c.getString((c.getColumnIndex(audit_main_location_server_id))));
+                selectedLocation.setmStrMainLocationLocalId(c.getString((c.getColumnIndex(audit_main_location_id))));
+                selectedLocation.setmStrMainLocationDesc(c.getString((c.getColumnIndex(audit_main_location_decs))));
+                mAuditList.add(selectedLocation);
+            } while (c.moveToNext());
+        }
+        return mAuditList;
+
+    }
+
+
+    public boolean isExistNotification(String mId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor clientCur = db.rawQuery("SELECT * FROM " + tb_selected_main_location + " WHERE "+audit_main_location_id+" = '" + mId + "'", null);
+        boolean exist = (clientCur.getCount() > 0);
+        clientCur.close();
+        return exist;
+    }
+
+
+    public int get_existing_location_count(String mId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor clientCur = db.rawQuery("SELECT * FROM " + tb_selected_main_location + " WHERE "+audit_main_location_id+" = '" + mId + "'", null);
+        int a = Integer.parseInt(clientCur.getString((clientCur.getColumnIndex(audit_main_location_count))));
+        return a;
+    }
 
 
 
@@ -252,15 +301,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return mAuditList;
     }
-
-
-
-
-
-
-
-
-
 
 
     //get all tb_list_audit
@@ -306,13 +346,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }*/
 
     //for upadte table
-  /*  public boolean isExistNotification(String notificationId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor clientCur = db.rawQuery("SELECT * FROM " + TABLE_NOTIFICATION + " WHERE mAuditId = '" + notificationId + "'", null);
-        boolean exist = (clientCur.getCount() > 0);
-        clientCur.close();
-        return exist;
-    }*/
+
 
     // closing database
     public void closeDB() {

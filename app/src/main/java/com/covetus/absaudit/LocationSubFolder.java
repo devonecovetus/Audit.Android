@@ -26,6 +26,7 @@ import ABS_CUSTOM_VIEW.TextViewRegular;
 import ABS_CUSTOM_VIEW.TextViewSemiBold;
 import ABS_GET_SET.AuditMainLocation;
 import ABS_GET_SET.MainLocationSubFolder;
+import ABS_GET_SET.SelectedLocation;
 import ABS_HELPER.DatabaseHelper;
 import ABS_HELPER.PreferenceManager;
 import butterknife.BindView;
@@ -49,6 +50,7 @@ public class LocationSubFolder extends Activity {
     }
 
     DatabaseHelper db;
+    ArrayList<SelectedLocation> mAuditList;
 
 
     @Override
@@ -57,15 +59,18 @@ public class LocationSubFolder extends Activity {
         setContentView(R.layout.activity_main_location_divide_sub_folder);
         ButterKnife.bind(this);
         db = new DatabaseHelper(LocationSubFolder.this);
+        mAuditList = db.get_all_tb_selected_main_location();
 
 
-
-
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < mAuditList.size(); i++) {
+            final SelectedLocation selectedLocation = mAuditList.get(i);
             LayoutInflater mInflater = LayoutInflater.from(LocationSubFolder.this);
             View convertView = mInflater.inflate(R.layout.item_selected_location, null);
             ImageView mImgAddSubFolder = (ImageView) convertView.findViewById(R.id.mImgAddSubFolder);
             final TextViewSemiBold mTxtMainLocationCount = (TextViewSemiBold) convertView.findViewById(R.id.mTxtMainLocationCount);
+            final TextViewSemiBold mTxtMainLocation = (TextViewSemiBold) convertView.findViewById(R.id.mTxtMainLocation);
+            mTxtMainLocationCount.setText(selectedLocation.getmStrMainLocationCount());
+            mTxtMainLocation.setText(selectedLocation.getmStrMainLocationTitle());
             final LinearLayout mLayoutForSubFolder = (LinearLayout) convertView.findViewById(R.id.mLayoutForSubFolder);
             mImgAddSubFolder.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -78,7 +83,7 @@ public class LocationSubFolder extends Activity {
                     }
                     int newCount = Integer.parseInt(mTxtMainLocationCount.getText().toString()) - a;
                     if (newCount > 0) {
-                        mAddUpdateSubFolder(mLayoutForSubFolder, mTxtMainLocationCount, newCount,"1");
+                        mAddUpdateSubFolder(mLayoutForSubFolder, mTxtMainLocationCount, newCount,selectedLocation.getmStrId());
                     }
                 }
             });

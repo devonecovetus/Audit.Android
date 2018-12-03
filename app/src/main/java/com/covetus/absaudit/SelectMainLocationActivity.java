@@ -58,7 +58,6 @@ public class SelectMainLocationActivity extends Activity implements Listener {
     DragListAdapter adapterSource = (DragListAdapter) rvTop.getAdapter();
     List<String> listSource = adapterSource.getList();
     if(listSource.size()>0){
-
         for(int i = 0;i<listSource.size();i++){
             SelectedLocation selectedLocation = new SelectedLocation();
             selectedLocation.setmStrAuditId("73");
@@ -67,17 +66,18 @@ public class SelectMainLocationActivity extends Activity implements Listener {
             selectedLocation.setmStrMainLocationServerId(meMapServerId.get(listSource.get(i)));
             selectedLocation.setmStrMainLocationTitle(listSource.get(i));
             selectedLocation.setmStrMainLocationCount(meMap.get(listSource.get(i)));
+            selectedLocation.setmStrMainLocationDesc(meMapDesc.get(listSource.get(i)));
+            if(!db.isExistNotification(meMapLocalId.get(listSource.get(i)))){
             //insert
             db.insert_tb_selected_main_location(selectedLocation);
+            }else {
+            //update
+            db.update_tb_selected_main_location(selectedLocation);
+            }
         }
         Intent intent = new Intent(SelectMainLocationActivity.this,LocationSubFolder.class);
         startActivity(intent);
-        
     }
-
-
-
-
     }
 
 
@@ -117,33 +117,43 @@ public class SelectMainLocationActivity extends Activity implements Listener {
     }
 
     private void initTopRecyclerView() {
-        DatabaseHelper db = new DatabaseHelper(SelectMainLocationActivity.this);
         mListArry = db.get_all_tb_audit_main_location();
         List<String> topList = new ArrayList<>();
         for (int i = 0; i<mListArry.size();i++){
+        if(!db.isExistNotification(mListArry.get(i).getmStrId())){
         topList.add(mListArry.get(i).getmStrLocationTitle());
         meMap.put(mListArry.get(i).getmStrLocationTitle(), "0");
         meMapDesc.put(mListArry.get(i).getmStrLocationTitle(),mListArry.get(i).getmStrLocationDesc());
         meMapServerId.put(mListArry.get(i).getmStrLocationTitle(),mListArry.get(i).getmStrLocationServerId());
         meMapLocalId.put(mListArry.get(i).getmStrLocationTitle(),mListArry.get(i).getmStrId());
         }
-        rvBottom.setLayoutManager(new LinearLayoutManager(
-                this, LinearLayoutManager.VERTICAL, false));
-        DragListAdapter topListAdapter = new DragListAdapter(topList, this, "0");
+        }
+        rvBottom.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        DragListAdapter topListAdapter = new DragListAdapter(SelectMainLocationActivity.this,topList, this, "0");
         rvBottom.setAdapter(topListAdapter);
         tvEmptyListTop.setOnDragListener(topListAdapter.getDragInstance());
         rvBottom.setOnDragListener(topListAdapter.getDragInstance());
-
     }
+
 
     private void initBottomRecyclerView() {
         rvTop.setLayoutManager(new GridLayoutManager(this, 2));
+        ArrayList<SelectedLocation> mAuditList = db.get_all_tb_selected_main_location();
         List<String> bottomList = new ArrayList<>();
-        DragListAdapter bottomListAdapter = new DragListAdapter(bottomList, this, "1");
+        for (int i = 0; i<mAuditList.size();i++){
+        bottomList.add(mAuditList.get(i).getmStrMainLocationTitle());
+        meMap.put(mAuditList.get(i).getmStrMainLocationTitle(),mAuditList.get(i).getmStrMainLocationCount());
+        meMapDesc.put(mAuditList.get(i).getmStrMainLocationTitle(),mAuditList.get(i).getmStrMainLocationDesc());
+        meMapServerId.put(mAuditList.get(i).getmStrMainLocationTitle(),mAuditList.get(i).getmStrMainLocationServerId());
+        meMapLocalId.put(mAuditList.get(i).getmStrMainLocationTitle(),mAuditList.get(i).getmStrMainLocationLocalId());
+        }
+        DragListAdapter bottomListAdapter = new DragListAdapter(SelectMainLocationActivity.this,bottomList, this, "1");
         rvTop.setAdapter(bottomListAdapter);
         tvEmptyListBottom.setOnDragListener(bottomListAdapter.getDragInstance());
         rvTop.setOnDragListener(bottomListAdapter.getDragInstance());
     }
+
+
 
     public static void getRemove(int position) {
         String title1 = ((TextView) rvTop.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.text)).getText().toString();

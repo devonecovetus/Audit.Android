@@ -68,6 +68,7 @@ public class StringUtils {
     public static String audit_main_location_title = "main_location_title";
     public static String audit_main_location_count = "main_location_count";
     public static String audit_main_location_server_id = "main_location_server_id";
+    public static String audit_main_location_decs = "main_location_decs";
 
 
 
@@ -84,7 +85,7 @@ public class StringUtils {
     public static String ct_tb_audit_question = "CREATE TABLE "+tb_audit_question+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_question_server_id+" TEXT NOT NULL, "+audit_question+" TEXT NOT NULL, "+audit_answer+" TEXT NOT NULL, "+audit_main_location_id+" TEXT NOT NULL, "+audit_answer_id+" TEXT NOT NULL, "+audit_sub_location_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_answer_type+" TEXT NOT NULL, "+audit_question_type+" TEXT NOT NULL )";
     public static String ct_tb_audit_sub_questions = "CREATE TABLE "+tb_audit_sub_questions+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+audit_main_question_id+" TEXT NOT NULL, "+audit_main_question_server_id+" TEXT NOT NULL, "+audit_sub_question_server_id+" TEXT NOT NULL, "+audit_question+" TEXT NOT NULL, 'answer' TEXT NOT NULL, "+audit_answer_id+" TEXT NOT NULL, "+audit_answer_type+" TEXT NOT NULL, "+audit_sub_question_condition+" TEXT NOT NULL )";
     public static String ct_tb_location_sub_folder = "CREATE TABLE "+tb_location_sub_folder+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_main_location_id+" TEXT NOT NULL, "+audit_sub_folder_name+" TEXT NOT NULL, "+audit_sub_folder_count+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL )";
-    public static String ct_tb_selected_main_location = "CREATE TABLE "+tb_selected_main_location+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_main_location_id+" TEXT NOT NULL, "+audit_main_location_title+" TEXT NOT NULL, "+audit_main_location_server_id+" TEXT NOT NULL, "+audit_main_location_count+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL )";
+    public static String ct_tb_selected_main_location = "CREATE TABLE "+tb_selected_main_location+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_main_location_id+" TEXT NOT NULL, "+audit_main_location_title+" TEXT NOT NULL, "+audit_main_location_server_id+" TEXT NOT NULL, "+audit_main_location_count+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+audit_main_location_decs+" TEXT NOT NULL )";
 
 
 

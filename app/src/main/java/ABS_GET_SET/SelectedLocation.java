@@ -11,8 +11,17 @@ String mStrMainLocationTitle;
 String mStrMainLocationServerId;
 String mStrMainLocationLocalId;
 String mStrMainLocationCount;
+String mStrMainLocationDesc;
 String mStrUserId;
 String mStrAuditId;
+
+    public String getmStrMainLocationDesc() {
+        return mStrMainLocationDesc;
+    }
+
+    public void setmStrMainLocationDesc(String mStrMainLocationDesc) {
+        this.mStrMainLocationDesc = mStrMainLocationDesc;
+    }
 
     public String getmStrId() {
         return mStrId;
