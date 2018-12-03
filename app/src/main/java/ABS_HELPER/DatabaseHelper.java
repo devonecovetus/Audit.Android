@@ -199,6 +199,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+
+
+
+
+
+
     //Update tb_location_sub_folder
     public void update_tb_location_sub_folder(MainLocationSubFolder mainLocationSubFolder) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -257,6 +263,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return mAuditList;
 
+    }
+
+
+
+
+    public ArrayList<MainLocationSubFolder> get_all_tb_location_sub_folder(String mStrId) {
+    ArrayList<MainLocationSubFolder> mAuditList = new ArrayList<MainLocationSubFolder>();
+    String selectQuery = "SELECT * FROM " + tb_location_sub_folder + " WHERE "+audit_main_location_id+" = '" + mStrId + "'";
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor c = db.rawQuery(selectQuery, null);
+    ///
+        if (c.moveToFirst()) {
+            do {
+                MainLocationSubFolder mainLocationSubFolder = new MainLocationSubFolder();
+                mainLocationSubFolder.setmStrId(c.getString((c.getColumnIndex(id))));
+                mainLocationSubFolder.setmStrAuditId(c.getString((c.getColumnIndex(audit_id))));
+                mainLocationSubFolder.setmStrUserId(c.getString((c.getColumnIndex(user_id))));
+                mainLocationSubFolder.setmStrMainLocationId(c.getString((c.getColumnIndex(audit_main_location_id))));
+                mainLocationSubFolder.setmStrSubFolderName(c.getString((c.getColumnIndex(audit_sub_folder_name))));
+                mainLocationSubFolder.setmStrSubFolderCont(c.getString((c.getColumnIndex(audit_sub_folder_count))));
+                mAuditList.add(mainLocationSubFolder);
+            } while (c.moveToNext());
+        }
+
+    return mAuditList;
     }
 
 

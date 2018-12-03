@@ -35,10 +35,8 @@ import butterknife.OnClick;
 
 public class LocationSubFolder extends Activity {
 
-
     @BindView(R.id.mLayoutAddLocation)
     LinearLayout mLayoutAddLocation;
-
     @BindView(R.id.mImageBack)
     ImageView mImageBack;
 
@@ -87,6 +85,41 @@ public class LocationSubFolder extends Activity {
                     }
                 }
             });
+            ArrayList<MainLocationSubFolder> mAuditList = db.get_all_tb_location_sub_folder(selectedLocation.getmStrId());
+            if(mAuditList.size()>0){
+            for(int j = 0;j<mAuditList.size();j++){
+            mLayoutForSubFolder.setVisibility(View.VISIBLE);
+            LayoutInflater msubInflater = LayoutInflater.from(LocationSubFolder.this);
+            View subConvertView = msubInflater.inflate(R.layout.item_selected_sub_folder, null);
+            final TextViewSemiBold mTxtSubGroupFolder = (TextViewSemiBold) subConvertView.findViewById(R.id.mTxtSubGroupFolder);
+            final TextViewSemiBold mTxtCount = (TextViewSemiBold) subConvertView.findViewById(R.id.mTxtCount);
+            final TextViewSemiBold mTxtFolderId = (TextViewSemiBold) subConvertView.findViewById(R.id.mTxtFolderId);
+            ImageView mImgUpdateSubGroup = (ImageView) subConvertView.findViewById(R.id.mImgUpdateSubGroup);
+            mTxtSubGroupFolder.setText(mAuditList.get(j).getmStrSubFolderName());
+            mTxtCount.setText(mAuditList.get(j).getmStrSubFolderCont());
+            mTxtFolderId.setText(mAuditList.get(j).getmStrId());
+                mImgUpdateSubGroup.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //update
+                        int a = 0;
+                        for (int index = 0; index < ((ViewGroup) mLayoutForSubFolder).getChildCount(); ++index) {
+                            View nextChild = ((ViewGroup) mLayoutForSubFolder).getChildAt(index);
+                            TextViewSemiBold mTxtCount = (TextViewSemiBold) nextChild.findViewById(R.id.mTxtCount);
+                            a = a + Integer.parseInt(mTxtCount.getText().toString());
+                        }
+                        int newCount = Integer.parseInt(mTxtMainLocationCount.getText().toString()) - a;
+                        updateDialog(mTxtSubGroupFolder, mTxtCount, Integer.parseInt(mTxtCount.getText().toString()) + newCount,mTxtFolderId.getText().toString());
+                    }
+                });
+                mLayoutForSubFolder.addView(subConvertView);
+            }
+            }
+            ///////////////////////////////////////////////////////////////
+
+
+
+
             mLayoutAddLocation.addView(convertView);
         }
 
