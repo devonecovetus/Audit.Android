@@ -43,7 +43,7 @@ public class ActivityTabHostMain extends FragmentActivity {
         mTabHost.addTab(mTabHost.newTabSpec("tab2").setIndicator(createTabView(R.mipmap.ic_tabbar_report)),
                 FragmentChatList.class, null);
         mTabHost.addTab(mTabHost.newTabSpec("tab3").setIndicator(createTabView(R.mipmap.ic_tabbar_report)),
-                FragmentDashboard.class, null);
+                FragmentDraft.class, null);
         mTabHost.addTab(mTabHost.newTabSpec("tab4").setIndicator(createTabView(R.mipmap.ic_tabbar_report)),
                 FragmentDashboard.class, null);
         mTabHost.addTab(mTabHost.newTabSpec("tab5").setIndicator(createTabView(R.mipmap.ic_tabbar_report)),

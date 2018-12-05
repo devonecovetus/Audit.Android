@@ -108,6 +108,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(tb_list_audit, null, values);
     }
 
+    public void update_tb_list_audit(String mId,String mStatus) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(audit_work_status,mStatus);
+        db.update(tb_list_audit, values, audit_id+"="+mId, null);
+    }
+
 
     //Insert tb_audit_main_location
     public int insert_tb_audit_main_location(AuditMainLocation auditMainLocation) {
@@ -141,12 +148,122 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(tb_sub_folder_explation_list, null, values);
     }
 
+
+
+
+
+//dalna he kl#########################################################
+
+
+
+
+
+
+    public ArrayList<LayerList> get_all_tb_sub_folder_explation_list(String mId) {
+        ArrayList<LayerList> mAuditList = new ArrayList<LayerList>();
+        String selectQuery = "SELECT  * FROM  " + tb_sub_folder_explation_list+ " WHERE "+audit_sub_folder_id+" = '" + mId + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            do {
+                LayerList layerList = new LayerList();
+                layerList.setmStrId(c.getString((c.getColumnIndex(id))));
+                layerList.setmStrUserId(c.getString((c.getColumnIndex(user_id))));
+                layerList.setmStrAuditId(c.getString((c.getColumnIndex(audit_id))));
+                layerList.setmStrLayerTitle(c.getString((c.getColumnIndex(audit_layer_title))));
+                layerList.setmStrLayerDesc(c.getString((c.getColumnIndex(audit_layer_desc))));
+                layerList.setmStrSubFolderTitle(c.getString((c.getColumnIndex(audit_sub_folder_title))));
+                layerList.setmStrSubFolderId(c.getString((c.getColumnIndex(audit_sub_folder_id))));
+                layerList.setmStrMainLocationTitle(c.getString((c.getColumnIndex(audit_main_location_title))));
+                layerList.setmStrMainLocationId(c.getString((c.getColumnIndex(audit_main_location_id))));
+                mAuditList.add(layerList);
+            } while (c.moveToNext());
+        }
+        return mAuditList;
+
+    }
+
+
+    public void update_tb_sub_folder_explation_list(LayerList layerList) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(audit_layer_title, layerList.getmStrLayerTitle());
+        values.put(audit_layer_desc, layerList.getmStrLayerDesc());
+        db.update(tb_sub_folder_explation_list, values, "id="+layerList.getmStrId(), null);
+    }
+
+
+
+    public void update_tb_location_sub_folder_count(String mFolder) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT  * FROM  " + tb_location_sub_folder+ " WHERE "+id+" = '" + mFolder + "'";
+        Cursor c = db.rawQuery(selectQuery, null);
+        String mStr = "0";
+        if (c.moveToFirst()) {
+            do {
+             mStr = c.getString((c.getColumnIndex(audit_sub_folder_count)));
+            } while (c.moveToNext());
+        }
+        ContentValues values = new ContentValues();
+        values.put(audit_sub_folder_count,Integer.parseInt(mStr)+1+"");
+        db.update(tb_location_sub_folder, values, "id="+mFolder, null);
+    }
+
+
+
+
+    public void update_tb_selected_main_location_count(String mFolder) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT  * FROM  " + tb_selected_main_location+ " WHERE "+audit_main_location_id+" = '" + mFolder + "'";
+        Cursor c = db.rawQuery(selectQuery, null);
+        String mStr = "0";
+        if (c.moveToFirst()) {
+            do {
+                mStr = c.getString((c.getColumnIndex(audit_main_location_count)));
+            } while (c.moveToNext());
+        }
+        ContentValues values = new ContentValues();
+        values.put(audit_main_location_count,Integer.parseInt(mStr)+1+"");
+        db.update(tb_selected_main_location, values, audit_main_location_id+"="+mFolder, null);
+    }
+
+//###################################################################
+
+
+
+
+
+
+
+
     //Delete tb_sub_folder_explation_list
     public void delete_tb_sub_folder_explation_list(String id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(tb_sub_folder_explation_list, audit_sub_folder_id + "=" + id, null);
     }
+
+    //Delete tb_selected_main_location
+    public void delete_tb_selected_main_location(String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(tb_selected_main_location, audit_main_location_id + "=" + id, null);
+    }
+
+    //Delete tb_location_sub_folder
+    public void delete_tb_location_sub_folder(String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(tb_location_sub_folder, audit_main_location_id + "=" + id, null);
+    }
+
+    //Delete tb_sub_folder_explation_list
+    public void delete_tb_sub_folder_explation_list_all(String id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(tb_sub_folder_explation_list, audit_main_location_id + "=" + id, null);
+    }
+
 
 
 
@@ -261,8 +378,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(audit_main_location_id, selectedLocation.getmStrMainLocationLocalId());
         values.put(audit_main_location_decs, selectedLocation.getmStrMainLocationDesc());
         db.insert(tb_selected_main_location, null, values);
-
     }
+
+    //Check data tb_selected_main_location
+    public int get_data_count_tb_selected_main_location(String mId) {
+    String selectQuery = "SELECT  * FROM  " + tb_audit_main_location+ " WHERE "+audit_id+" = '" + mId + "'";
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor c = db.rawQuery(selectQuery, null);
+    return c.getCount();
+    }
+
 
 
     public void update_tb_selected_main_location(SelectedLocation selectedLocation) {
@@ -273,9 +398,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<SelectedLocation> get_all_tb_selected_main_location() {
+    public ArrayList<SelectedLocation> get_all_tb_selected_main_location(String mId) {
         ArrayList<SelectedLocation> mAuditList = new ArrayList<SelectedLocation>();
-        String selectQuery = "SELECT  * FROM  " + tb_selected_main_location;
+        String selectQuery = "SELECT  * FROM  " + tb_selected_main_location+ " WHERE "+audit_id+" = '" + mId + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
@@ -333,8 +458,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public int get_existing_location_count(String mId) {
         SQLiteDatabase db = this.getWritableDatabase();
+        int a = 0;
         Cursor clientCur = db.rawQuery("SELECT * FROM " + tb_selected_main_location + " WHERE "+audit_main_location_id+" = '" + mId + "'", null);
-        int a = Integer.parseInt(clientCur.getString((clientCur.getColumnIndex(audit_main_location_count))));
+        if (clientCur.moveToFirst()) {
+            do {
+            a = Integer.parseInt(clientCur.getString((clientCur.getColumnIndex(audit_main_location_count))));
+            } while (clientCur.moveToNext());
+        }
         return a;
     }
 
@@ -344,9 +474,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //get all tb_audit_main_location
-    public ArrayList<AuditMainLocation> get_all_tb_audit_main_location() {
+    public ArrayList<AuditMainLocation> get_all_tb_audit_main_location(String mId) {
         ArrayList<AuditMainLocation> mAuditList = new ArrayList<AuditMainLocation>();
-        String selectQuery = "SELECT  * FROM  " + tb_audit_main_location;
+        String selectQuery = "SELECT  * FROM  " + tb_audit_main_location+ " where " + audit_id + " = '" + mId + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
@@ -366,9 +496,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //get all tb_list_audit
-    public ArrayList<Audit> get_all_tb_list_audit(String mUserId) {
+    public ArrayList<Audit> get_all_tb_list_audit(String mUserId,String mStatus) {
         ArrayList<Audit> mAuditList = new ArrayList<Audit>();
-        String selectQuery = "SELECT  * FROM  " + tb_list_audit + " where " + user_id + " = '" + mUserId + "'";
+        String selectQuery = "SELECT  * FROM  " + tb_list_audit + " where " + user_id + " = " + mUserId + " AND "+audit_work_status+ " = "+mStatus;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {

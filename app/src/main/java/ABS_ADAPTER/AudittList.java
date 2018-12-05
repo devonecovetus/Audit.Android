@@ -3,7 +3,9 @@
  */
 package ABS_ADAPTER;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,23 +14,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.covetus.absaudit.ActivitySelectCountryStandard;
 import com.covetus.absaudit.R;
+import com.covetus.absaudit.SelectMainLocationActivity;
 
 import java.util.ArrayList;
 
 import ABS_CUSTOM_VIEW.TextViewSemiBold;
 import ABS_GET_SET.Audit;
 import ABS_GET_SET.SideMenu;
+import ABS_HELPER.DatabaseHelper;
 
 
 public class AudittList extends BaseAdapter {
 
     private ArrayList<Audit> mListItems = new ArrayList<>();
-    Context context;
-    int selectedPos;
+    Activity context;
 
 
-    public AudittList(Context context, ArrayList<Audit> mListItems) {
+    public AudittList(Activity context, ArrayList<Audit> mListItems) {
         this.mListItems = mListItems;
         this.context = context;
     }
@@ -58,24 +62,37 @@ public class AudittList extends BaseAdapter {
             holder.mTxtAuditDate = (TextViewSemiBold) convertView.findViewById(R.id.mTxtAuditDate);
             holder.mTxtAuditTitle = (TextViewSemiBold) convertView.findViewById(R.id.mTxtAuditTitle);
             holder.mTxtAgentName = (TextViewSemiBold) convertView.findViewById(R.id.mTxtAgentName);
-            //holder.mStatusLine = (RelativeLayout) convertView.findViewById(R.id.mStatusLine);
+            holder.mLayoutViewAudit = (RelativeLayout) convertView.findViewById(R.id.mLayoutViewAudit);
             holder.mLayoutMain = (RelativeLayout) convertView.findViewById(R.id.mLayoutMain);
-            Audit audit = mListItems.get(position);
+            final Audit audit = mListItems.get(position);
             holder.mTxtAuditDate.setText(audit.getmDueDate());
             holder.mTxtAuditTitle.setText(audit.getmTitle());
             holder.mTxtAgentName.setText(audit.getmAssignBy());
-
-
-            //holder.mStatusLine.setLayoutParams(new RelativeLayout.LayoutParams(30, parent.getHeight()));
-
-
-
-            convertView.setTag(holder);
-            //System.out.println("<><><><>"+holder.mLayoutMain.getMeasuredHeight());
+            if(audit.getmStatus().equals("0")){
+            holder.mLayoutMain.setBackground(context.getResources().getDrawable(R.drawable.red_border));
+            }else {
+            holder.mLayoutMain.setBackground(context.getResources().getDrawable(R.drawable.yellow_border));
+            }
+            holder.mLayoutViewAudit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseHelper db = new DatabaseHelper(context);
+                    String mAuditId = audit.getmAuditId();
+                    if(db.get_data_count_tb_selected_main_location(mAuditId)>0){
+                        Intent intent = new Intent(context,SelectMainLocationActivity.class);
+                        intent.putExtra("mAuditId",mAuditId);
+                        context.startActivity(intent);
+                    }else {
+                        Intent intent = new Intent(context,ActivitySelectCountryStandard.class);
+                        intent.putExtra("mAuditId",mAuditId);
+                        context.startActivity(intent);
+                    }
+                }
+            });
+          convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
 
         return convertView;
     }
@@ -85,7 +102,7 @@ public class AudittList extends BaseAdapter {
         TextViewSemiBold mTxtAuditDate;
         TextViewSemiBold mTxtAuditTitle;
         TextViewSemiBold mTxtAgentName;
-        //RelativeLayout mStatusLine;
+        RelativeLayout mLayoutViewAudit;
         RelativeLayout mLayoutMain;
     }
 

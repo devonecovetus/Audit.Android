@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import ABS_CUSTOM_VIEW.TextViewRegular;
 import ABS_CUSTOM_VIEW.TextViewSemiBold;
 import ABS_GET_SET.AuditMainLocation;
 import ABS_GET_SET.SelectedLocation;
+import ABS_HELPER.CommonUtils;
 import ABS_HELPER.DatabaseHelper;
 import ABS_HELPER.PreferenceManager;
 import butterknife.BindView;
@@ -43,6 +45,8 @@ public class SelectMainLocationActivity extends Activity implements Listener {
 
     @BindView(R.id.mLayoutNext)
     RelativeLayout mLayoutNext;
+    @BindView(R.id.mImageBack)
+    ImageView mImageBack;
 
 
     public static TextViewRegular mTxtLocationDesc;
@@ -51,7 +55,13 @@ public class SelectMainLocationActivity extends Activity implements Listener {
 
     ArrayList<AuditMainLocation> mListArry = new ArrayList<>();
     DatabaseHelper db;
+    String mAuditId;
 
+
+    @OnClick(R.id.mImageBack)
+    public void goBack() {
+        finish();
+    }
 
     @OnClick(R.id.mLayoutNext)
     public void mLayoutGoNext() {
@@ -59,9 +69,16 @@ public class SelectMainLocationActivity extends Activity implements Listener {
     List<String> listSource = adapterSource.getList();
     if(listSource.size()>0){
         for(int i = 0;i<listSource.size();i++){
+        if(meMap.get(listSource.get(i)).equals("0") || meMap.get(listSource.get(i)).equals("")){
+            CommonUtils.mShowAlert("Please give count of "+listSource.get(i)+" location",SelectMainLocationActivity.this);
+            return;
+        }
+        }
+
+        for(int i = 0;i<listSource.size();i++){
             SelectedLocation selectedLocation = new SelectedLocation();
-            selectedLocation.setmStrAuditId("73");
-            selectedLocation.setmStrUserId("44");
+            selectedLocation.setmStrAuditId(mAuditId);
+            selectedLocation.setmStrUserId(PreferenceManager.getFormiiId(SelectMainLocationActivity.this));
             selectedLocation.setmStrMainLocationLocalId(meMapLocalId.get(listSource.get(i)));
             selectedLocation.setmStrMainLocationServerId(meMapServerId.get(listSource.get(i)));
             selectedLocation.setmStrMainLocationTitle(listSource.get(i));
@@ -70,13 +87,17 @@ public class SelectMainLocationActivity extends Activity implements Listener {
             if(!db.isExistNotification(meMapLocalId.get(listSource.get(i)))){
             //insert
             db.insert_tb_selected_main_location(selectedLocation);
+            db.update_tb_list_audit(mAuditId,"1");
             }else {
             //update
+            db.update_tb_list_audit(mAuditId,"1");
             db.update_tb_selected_main_location(selectedLocation);
             }
         }
         Intent intent = new Intent(SelectMainLocationActivity.this,LocationSubFolder.class);
+        intent.putExtra("mAuditId",mAuditId);
         startActivity(intent);
+        finish();
     }
     }
 
@@ -99,6 +120,12 @@ public class SelectMainLocationActivity extends Activity implements Listener {
 
     }
 
+    public static int getCount(){
+    DragListAdapter adapterSource = (DragListAdapter) rvTop.getAdapter();
+    List<String> listSource = adapterSource.getList();
+    return listSource.size();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +133,10 @@ public class SelectMainLocationActivity extends Activity implements Listener {
         setContentView(R.layout.activity_select_main_location);
         ButterKnife.bind(this);
         db = new DatabaseHelper(SelectMainLocationActivity.this);
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+        mAuditId = bundle.getString("mAuditId");
+        }
         rvTop = (RecyclerView) findViewById(R.id.rvTop);
         rvBottom = (RecyclerView) findViewById(R.id.rvBottom);
         mTextNormal = (TextViewSemiBold) findViewById(R.id.mTextNormal);
@@ -117,7 +148,7 @@ public class SelectMainLocationActivity extends Activity implements Listener {
     }
 
     private void initTopRecyclerView() {
-        mListArry = db.get_all_tb_audit_main_location();
+        mListArry = db.get_all_tb_audit_main_location(mAuditId);
         List<String> topList = new ArrayList<>();
         for (int i = 0; i<mListArry.size();i++){
         if(!db.isExistNotification(mListArry.get(i).getmStrId())){
@@ -129,7 +160,7 @@ public class SelectMainLocationActivity extends Activity implements Listener {
         }
         }
         rvBottom.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        DragListAdapter topListAdapter = new DragListAdapter(SelectMainLocationActivity.this,topList, this, "0");
+        DragListAdapter topListAdapter = new DragListAdapter(SelectMainLocationActivity.this,topList, this, "0",mAuditId);
         rvBottom.setAdapter(topListAdapter);
         tvEmptyListTop.setOnDragListener(topListAdapter.getDragInstance());
         rvBottom.setOnDragListener(topListAdapter.getDragInstance());
@@ -138,7 +169,7 @@ public class SelectMainLocationActivity extends Activity implements Listener {
 
     private void initBottomRecyclerView() {
         rvTop.setLayoutManager(new GridLayoutManager(this, 2));
-        ArrayList<SelectedLocation> mAuditList = db.get_all_tb_selected_main_location();
+        ArrayList<SelectedLocation> mAuditList = db.get_all_tb_selected_main_location(mAuditId);
         List<String> bottomList = new ArrayList<>();
         for (int i = 0; i<mAuditList.size();i++){
         bottomList.add(mAuditList.get(i).getmStrMainLocationTitle());
@@ -147,7 +178,7 @@ public class SelectMainLocationActivity extends Activity implements Listener {
         meMapServerId.put(mAuditList.get(i).getmStrMainLocationTitle(),mAuditList.get(i).getmStrMainLocationServerId());
         meMapLocalId.put(mAuditList.get(i).getmStrMainLocationTitle(),mAuditList.get(i).getmStrMainLocationLocalId());
         }
-        DragListAdapter bottomListAdapter = new DragListAdapter(SelectMainLocationActivity.this,bottomList, this, "1");
+        DragListAdapter bottomListAdapter = new DragListAdapter(SelectMainLocationActivity.this,bottomList, this, "1",mAuditId);
         rvTop.setAdapter(bottomListAdapter);
         tvEmptyListBottom.setOnDragListener(bottomListAdapter.getDragInstance());
         rvTop.setOnDragListener(bottomListAdapter.getDragInstance());

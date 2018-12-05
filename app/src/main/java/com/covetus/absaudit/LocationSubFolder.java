@@ -28,6 +28,7 @@ import ABS_GET_SET.AuditMainLocation;
 import ABS_GET_SET.LayerList;
 import ABS_GET_SET.MainLocationSubFolder;
 import ABS_GET_SET.SelectedLocation;
+import ABS_HELPER.CommonUtils;
 import ABS_HELPER.DatabaseHelper;
 import ABS_HELPER.PreferenceManager;
 import butterknife.BindView;
@@ -42,6 +43,10 @@ public class LocationSubFolder extends Activity {
     ImageView mImageBack;
     DatabaseHelper db;
     ArrayList<SelectedLocation> mAuditList;
+    String mAuditId;
+
+
+
     @OnClick(R.id.mImageBack)
     public void mImageBack() {
 
@@ -54,8 +59,11 @@ public class LocationSubFolder extends Activity {
         setContentView(R.layout.activity_main_location_divide_sub_folder);
         ButterKnife.bind(this);
         db = new DatabaseHelper(LocationSubFolder.this);
-        mAuditList = db.get_all_tb_selected_main_location();
-
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            mAuditId = bundle.getString("mAuditId");
+        }
+        mAuditList = db.get_all_tb_selected_main_location(mAuditId);
         for (int i = 0; i < mAuditList.size(); i++) {
             final SelectedLocation selectedLocation = mAuditList.get(i);
             LayoutInflater mInflater = LayoutInflater.from(LocationSubFolder.this);
@@ -63,9 +71,26 @@ public class LocationSubFolder extends Activity {
             ImageView mImgAddSubFolder = (ImageView) convertView.findViewById(R.id.mImgAddSubFolder);
             final TextViewSemiBold mTxtMainLocationCount = (TextViewSemiBold) convertView.findViewById(R.id.mTxtMainLocationCount);
             final TextViewSemiBold mTxtMainLocation = (TextViewSemiBold) convertView.findViewById(R.id.mTxtMainLocation);
+            final ImageView mImgExpand = (ImageView) convertView.findViewById(R.id.mImgExpand);
             mTxtMainLocationCount.setText(selectedLocation.getmStrMainLocationCount());
             mTxtMainLocation.setText(selectedLocation.getmStrMainLocationTitle());
             final LinearLayout mLayoutForSubFolder = (LinearLayout) convertView.findViewById(R.id.mLayoutForSubFolder);
+            mImgExpand.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mLayoutForSubFolder.getVisibility() == View.VISIBLE) {
+                        mLayoutForSubFolder.setVisibility(View.GONE);
+                        mImgExpand.setImageResource(R.mipmap.ic_arrow_green_down);
+                    }else {
+                        mLayoutForSubFolder.setVisibility(View.VISIBLE);
+                        mImgExpand.setImageResource(R.mipmap.ic_arrow_green_up);
+                    }
+
+
+                }
+            });
+
+
             mImgAddSubFolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,14 +102,14 @@ public class LocationSubFolder extends Activity {
                     }
                     int newCount = Integer.parseInt(mTxtMainLocationCount.getText().toString()) - a;
                     if (newCount > 0) {
-                        mAddUpdateSubFolder(mLayoutForSubFolder,mTxtMainLocation, mTxtMainLocationCount, newCount,selectedLocation.getmStrId());
+                        mAddUpdateSubFolder(mImgExpand,mLayoutForSubFolder,mTxtMainLocation, mTxtMainLocationCount, newCount,selectedLocation.getmStrMainLocationLocalId());
                     }
                 }
             });
             ArrayList<MainLocationSubFolder> mAuditList = db.get_all_tb_location_sub_folder(selectedLocation.getmStrId());
             if(mAuditList.size()>0){
             for(int j = 0;j<mAuditList.size();j++){
-            mLayoutForSubFolder.setVisibility(View.VISIBLE);
+            //mLayoutForSubFolder.setVisibility(View.VISIBLE);
             LayoutInflater msubInflater = LayoutInflater.from(LocationSubFolder.this);
             View subConvertView = msubInflater.inflate(R.layout.item_selected_sub_folder, null);
             final TextViewSemiBold mTxtSubGroupFolder = (TextViewSemiBold) subConvertView.findViewById(R.id.mTxtSubGroupFolder);
@@ -105,9 +130,39 @@ public class LocationSubFolder extends Activity {
                             a = a + Integer.parseInt(mTxtCount.getText().toString());
                         }
                         int newCount = Integer.parseInt(mTxtMainLocationCount.getText().toString()) - a;
-                        updateDialog(selectedLocation.getmStrId(),mTxtSubGroupFolder,mTxtMainLocation, mTxtCount, Integer.parseInt(mTxtCount.getText().toString()) + newCount,mTxtFolderId.getText().toString());
+                        updateDialog(selectedLocation.getmStrMainLocationLocalId(),mTxtSubGroupFolder,mTxtMainLocation, mTxtCount, Integer.parseInt(mTxtCount.getText().toString()) + newCount,mTxtFolderId.getText().toString());
                     }
                 });
+
+
+                subConvertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        int a = 0;
+                        for (int index = 0; index < ((ViewGroup) mLayoutForSubFolder).getChildCount(); ++index) {
+                            View nextChild = ((ViewGroup) mLayoutForSubFolder).getChildAt(index);
+                            TextViewSemiBold mTxtCount = (TextViewSemiBold) nextChild.findViewById(R.id.mTxtCount);
+                            a = a + Integer.parseInt(mTxtCount.getText().toString());
+                        }
+                        int newCount = Integer.parseInt(mTxtMainLocationCount.getText().toString()) - a;
+                        if(newCount==0){
+                            Intent intent = new Intent(LocationSubFolder.this,ActivityLayerList.class);
+                            intent.putExtra("mSubFolderId",mTxtFolderId.getText());
+                            startActivity(intent);
+                            finish();
+                        }else {
+                            CommonUtils.mShowAlert("",LocationSubFolder.this);
+                        }
+
+
+
+
+                    }
+                });
+
+
+
                 mLayoutForSubFolder.addView(subConvertView);
             }
             }
@@ -118,7 +173,7 @@ public class LocationSubFolder extends Activity {
     }
 
 
-    public void mAddUpdateSubFolder(final LinearLayout linearLayout,final TextViewSemiBold mTxtMainLocation, final TextViewSemiBold mTxtMainLocationCount, final int Count,final String mLocationId) {
+    public void mAddUpdateSubFolder(final ImageView imageView,final LinearLayout linearLayout,final TextViewSemiBold mTxtMainLocation, final TextViewSemiBold mTxtMainLocationCount, final int Count,final String mLocationId) {
         final Dialog dialog = new Dialog(LocationSubFolder.this, R.style.Theme_Dialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_add_update_sub_folder);
@@ -135,7 +190,6 @@ public class LocationSubFolder extends Activity {
                 if (a > 0) {
                     mDiaTxtCount.setText(a - 1 + "");
                 } else {
-
                 }
 
             }
@@ -157,6 +211,7 @@ public class LocationSubFolder extends Activity {
                 if (mDiaTxtCount.getText().equals("0") || mDiaEditFolderName.getText().toString().length()<=0) {
 
                 } else {
+                    imageView.setImageResource(R.mipmap.ic_arrow_green_up);
                     linearLayout.setVisibility(View.VISIBLE);
                     LayoutInflater mInflater = LayoutInflater.from(LocationSubFolder.this);
                     View convertView = mInflater.inflate(R.layout.item_selected_sub_folder, null);
@@ -182,8 +237,8 @@ public class LocationSubFolder extends Activity {
                     });
                     //insert
                     MainLocationSubFolder mainLocationSubFolder = new MainLocationSubFolder();
-                    mainLocationSubFolder.setmStrAuditId("73");
-                    mainLocationSubFolder.setmStrUserId("44");
+                    mainLocationSubFolder.setmStrAuditId(mAuditId);
+                    mainLocationSubFolder.setmStrUserId(PreferenceManager.getFormiiId(LocationSubFolder.this));
                     mainLocationSubFolder.setmStrMainLocationId(mLocationId);
                     mainLocationSubFolder.setmStrSubFolderName(mDiaEditFolderName.getText().toString());
                     mainLocationSubFolder.setmStrSubFolderCont(mDiaTxtCount.getText().toString());
@@ -192,16 +247,44 @@ public class LocationSubFolder extends Activity {
 
                     for (int j=0;j<Integer.parseInt(mDiaTxtCount.getText().toString());j++){
                         LayerList layerList = new LayerList();
-                        layerList.setmStrUserId("44");
-                        layerList.setmStrAuditId("73");
+                        layerList.setmStrUserId(PreferenceManager.getFormiiId(LocationSubFolder.this));
+                        layerList.setmStrAuditId(mAuditId);
                         layerList.setmStrLayerDesc(mTxtSubGroupFolder.getText().toString()+" Name");
-                        layerList.setmStrLayerTitle(mTxtSubGroupFolder.getText().toString()+" "+j);
+                        layerList.setmStrLayerTitle(mTxtSubGroupFolder.getText().toString()+" "+(j+1));
                         layerList.setmStrMainLocationId(mLocationId);
                         layerList.setmStrMainLocationTitle(mTxtMainLocation.getText().toString());
                         layerList.setmStrSubFolderTitle(mDiaEditFolderName.getText().toString());
                         layerList.setmStrSubFolderId(mTxtFolderId.getText().toString());
                         db.insert_tb_sub_folder_explation_list(layerList);
                     }
+
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+
+                            int a = 0;
+                            for (int index = 0; index < ((ViewGroup) linearLayout).getChildCount(); ++index) {
+                                View nextChild = ((ViewGroup) linearLayout).getChildAt(index);
+                                TextViewSemiBold mTxtCount = (TextViewSemiBold) nextChild.findViewById(R.id.mTxtCount);
+                                a = a + Integer.parseInt(mTxtCount.getText().toString());
+                            }
+                            int newCount = Integer.parseInt(mTxtMainLocationCount.getText().toString()) - a;
+                            if(newCount==0){
+                                Intent intent = new Intent(LocationSubFolder.this,ActivityLayerList.class);
+                                intent.putExtra("mSubFolderId",mTxtFolderId.getText());
+                                startActivity(intent);
+                                finish();
+                            }else {
+                                CommonUtils.mShowAlert("",LocationSubFolder.this);
+                            }
+
+
+
+
+
+                        }
+                    });
                     linearLayout.addView(convertView);
                     dialog.dismiss();
                 }
@@ -262,19 +345,16 @@ public class LocationSubFolder extends Activity {
                     db.delete_tb_sub_folder_explation_list(mIdForUpdate);
                     for (int j=0;j<Integer.parseInt(mTxtCount.getText().toString());j++){
                         LayerList layerList = new LayerList();
-                        layerList.setmStrUserId("44");
-                        layerList.setmStrAuditId("73");
+                        layerList.setmStrUserId(PreferenceManager.getFormiiId(LocationSubFolder.this));
+                        layerList.setmStrAuditId(mAuditId);
                         layerList.setmStrLayerDesc(mEditFolderName.getText().toString()+" Name");
-                        layerList.setmStrLayerTitle(mEditFolderName.getText().toString()+" "+j);
+                        layerList.setmStrLayerTitle(mEditFolderName.getText().toString()+" "+(j+1));
                         layerList.setmStrMainLocationId(mLocationId);
                         layerList.setmStrMainLocationTitle(mTxtMainLocation.getText().toString());
                         layerList.setmStrSubFolderTitle(mEditFolderName.getText().toString());
                         layerList.setmStrSubFolderId(mIdForUpdate);
                         db.insert_tb_sub_folder_explation_list(layerList);
                     }
-
-
-
                     dialog.dismiss();
                 }
             }

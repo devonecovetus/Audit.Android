@@ -88,7 +88,6 @@ public class ActivitySelectCountryStandard extends Activity {
     ArrayList<String> mListCountry = new ArrayList<>();
     ArrayList<String> mListCountryId = new ArrayList<>();
     String mStrCountryId,mStrLanguageCode;
-
     String mAuditId;
     DatabaseHelper db;
 
@@ -251,10 +250,8 @@ public class ActivitySelectCountryStandard extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                /*params.put("id", PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
-                params.put("auth_token", PreferenceManager.getFormiiAuthToken(ActivitySelectCountryStandard.this));params.put("id", PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));*/
-                params.put("id", "70");
-                params.put("auth_token","fXQah0GZxq9+Rex3DUoLKTiTq9wQ24148LPnG1R7lek=1543847130");
+                params.put("id", PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
+                params.put("auth_token", PreferenceManager.getFormiiAuthToken(ActivitySelectCountryStandard.this));params.put("id", PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
                 return params;
             }
         };
@@ -290,8 +287,8 @@ public class ActivitySelectCountryStandard extends Activity {
                                 String mStrMainCatDesc = JOMainCategory.getString("desc");
 
                                 AuditMainLocation auditMainLocation = new AuditMainLocation();
-                                auditMainLocation.setmStrAuditId("73");//audit id
-                                auditMainLocation.setmStrUserId("70");//user id
+                                auditMainLocation.setmStrAuditId(mAuditId);//audit id
+                                auditMainLocation.setmStrUserId(PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));//user id
                                 auditMainLocation.setmStrLocationServerId(mStrMainCatID);
                                 auditMainLocation.setmStrLocationTitle(mStrMainCatTitle);
                                 auditMainLocation.setmStrLocationDesc(mStrMainCatDesc);
@@ -303,8 +300,8 @@ public class ActivitySelectCountryStandard extends Activity {
                                 String mStrSubCatID = JOSubCategory.getString("id");
                                 String mStrSubCatTitle = JOSubCategory.getString("title");
                                 AuditSubLocation auditSubLocation = new AuditSubLocation();
-                                auditSubLocation.setmStrAuditId("73");
-                                auditSubLocation.setmStrUserId("70");
+                                auditSubLocation.setmStrAuditId(mAuditId);
+                                auditSubLocation.setmStrUserId(PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
                                 auditSubLocation.setmStrMainLocationId(mainLocationLocalID+"");
                                 auditSubLocation.setmStrSubLocationServerId(mStrSubCatID);
                                 auditSubLocation.setmStrSubLocationTitle(mStrSubCatTitle);
@@ -319,8 +316,8 @@ public class ActivitySelectCountryStandard extends Activity {
                                 String mStrNormalAnswerID = JONormalQuestion.getString("answernum");
                                 String mStrAnswerType = JONormalQuestion.getString("type");
                                 AuditQuestion auditQuestion = new AuditQuestion();
-                                auditQuestion.setmStrAuditId("73");
-                                auditQuestion.setmStrUserId("70");
+                                auditQuestion.setmStrAuditId(mAuditId);
+                                auditQuestion.setmStrUserId(PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
                                 auditQuestion.setmStrMainLocationId(mainLocationLocalID+"");
                                 auditQuestion.setmStrSubLocationId(subLocationLocalID+"");
                                 auditQuestion.setmStrQuestion(mStrNormalQuestion);
@@ -342,8 +339,8 @@ public class ActivitySelectCountryStandard extends Activity {
                                 String mStrQuestionCondition = JOSubQuestion.getString("answer_id");
                                 String mStrSubAnsType = JOSubQuestion.getString("type");
                                 AuditSubQuestion auditSubQuestion = new AuditSubQuestion();
-                                auditSubQuestion.setmStrUserId("");
-                                auditSubQuestion.setmStrAuditId("");
+                                auditSubQuestion.setmStrUserId(PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
+                                auditSubQuestion.setmStrAuditId(mAuditId);
                                 auditSubQuestion.setmStrSubQuestionServerId(mStrSubQuestionId);
                                 auditSubQuestion.setmStrQuestion(mStrSubQuestion);
                                 auditSubQuestion.setmStrAnswer(mStrSubQuestionAns.replace("\r\n","#"));
@@ -364,8 +361,8 @@ public class ActivitySelectCountryStandard extends Activity {
                                         String mStrNormalAnswerID = JOMeasurementQuestion.getString("answernum");
                                         String mStrAnswerType = JOMeasurementQuestion.getString("type");
                                         AuditQuestion auditQuestion = new AuditQuestion();
-                                        auditQuestion.setmStrAuditId("73");
-                                        auditQuestion.setmStrUserId("70");
+                                        auditQuestion.setmStrAuditId(mAuditId);
+                                        auditQuestion.setmStrUserId(PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
                                         auditQuestion.setmStrMainLocationId(mainLocationLocalID+"");
                                         auditQuestion.setmStrSubLocationId(subLocationLocalID+"");
                                         auditQuestion.setmStrQuestion(mStrNormalQuestion);
@@ -385,8 +382,8 @@ public class ActivitySelectCountryStandard extends Activity {
                                             String mStrQuestionCondition = JOSubQuestion.getString("answer_id");
                                             String mStrSubAnsType = JOSubQuestion.getString("type");
                                             AuditSubQuestion auditSubQuestion = new AuditSubQuestion();
-                                            auditSubQuestion.setmStrUserId("");
-                                            auditSubQuestion.setmStrAuditId("");
+                                            auditSubQuestion.setmStrUserId(PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
+                                            auditSubQuestion.setmStrAuditId(mAuditId);
                                             auditSubQuestion.setmStrSubQuestionServerId(mStrSubQuestionId);
                                             auditSubQuestion.setmStrQuestion(mStrSubQuestion);
                                             auditSubQuestion.setmStrAnswer(mStrSubQuestionAns.replace("\r\n","#"));
@@ -400,9 +397,9 @@ public class ActivitySelectCountryStandard extends Activity {
                                     }
                                 }
                                 }
-
                                 }
                             Intent i = new Intent(ActivitySelectCountryStandard.this,SelectMainLocationActivity.class);
+                            i.putExtra("mAuditId",mAuditId);
                             startActivity(i);
                             finish();
                             } else if (mStrStatus.equals("2")) {
@@ -425,11 +422,11 @@ public class ActivitySelectCountryStandard extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("id","70");
-                params.put("auth_token","fXQah0GZxq9+Rex3DUoLKTiTq9wQ24148LPnG1R7lek=1543847130");
-                params.put("audit_id", "73");
-                params.put("lang","en");
-                params.put("country_id","231");
+                params.put("id",PreferenceManager.getFormiiId(ActivitySelectCountryStandard.this));
+                params.put("auth_token",PreferenceManager.getFormiiAuthToken(ActivitySelectCountryStandard.this));
+                params.put("audit_id",mAuditId);
+                params.put("lang",mStrLanguageCode);
+                params.put("country_id",mStrCountryId);
                 return params;
             }
         };

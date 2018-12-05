@@ -1,8 +1,10 @@
 package com.covetus.absaudit;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +22,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import ABS_CUSTOM_VIEW.TextViewBold;
+import ABS_CUSTOM_VIEW.TextViewRegular;
+import ABS_CUSTOM_VIEW.TextViewSemiBold;
 import ABS_HELPER.DatabaseHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,13 +34,15 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
     private List<String> list;
     private Listener listener;
     String mStatus;
+    String mAudit;
     Activity context;
 
-    DragListAdapter(Activity context, List<String> list, Listener listener, String mStr) {
+    DragListAdapter(Activity context, List<String> list, Listener listener, String mStr, String mAudit) {
         this.list = list;
         this.listener = listener;
         this.mStatus = mStr;
         this.context = context;
+        this.mAudit = mAudit;
 
     }
 
@@ -75,7 +82,7 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
         } else {
             holder.mImgRemove.setVisibility(View.GONE);
         }
-
+// db.update_tb_list_audit(mAuditId,"1");
         holder.mImgRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +90,36 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
                 if (!db.isExistNotification(SelectMainLocationActivity.meMapLocalId.get(list.get(position)))) {
                     SelectMainLocationActivity.getRemove(position);
                 }else {
-                    //alert and delete from selected location and sub folder
+                    final Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    dialog.setContentView(R.layout.dialog_confirmation_delete_data_exp);
+                    TextViewRegular mTxtMsg = (TextViewRegular)dialog.findViewById(R.id.mTxtMsg);
+                    RelativeLayout mConfirm = (RelativeLayout)dialog.findViewById(R.id.mConfirm);
+                    RelativeLayout mCancel = (RelativeLayout)dialog.findViewById(R.id.mCancel);
+                    mTxtMsg.setText("This will delete "+list.get(position)+" Folder and Sub folders including associated questions,Do you want to proceed ?");
+
+                    mCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    mConfirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseHelper dbase = new DatabaseHelper(context);
+                            dbase.delete_tb_selected_main_location(SelectMainLocationActivity.meMapLocalId.get(list.get(position)));
+                            dbase.delete_tb_location_sub_folder(SelectMainLocationActivity.meMapLocalId.get(list.get(position)));
+                            dbase.delete_tb_sub_folder_explation_list_all(SelectMainLocationActivity.meMapLocalId.get(list.get(position)));
+                            SelectMainLocationActivity.getRemove(position);
+                            if(SelectMainLocationActivity.getCount()==0){
+                            dbase.update_tb_list_audit(mAudit,"0");
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -113,7 +149,6 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
                 DatabaseHelper db = new DatabaseHelper(context);
                 if (!db.isExistNotification(SelectMainLocationActivity.meMapLocalId.get(list.get(position)))) {
                     int a = Integer.parseInt(holder.count.getText().toString());
-
                     if (a != 0) {
                         holder.count.setText(a - 1 + "");
                         SelectMainLocationActivity.meMap.put(list.get(position), a - 1 + "");
@@ -124,8 +159,43 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
 
                 } else {
                     int existing = db.get_existing_location_count(SelectMainLocationActivity.meMapLocalId.get(list.get(position)));
-                    int a = Integer.parseInt(holder.count.getText().toString());
+                    final int a = Integer.parseInt(holder.count.getText().toString());
                     if (a == existing) {
+                        final Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        dialog.setContentView(R.layout.dialog_confirmation_delete_data_exp);
+                        TextViewRegular mTxtMsg = (TextViewRegular)dialog.findViewById(R.id.mTxtMsg);
+                        RelativeLayout mConfirm = (RelativeLayout)dialog.findViewById(R.id.mConfirm);
+                        RelativeLayout mCancel = (RelativeLayout)dialog.findViewById(R.id.mCancel);
+                        mTxtMsg.setText("This will delete "+list.get(position)+" Folder and Sub folders including associated questions,Do you want to proceed ?");
+
+                        mCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        mConfirm.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DatabaseHelper dbase = new DatabaseHelper(context);
+                                dbase.delete_tb_selected_main_location(SelectMainLocationActivity.meMapLocalId.get(list.get(position)));
+                                dbase.delete_tb_location_sub_folder(SelectMainLocationActivity.meMapLocalId.get(list.get(position)));
+                                dbase.delete_tb_sub_folder_explation_list_all(SelectMainLocationActivity.meMapLocalId.get(list.get(position)));
+                                if (a != 0) {
+                                    holder.count.setText(a - 1 + "");
+                                    SelectMainLocationActivity.meMap.put(list.get(position), a - 1 + "");
+                                } else {
+                                    holder.count.setVisibility(View.GONE);
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+
+
+
                         //alert and delete from selected location and sub folder
                     } else {
                         if (a != 0) {

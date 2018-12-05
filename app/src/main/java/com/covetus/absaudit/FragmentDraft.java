@@ -1,12 +1,10 @@
 package com.covetus.absaudit;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class FragmentAuditList extends Fragment {
+public class FragmentDraft extends Fragment {
 
 
     ArrayList<Audit> mListItems = new ArrayList<>();
@@ -31,14 +29,12 @@ public class FragmentAuditList extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_audit_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_draft_list, container, false);
         ButterKnife.bind(this, view);
-
         /* database intilization */
         db = new DatabaseHelper(getActivity());
-
         /* database data into list */
-        mListItems = db.get_all_tb_list_audit(PreferenceManager.getFormiiId(getActivity()),"0");
+        mListItems = db.get_all_tb_list_audit(PreferenceManager.getFormiiId(getActivity()),"1");
         if (mListItems.size() > 0) {
             audittList = new AudittList(getActivity(), mListItems);
             mListChat.setAdapter(audittList);
