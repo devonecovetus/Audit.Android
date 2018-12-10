@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
 
     <RelativeLayout
@@ -18,41 +18,43 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@mipmap/ic_actionbar_back" />
+            android:src="@mipmap/ic_actionbar_back"
+            android:visibility="gone" />
 
         <ABS_CUSTOM_VIEW.TextViewBold
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="Build Audit"
+            android:text="@string/mTextTitle_build_audit"
             android:textColor="@color/white"
             android:textSize="25dp" />
 
 
     </RelativeLayout>
 
-        <RelativeLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@color/colorPrimary">
+
         <ImageView
-        android:id="@+id/mImageStarBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:src="@mipmap/ic_back_star" />
+            android:id="@+id/mImageStarBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/ic_star_red_bg" />
 
         <ABS_CUSTOM_VIEW.TextViewSemiBold
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Locations selected for this audit/inspection"
-        android:textColor="@color/white"
-        android:textSize="22dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/mText_locations_selected"
+            android:textColor="@color/white"
+            android:textSize="22dp" />
     </RelativeLayout>
 
     <ScrollView
@@ -61,20 +63,16 @@
 
         <LinearLayout
             android:id="@+id/mLayoutAddLocation"
-            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
+            android:orientation="vertical">
 
 
         </LinearLayout>
 
     </ScrollView>
-
-
 
 
 </LinearLayout>

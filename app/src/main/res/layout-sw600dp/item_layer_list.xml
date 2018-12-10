@@ -1,198 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/mLayoutMain"
-    android:padding="15dp"
-    android:background="@color/white"
-    android:layout_height="270dp">
-
-
-
-<LinearLayout
-    android:id="@+id/mLayoutGrid"
-    android:layout_alignParentRight="true"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:background="@drawable/rounded_corner_layer_gray"
-            android:layout_width="70dp"
-            android:layout_height="70dp"></RelativeLayout>
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:background="@drawable/rounded_corner_layer_gray"
-            android:layout_width="70dp"
-            android:layout_height="70dp"></RelativeLayout>
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:background="@drawable/rounded_corner_layer_gray"
-            android:layout_width="70dp"
-            android:layout_height="70dp"></RelativeLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:background="@drawable/rounded_corner_layer_gray"
-            android:layout_width="70dp"
-            android:layout_height="70dp"></RelativeLayout>
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:background="@drawable/rounded_corner_layer_gray"
-            android:layout_width="70dp"
-            android:layout_height="70dp"></RelativeLayout>
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:background="@drawable/rounded_corner_layer_gray"
-            android:layout_width="70dp"
-            android:layout_height="70dp"></RelativeLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:background="@drawable/rounded_corner_layer_gray"
-            android:layout_width="70dp"
-            android:layout_height="70dp"></RelativeLayout>
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:background="@drawable/rounded_corner_layer_gray"
-            android:layout_width="70dp"
-            android:layout_height="70dp"></RelativeLayout>
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:background="@drawable/rounded_corner_layer_gray"
-            android:layout_width="70dp"
-            android:layout_height="70dp"></RelativeLayout>
-
-
-    </LinearLayout>
-
-
-</LinearLayout>
-
-
-<LinearLayout
-    android:weightSum="2"
-    android:layout_toLeftOf="@+id/mLayoutGrid"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="270dp">
-
-    <RelativeLayout
-        android:layout_weight="1.7"
-        android:layout_width="0dp"
-        android:layout_height="match_parent">
+    android:layout_height="270dp"
+    android:background="@color/white"
+    android:padding="15dp">
 
 
-
-
+    <LinearLayout
+        android:id="@+id/mLayoutGrid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="60dp">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <RelativeLayout
-                android:id="@+id/mLayoutView"
-                android:layout_width="180dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/rounded_corner_signin_button">
-
-                <ABS_CUSTOM_VIEW.TextViewRegular
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:padding="10dp"
-                    android:text="View"
-                    android:textColor="@color/white"
-                    android:textSize="25dp" />
-            </RelativeLayout>
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_layer_gray"></RelativeLayout>
 
             <RelativeLayout
-                android:layout_marginLeft="30dp"
-                android:id="@+id/mLayoutArchive"
-                android:layout_width="180dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/rounded_corner_archive_button">
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_layer_gray"></RelativeLayout>
 
-                <ABS_CUSTOM_VIEW.TextViewRegular
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:padding="10dp"
-                    android:text="Archive"
-                    android:textColor="@color/black"
-                    android:textSize="25dp" />
-            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_layer_gray"></RelativeLayout>
 
 
         </LinearLayout>
 
-        <ABS_CUSTOM_VIEW.TextViewSemiBold
-            android:id="@+id/mTxtTitle"
-            android:textSize="30dp"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Car Park 1"
-            android:textColor="@color/black"/>
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_layer_gray"></RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_layer_gray"></RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_layer_gray"></RelativeLayout>
 
 
+        </LinearLayout>
 
-        <ABS_CUSTOM_VIEW.TextViewSemiBold
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/mTxtTitle"
-            android:id="@+id/mTxtDecs"
-            android:textSize="30dp"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Car Park Name"
-            android:textColor="@color/black"/>
+            android:orientation="horizontal">
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_layer_gray"></RelativeLayout>
 
-    <RelativeLayout
-        android:layout_weight="0.3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_layer_gray"></RelativeLayout>
 
-        <ImageView
-            android:id="@+id/mImgUpdateData"
-            android:src="@mipmap/ic_update_sub_group"
-            android:layout_width="70dp"
-            android:layout_height="70dp" />
-
-    </RelativeLayout>
-
-
-</LinearLayout>
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_layer_gray"></RelativeLayout>
 
 
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:layout_toLeftOf="@+id/mLayoutGrid"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.7">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/mLayoutView"
+                    android:layout_width="180dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/rounded_corner_signin_button">
+
+                    <ABS_CUSTOM_VIEW.TextViewRegular
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:padding="10dp"
+                        android:text="View"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/mLayoutArchive"
+                    android:layout_width="180dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="30dp"
+                    android:background="@drawable/rounded_corner_archive_button">
+
+                    <ABS_CUSTOM_VIEW.TextViewRegular
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:padding="10dp"
+                        android:text="Archive"
+                        android:textColor="@color/black"
+                        android:textSize="25dp" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <ABS_CUSTOM_VIEW.TextViewSemiBold
+                android:id="@+id/mTxtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Car Park 1"
+                android:textColor="@color/black"
+                android:textSize="30dp" />
+
+
+            <ABS_CUSTOM_VIEW.TextViewSemiBold
+                android:id="@+id/mTxtDecs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mTxtTitle"
+                android:layout_marginTop="20dp"
+                android:text="Car Park Name"
+                android:textColor="@color/black"
+                android:textSize="30dp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3">
+
+            <ImageView
+                android:id="@+id/mImgUpdateData"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:src="@mipmap/ic_update_sub_group" />
+
+            <ImageView
+                android:id="@+id/mImgDelete"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_below="@+id/mImgUpdateData"
+                android:src="@mipmap/ic_cancel" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
 
 </RelativeLayout>

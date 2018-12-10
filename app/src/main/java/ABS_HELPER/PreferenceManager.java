@@ -22,6 +22,11 @@ public class PreferenceManager {
     private static String FORMII_CONTACT = "com.access4me.org_contact";
     private static String FORMII_ADDRESS = "com.access4me.org_address";
     private static String FORMII_TOKAN = "com.access4me.org_tokan";
+    private static String FORMII_PROGREESS_VIEW = "com.access4me.org_view";
+    private static String FORMII_CHECK_NOTIFICATION_AUDIT = "com.access4me.org_tokan_notification_audit";
+    private static String FORMII_CHECK_NOTIFICATION_CHAT = "com.access4me.org_tokan_notification_chat";
+    private static String FORMII_CHECK_NOTIFICATION_REPORT = "com.access4me.org_tokan_notification_report";
+    private static String FORMII_CHECK_IS_FIRST_TIME = "com.access4me.org_is_first_time";
 
     public static SharedPreferences getPrefs(Context context) {
         return context.getSharedPreferences(FORMII_PREF, Context.MODE_PRIVATE);
@@ -115,7 +120,6 @@ public class PreferenceManager {
     }
 
 
-
     public static String getFormiiFullName(Context context) {
         return getPrefs(context).getString(FORMII_FULLNAME, "0");
     }
@@ -124,9 +128,50 @@ public class PreferenceManager {
         getPrefs(context).edit().putString(FORMII_FULLNAME, value).commit();
     }
 
+    public static String getFormiiProgreessView(Context context) {
+        return getPrefs(context).getString(FORMII_PROGREESS_VIEW, "0");
+    }
 
-    public static void cleanData(Context context){
-    getPrefs(context).edit().clear().commit();
+    public static void setFormiiProgreessView(Context context, String value) {
+        getPrefs(context).edit().putString(FORMII_PROGREESS_VIEW, value).commit();
+    }
+
+    public static String getFormiiCheckNotificationChat(Context context) {
+        return getPrefs(context).getString(FORMII_CHECK_NOTIFICATION_CHAT, "1");
+    }
+
+    public static void setFormiiCheckNotificationChat(Context context, String value) {
+        getPrefs(context).edit().putString(FORMII_CHECK_NOTIFICATION_CHAT, value).commit();
+    }
+
+
+    public static String getFormiiCheckNotificationAudit(Context context) {
+        return getPrefs(context).getString(FORMII_CHECK_NOTIFICATION_AUDIT, "1");
+    }
+
+    public static void setFormiiCheckNotificationAudit(Context context, String value) {
+        getPrefs(context).edit().putString(FORMII_CHECK_NOTIFICATION_AUDIT, value).commit();
+    }
+
+
+    public static String getFormiiCheckNotificationReport(Context context) {
+        return getPrefs(context).getString(FORMII_CHECK_NOTIFICATION_REPORT, "1");
+    }
+
+    public static void setFormiiCheckNotificationReport(Context context, String value) {
+        getPrefs(context).edit().putString(FORMII_CHECK_NOTIFICATION_REPORT, value).commit();
+    }
+
+    public static String getFormiiCheckIsFirstTime(Context context) {
+        return getPrefs(context).getString(FORMII_CHECK_NOTIFICATION_REPORT, "1");
+    }
+
+    public static void setFormiiCheckIsFirstTime(Context context, String value) {
+        getPrefs(context).edit().putString(FORMII_CHECK_NOTIFICATION_REPORT, value).commit();
+    }
+
+    public static void cleanData(Context context) {
+        getPrefs(context).edit().clear().commit();
     }
 
 

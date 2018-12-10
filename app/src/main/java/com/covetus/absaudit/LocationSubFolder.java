@@ -41,15 +41,19 @@ public class LocationSubFolder extends Activity {
     LinearLayout mLayoutAddLocation;
     @BindView(R.id.mImageBack)
     ImageView mImageBack;
+
+    @BindView(R.id.mImageStarBack)
+    ImageView mImageStarBack;
+
     DatabaseHelper db;
     ArrayList<SelectedLocation> mAuditList;
     String mAuditId;
 
 
 
-    @OnClick(R.id.mImageBack)
+    @OnClick(R.id.mImageStarBack)
     public void mImageBack() {
-
+        finish();
     }
 
 
@@ -106,7 +110,7 @@ public class LocationSubFolder extends Activity {
                     }
                 }
             });
-            ArrayList<MainLocationSubFolder> mAuditList = db.get_all_tb_location_sub_folder(selectedLocation.getmStrId());
+            ArrayList<MainLocationSubFolder> mAuditList = db.get_all_tb_location_sub_folder(selectedLocation.getmStrMainLocationLocalId());
             if(mAuditList.size()>0){
             for(int j = 0;j<mAuditList.size();j++){
             //mLayoutForSubFolder.setVisibility(View.VISIBLE);
@@ -152,7 +156,7 @@ public class LocationSubFolder extends Activity {
                             startActivity(intent);
                             finish();
                         }else {
-                            CommonUtils.mShowAlert("",LocationSubFolder.this);
+                            CommonUtils.mShowAlert(getString(R.string.mtextFile_order_procedd),LocationSubFolder.this);
                         }
 
 
@@ -249,8 +253,8 @@ public class LocationSubFolder extends Activity {
                         LayerList layerList = new LayerList();
                         layerList.setmStrUserId(PreferenceManager.getFormiiId(LocationSubFolder.this));
                         layerList.setmStrAuditId(mAuditId);
-                        layerList.setmStrLayerDesc(mTxtSubGroupFolder.getText().toString()+" Name");
-                        layerList.setmStrLayerTitle(mTxtSubGroupFolder.getText().toString()+" "+(j+1));
+                        layerList.setmStrLayerDesc(mTxtMainLocation.getText().toString()+" Name");
+                        layerList.setmStrLayerTitle(mTxtMainLocation.getText().toString()+" "+(j+1));
                         layerList.setmStrMainLocationId(mLocationId);
                         layerList.setmStrMainLocationTitle(mTxtMainLocation.getText().toString());
                         layerList.setmStrSubFolderTitle(mDiaEditFolderName.getText().toString());
@@ -276,7 +280,7 @@ public class LocationSubFolder extends Activity {
                                 startActivity(intent);
                                 finish();
                             }else {
-                                CommonUtils.mShowAlert("",LocationSubFolder.this);
+                                CommonUtils.mShowAlert(getString(R.string.mtextFile_order_procedd),LocationSubFolder.this);
                             }
 
 
@@ -347,8 +351,8 @@ public class LocationSubFolder extends Activity {
                         LayerList layerList = new LayerList();
                         layerList.setmStrUserId(PreferenceManager.getFormiiId(LocationSubFolder.this));
                         layerList.setmStrAuditId(mAuditId);
-                        layerList.setmStrLayerDesc(mEditFolderName.getText().toString()+" Name");
-                        layerList.setmStrLayerTitle(mEditFolderName.getText().toString()+" "+(j+1));
+                        layerList.setmStrLayerDesc(mTxtMainLocation.getText().toString()+" Name");
+                        layerList.setmStrLayerTitle(mTxtMainLocation.getText().toString()+" "+(j+1));
                         layerList.setmStrMainLocationId(mLocationId);
                         layerList.setmStrMainLocationTitle(mTxtMainLocation.getText().toString());
                         layerList.setmStrSubFolderTitle(mEditFolderName.getText().toString());

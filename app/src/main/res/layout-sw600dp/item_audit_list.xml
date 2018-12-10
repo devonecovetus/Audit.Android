@@ -1,127 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:background="@drawable/red_border"
     android:id="@+id/mLayoutMain"
-    android:layout_height="wrap_content">
-
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/red_border">
 
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="55dp"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/mLayoutSignIn"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_toLeftOf="@+id/mButtonLayout"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:weightSum="2"
-            android:background="@color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:background="@color/transparent"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <ABS_CUSTOM_VIEW.TextViewSemiBold
-                android:layout_weight="0.5"
-                android:text="@string/mText_assign_by"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/mText_assign_by"
                 android:textColor="@color/black"
                 android:textSize="22dp" />
 
             <ABS_CUSTOM_VIEW.TextViewSemiBold
-                android:layout_weight="1.5"
                 android:id="@+id/mTxtAgentName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1.5"
                 android:textColor="@color/black"
                 android:textSize="22dp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
-            android:weightSum="2"
-            android:background="@color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="10dp"
+            android:background="@color/transparent"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <ABS_CUSTOM_VIEW.TextViewSemiBold
-                android:layout_weight="0.5"
-                android:text="@string/mText_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/mText_title"
                 android:textColor="@color/black"
                 android:textSize="22dp" />
 
             <ABS_CUSTOM_VIEW.TextViewSemiBold
-                android:layout_weight="1.5"
                 android:id="@+id/mTxtAuditTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1.5"
                 android:textColor="@color/black"
                 android:textSize="22dp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
-            android:weightSum="2"
-            android:background="@color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="10dp"
+            android:background="@color/transparent"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <ABS_CUSTOM_VIEW.TextViewSemiBold
-                android:layout_weight="0.5"
-                android:text="@string/mText_target_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/mText_target_date"
                 android:textColor="@color/black"
                 android:textSize="22dp" />
 
             <ABS_CUSTOM_VIEW.TextViewSemiBold
-                android:layout_weight="1.5"
                 android:id="@+id/mTxtAuditDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1.5"
                 android:textColor="@color/black"
                 android:textSize="22dp" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>
 
 
-    <RelativeLayout
-        android:layout_marginRight="15dp"
-        android:layout_centerVertical="true"
+    <LinearLayout
+        android:id="@+id/mButtonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:id="@+id/mLayoutViewAudit"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:background="@drawable/rounded_corner_signin_button">
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
 
-        <ABS_CUSTOM_VIEW.TextViewSemiBold
-            android:id="@+id/mTextNormal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/mText_view"
-            android:textColor="@color/white"
-            android:textSize="22dp" />
-    </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/mLayoutViewAudit"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/ic_view_audit"/>
 
 
 
-
+    </LinearLayout>
 
 
 </RelativeLayout>

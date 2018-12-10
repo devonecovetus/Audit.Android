@@ -2,6 +2,7 @@ package com.covetus.absaudit;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -30,6 +31,10 @@ public class ActivityLayerList extends Activity {
     ListView mListView;
     @BindView(R.id.mLayoutAddMore)
     RelativeLayout mLayoutAddMore;
+
+    @BindView(R.id.mImageStarBack)
+    ImageView mImageStarBack;
+
     @BindView(R.id.mTxtMainLocationTitle)
     TextViewRegular mTxtMainLocationTitle;
     DatabaseHelper databaseHelper;
@@ -41,8 +46,8 @@ public class ActivityLayerList extends Activity {
         LayerList layerList = new LayerList();
         layerList.setmStrUserId(PreferenceManager.getFormiiId(ActivityLayerList.this));
         layerList.setmStrAuditId(mListItems.get(0).getmStrAuditId());
-        layerList.setmStrLayerDesc(mListItems.get(0).getmStrMainLocationTitle()+" Name");
-        layerList.setmStrLayerTitle(mListItems.get(0).getmStrMainLocationTitle()+" "+(mListItems.size()+1));
+        layerList.setmStrLayerDesc(mListItems.get(0).getmStrMainLocationTitle() + " Name");
+        layerList.setmStrLayerTitle(mListItems.get(0).getmStrMainLocationTitle() + " " + (mListItems.size() + 1));
         layerList.setmStrMainLocationId(mListItems.get(0).getmStrMainLocationId());
         layerList.setmStrMainLocationTitle(mListItems.get(0).getmStrMainLocationTitle());
         layerList.setmStrSubFolderTitle(mListItems.get(0).getmStrSubFolderTitle());
@@ -52,16 +57,23 @@ public class ActivityLayerList extends Activity {
         databaseHelper.update_tb_selected_main_location_count(mListItems.get(0).getmStrMainLocationId());
         mListItems.clear();
         mListItems = databaseHelper.get_all_tb_sub_folder_explation_list(mSubFolderId);
-        System.out.println("<><><>"+mListItems.size());
-        layerListAdapter = new LayerListAdapter(ActivityLayerList.this,mListItems);
+        System.out.println("<><><>" + mListItems.size());
+        layerListAdapter = new LayerListAdapter(ActivityLayerList.this, mListItems);
         mListView.setAdapter(layerListAdapter);
         mTxtMainLocationTitle.setText(mListItems.get(0).getmStrMainLocationTitle());
-        mTxtFolderTitle.setText(mListItems.get(0).getmStrSubFolderTitle()+"("+mListItems.size()+" "+mListItems.get(0).getmStrMainLocationTitle()+")");
+        mTxtFolderTitle.setText(mListItems.get(0).getmStrSubFolderTitle() + "(" + mListItems.size() + " " + mListItems.get(0).getmStrMainLocationTitle() + ")");
+        //for scrolling bottom
+        mListView.setStackFromBottom(true);
+        mListView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        mListView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_NORMAL);
+
     }
 
 
-
-
+    @OnClick(R.id.mImageStarBack)
+    public void mImageBack() {
+        finish();
+    }
 
 
     @Override
@@ -71,16 +83,15 @@ public class ActivityLayerList extends Activity {
         ButterKnife.bind(this);
         databaseHelper = new DatabaseHelper(ActivityLayerList.this);
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
-        mSubFolderId = bundle.getString("mSubFolderId");
+        if (bundle != null) {
+            mSubFolderId = bundle.getString("mSubFolderId");
         }
         mListItems = databaseHelper.get_all_tb_sub_folder_explation_list(mSubFolderId);
-        layerListAdapter = new LayerListAdapter(ActivityLayerList.this,mListItems);
+        layerListAdapter = new LayerListAdapter(ActivityLayerList.this, mListItems);
         mListView.setAdapter(layerListAdapter);
         mTxtMainLocationTitle.setText(mListItems.get(0).getmStrMainLocationTitle());
-        mTxtFolderTitle.setText(mListItems.get(0).getmStrSubFolderTitle()+"("+mListItems.size()+" "+mListItems.get(0).getmStrMainLocationTitle()+")");
+        mTxtFolderTitle.setText(mListItems.get(0).getmStrSubFolderTitle() + "(" + mListItems.size() + " " + mListItems.get(0).getmStrMainLocationTitle() + ")");
     }
-
 
 
 }

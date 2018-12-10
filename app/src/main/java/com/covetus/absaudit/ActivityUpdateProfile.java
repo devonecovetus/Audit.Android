@@ -12,9 +12,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Base64;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -46,15 +50,16 @@ import ly.img.android.ui.activities.CameraPreviewIntent;
 import ly.img.android.ui.activities.PhotoEditorIntent;
 import ly.img.android.ui.utilities.PermissionRequest;
 
+import static ABS_HELPER.CommonUtils.FOLDER;
 import static ABS_HELPER.CommonUtils.hidePDialog;
 import static ABS_HELPER.CommonUtils.mStrBaseUrlImage;
 
 public class ActivityUpdateProfile extends Activity implements PermissionRequest.Response {
 
-    private static final String FOLDER = "ABS";
-    public static int CAMERA_PREVIEW_RESULT = 1;
-    String mStrFirstName, mStrLastName, mStrEmailAddress, mStrContactNumber, imageString = "";
 
+    public static int CAMERA_PREVIEW_RESULT = 1;
+    private static int SPLASH_TIME_OUT = 3000;
+    String mStrFirstName, mStrLastName, mStrEmailAddress, mStrContactNumber, imageString = "";
     @BindView(R.id.mEditFirstName)
     EditTextRegular mEditFirstName;
     @BindView(R.id.mEditLastName)
@@ -65,15 +70,12 @@ public class ActivityUpdateProfile extends Activity implements PermissionRequest
     EditTextRegular mEditContactNumber;
     @BindView(R.id.mLayoutUpdate)
     RelativeLayout mLayoutUpdate;
-
     @BindView(R.id.mImageBack)
     ImageView mImageBack;
     @BindView(R.id.mImgUserProfile)
     ImageView mImgUserProfile;
     @BindView(R.id.mImgAddImage)
     ImageView mImgAddImage;
-    private static int SPLASH_TIME_OUT = 3000;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,44 @@ public class ActivityUpdateProfile extends Activity implements PermissionRequest
                 mImgUserProfile.setImageDrawable(circularBitmapDrawable);
             }
         });
+
+
+        mEditContactNumber.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    CommonUtils.closeKeyBoard(ActivityUpdateProfile.this);
+                    CommonUtils.OnClick(ActivityUpdateProfile.this, mLayoutUpdate);
+                    mStrFirstName = mEditFirstName.getText().toString();
+                    mStrLastName = mEditLastName.getText().toString();
+                    mStrEmailAddress = mEditEmailAddress.getText().toString();
+                    mStrContactNumber = mEditContactNumber.getText().toString();
+
+        /* validation for updating profile*/
+                    if (mStrFirstName.length() <= 0) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_error_enter_first_name), ActivityUpdateProfile.this);
+                        return false;
+                    } else if (mStrLastName.length() <= 0) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_error_enter_last_name), ActivityUpdateProfile.this);
+                        return false;
+                    } else if (mStrContactNumber.length() <= 0) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_error_enter_contact), ActivityUpdateProfile.this);
+                        return false;
+                    } else if (mStrContactNumber.length() < 10 || mStrContactNumber.length() > 10) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_valid_no), ActivityUpdateProfile.this);
+                        return false;
+                    }
+
+                    CommonUtils.show(ActivityUpdateProfile.this);
+                    mToDoUpdate();
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
     }
 
     /* click for going back */
@@ -109,11 +149,11 @@ public class ActivityUpdateProfile extends Activity implements PermissionRequest
     public void mImageAddImg() {
         new CameraPreviewIntent(this)
                 .setExportDir(CameraPreviewIntent.Directory.DCIM, FOLDER)
-                .setExportPrefix("img_")
+                .setExportPrefix(getString(R.string.mTextFile_imagename))
                 .setEditorIntent(
                         new PhotoEditorIntent(this)
                                 .setExportDir(PhotoEditorIntent.Directory.DCIM, FOLDER)
-                                .setExportPrefix("result_")
+                                .setExportPrefix(getString(R.string.mTextFile_filename))
                                 .destroySourceAfterSave(true)
                 )
                 .startActivityForResult(CAMERA_PREVIEW_RESULT);
@@ -139,7 +179,7 @@ public class ActivityUpdateProfile extends Activity implements PermissionRequest
             CommonUtils.mShowAlert(getString(R.string.mTextFile_error_enter_contact), ActivityUpdateProfile.this);
             return;
         } else if (mStrContactNumber.length() < 10 || mStrContactNumber.length() > 10) {
-            CommonUtils.mShowAlert("Please enter valid phone number", ActivityUpdateProfile.this);
+            CommonUtils.mShowAlert(getString(R.string.mTextFile_valid_no), ActivityUpdateProfile.this);
             return;
         }
 
@@ -222,11 +262,10 @@ public class ActivityUpdateProfile extends Activity implements PermissionRequest
                                         finish();
 
 
-
                                     }
                                 }, SPLASH_TIME_OUT);
 
-                            }else if(mStrStatus.equals("2")) {
+                            } else if (mStrStatus.equals("2")) {
                                 CommonUtils.showSessionExp(ActivityUpdateProfile.this);
                             } else {
                                 CommonUtils.mShowAlert(response.getString("message"), ActivityUpdateProfile.this);
@@ -252,8 +291,8 @@ public class ActivityUpdateProfile extends Activity implements PermissionRequest
                 params.put("lastname", mStrLastName);
                 params.put("photo", imageString);
                 params.put("phone", mStrContactNumber);
-                params.put("platform", "ANDROID");
-                params.put("devicetoken", "kykyyrykryyyyryryryyryy");
+                params.put("platform", "android");
+                params.put("devicetoken", PreferenceManager.getFormiiDeviceId(ActivityUpdateProfile.this));
                 params.put("auth_token", PreferenceManager.getFormiiAuthToken(ActivityUpdateProfile.this));
 
 

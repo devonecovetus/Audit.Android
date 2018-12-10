@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:elevation="2dp"
-    android:padding="5dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:elevation="2dp"
+    android:padding="5dp">
 
     <RelativeLayout
         android:id="@+id/mLayoutTop"
@@ -22,68 +22,64 @@
             android:src="@mipmap/ic_actionbar_back" />
 
 
-
-
-
     </RelativeLayout>
 
 
     <ABS_CUSTOM_VIEW.TextViewBold
         android:id="@+id/mTxtTitle"
-        android:layout_marginTop="80dp"
-        android:layout_below="@+id/mLayoutTop"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/white"
-        android:textSize="35dp"
-        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Option Below"/>
+        android:layout_below="@+id/mLayoutTop"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:text="@string/mText_select_option_below"
+        android:textColor="@color/white"
+        android:textSize="35dp"
+        android:textStyle="bold" />
 
 
     <RelativeLayout
-        android:layout_marginRight="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/mTxtTitle"
-        android:background="@drawable/white_border_shap"
-        android:padding="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mTxtTitle"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/white_border_shap"
+        android:padding="15dp">
 
         <ABS_CUSTOM_VIEW.TextViewBold
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Click on help icon to view details about country standard and langauge"/>
+            android:gravity="center"
+            android:text="@string/mText_click_on_help"
+            android:textColor="@color/white"
+            android:textSize="25dp" />
 
     </RelativeLayout>
 
 
-
     <LinearLayout
-        android:layout_marginRight="60dp"
-        android:layout_marginLeft="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:padding="40dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
         android:background="@drawable/rounded_corner_white_shap"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:padding="40dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ABS_CUSTOM_VIEW.TextViewBold
-                android:textStyle="bold"
-                android:textSize="30dp"
-                android:textColor="#949ea8"
-                android:text="Country Standard"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/nText_country_standard"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -94,30 +90,30 @@
 
         <Spinner
             android:id="@+id/mSpinnerCountryStandard"
-            android:layout_marginTop="10dp"
-            android:background="@color/transparent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></Spinner>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/transparent" />
 
         <View
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/colorPrimary"/>
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary" />
 
 
         <RelativeLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
 
             <ABS_CUSTOM_VIEW.TextViewBold
-                android:textStyle="bold"
-                android:textSize="30dp"
-                android:textColor="#949ea8"
-                android:text="Language"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/mText_language"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -128,39 +124,35 @@
 
         <Spinner
             android:id="@+id/mSpinnerLanguageStandard"
-            android:layout_marginTop="10dp"
-            android:background="@color/transparent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></Spinner>
-
-
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/transparent" />
 
 
     </LinearLayout>
 
 
     <RelativeLayout
-        android:layout_marginBottom="160dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
         android:id="@+id/mLayoutDone"
         android:layout_width="200dp"
         android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="160dp"
         android:background="@drawable/white_border_round_corner_shap">
 
         <ABS_CUSTOM_VIEW.TextViewSemiBold
             android:id="@+id/mTextNormal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:padding="10dp"
-            android:text="Done"
+            android:text="@string/mtextFile_done"
             android:textColor="@color/white"
             android:textSize="25dp" />
     </RelativeLayout>
-
-
 
 
 </RelativeLayout>

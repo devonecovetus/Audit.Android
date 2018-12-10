@@ -9,9 +9,9 @@
 
 
     <LinearLayout
-        android:layout_centerVertical="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:orientation="vertical">
 
         <ImageView
@@ -22,11 +22,11 @@
             android:src="@drawable/audit_logo" />
 
         <LinearLayout
-            android:layout_marginTop="200dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginLeft="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="200dp"
             android:orientation="horizontal">
 
             <ABS_CUSTOM_VIEW.TextViewSemiBold
@@ -55,45 +55,45 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:weightSum="2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
                 <View
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:id="@+id/mViewAuditor"
                 android:layout_width="0dp"
                 android:layout_height="2dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"/>
 
             <View
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:id="@+id/mViewInspector"
                 android:layout_width="0dp"
                 android:layout_height="2dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_weight="1"
                 android:background="@color/white"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginRight="40dp"
-            android:layout_marginLeft="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:orientation="vertical"
             android:padding="10dp">
 
             <LinearLayout
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
                 android:layout_marginTop="30dp"
                 android:orientation="horizontal"
                 android:padding="5dp">
@@ -105,33 +105,33 @@
                     android:src="@mipmap/ic_user" />
 
                 <ABS_CUSTOM_VIEW.EditTextRegular
-                    android:textSize="25dp"
                     android:id="@+id/mEditUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:background="@color/transparent"
-                    android:inputType="textEmailAddress"
                     android:hint="@string/mEditHint_username"
+                    android:inputType="textEmailAddress"
                     android:padding="3dp"
                     android:textColor="@color/abs_text_color_blacktuch"
-                    android:textColorHint="@color/abs_text_color_blacktuch" />
+                    android:textColorHint="@color/abs_text_color_blacktuch"
+                    android:textSize="25dp" />
             </LinearLayout>
 
             <View
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
                 android:background="@color/abs_text_color_blacktuch" />
 
 
             <LinearLayout
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:padding="5dp">
@@ -143,25 +143,26 @@
                     android:src="@mipmap/ic_unlock" />
 
                 <ABS_CUSTOM_VIEW.EditTextRegular
-                    android:textSize="25dp"
                     android:id="@+id/mEditPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:background="@color/transparent"
-                    android:inputType="textPassword"
                     android:hint="@string/mEditHint_password"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
                     android:padding="3dp"
                     android:textColor="@color/abs_text_color_blacktuch"
-                    android:textColorHint="@color/abs_text_color_blacktuch" />
+                    android:textColorHint="@color/abs_text_color_blacktuch"
+                    android:textSize="25dp" />
             </LinearLayout>
 
             <View
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
                 android:background="@color/abs_text_color_blacktuch" />
 
 
@@ -181,8 +182,8 @@
                     android:id="@+id/mTextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:padding="10dp"
                     android:text="@string/mTextTitle_login"
                     android:textColor="@color/white"

@@ -5,10 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -36,6 +40,7 @@ import static ABS_HELPER.CommonUtils.hidePDialog;
 
 public class ActivityForgetPassword extends Activity {
 
+    private static int SPLASH_TIME_OUT = 3000;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     @BindView(R.id.mEditEmailAddress)
     EditTextRegular mEditEmailAddress;
@@ -43,9 +48,7 @@ public class ActivityForgetPassword extends Activity {
     RelativeLayout mLayoutSubmit;
     @BindView(R.id.mImageBack)
     ImageView mImageBack;
-
     String mStrEmail;
-    private static int SPLASH_TIME_OUT = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +56,32 @@ public class ActivityForgetPassword extends Activity {
         setContentView(R.layout.activity_forgot_password);
         ButterKnife.bind(this);
 
+        mEditEmailAddress.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    CommonUtils.closeKeyBoard(ActivityForgetPassword.this);
+                    CommonUtils.OnClick(ActivityForgetPassword.this, mLayoutSubmit);
+                    mStrEmail = mEditEmailAddress.getText().toString();
+                    /*forget password validation*/
+                    if (mStrEmail.length() <= 0) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_error_enter_email), ActivityForgetPassword.this);
+                        return false;
+                    } else if (!mStrEmail.matches(emailPattern)) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_error_valid_email), ActivityForgetPassword.this);
+                        return false;
+                    }
+                    CommonUtils.show(ActivityForgetPassword.this);
+                    mToDoForget();
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
-  /*click for going back*/
+    /*click for going back*/
     @OnClick(R.id.mImageBack)
     public void mGoBack() {
         finish();
@@ -64,35 +90,35 @@ public class ActivityForgetPassword extends Activity {
     /*click to submit passowrd*/
     @OnClick(R.id.mLayoutSubmit)
     public void mGoForSubmit() {
-    CommonUtils.closeKeyBoard(ActivityForgetPassword.this);
-    CommonUtils.OnClick(ActivityForgetPassword.this, mLayoutSubmit);
-    mStrEmail = mEditEmailAddress.getText().toString();
+        CommonUtils.closeKeyBoard(ActivityForgetPassword.this);
+        CommonUtils.OnClick(ActivityForgetPassword.this, mLayoutSubmit);
+        mStrEmail = mEditEmailAddress.getText().toString();
     /*forget password validation*/
-    if (mStrEmail.length() <= 0) {
-    CommonUtils.mShowAlert(getString(R.string.mTextFile_error_enter_email), ActivityForgetPassword.this);
-    return;
-    } else if (!mStrEmail.matches(emailPattern)) {
-    CommonUtils.mShowAlert(getString(R.string.mTextFile_error_valid_email), ActivityForgetPassword.this);
-    return;
-    }
-    CommonUtils.show(ActivityForgetPassword.this);
-    mToDoForget();
+        if (mStrEmail.length() <= 0) {
+            CommonUtils.mShowAlert(getString(R.string.mTextFile_error_enter_email), ActivityForgetPassword.this);
+            return;
+        } else if (!mStrEmail.matches(emailPattern)) {
+            CommonUtils.mShowAlert(getString(R.string.mTextFile_error_valid_email), ActivityForgetPassword.this);
+            return;
+        }
+        CommonUtils.show(ActivityForgetPassword.this);
+        mToDoForget();
 
 
     }
 
     /*api call for forget password*/
     void mToDoForget() {
-        StringRequest strRequest = new StringRequest(Request.Method.POST, CommonUtils.mStrBaseUrl+"forgetPassword",
+        StringRequest strRequest = new StringRequest(Request.Method.POST, CommonUtils.mStrBaseUrl + "forgetPassword",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String str) {
                         hidePDialog();
                         try {
-                            System.out.println("<><><>"+str);
+                            System.out.println("<><><>" + str);
                             JSONObject response = new JSONObject(str);
                             String mStrStatus = response.getString("status");
-                            if(mStrStatus.equals("1")){
+                            if (mStrStatus.equals("1")) {
                                 mEditEmailAddress.setText("");
                                 CommonUtils.mShowAlert(response.getString("message"), ActivityForgetPassword.this);
 
@@ -100,14 +126,13 @@ public class ActivityForgetPassword extends Activity {
                                     @Override
                                     public void run() {
                                         finish();
-                                        Intent intent =new Intent(ActivityForgetPassword.this,ActivityLogin.class);
+                                        Intent intent = new Intent(ActivityForgetPassword.this, ActivityLogin.class);
                                         startActivity(intent);
                                     }
                                 }, SPLASH_TIME_OUT);
 
 
-
-                            }else {
+                            } else {
                                 CommonUtils.mShowAlert(response.getString("message"), ActivityForgetPassword.this);
                             }
                         } catch (JSONException e) {
@@ -125,14 +150,13 @@ public class ActivityForgetPassword extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("email",mStrEmail);
+                params.put("email", mStrEmail);
                 return params;
             }
         };
         strRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 48, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(strRequest);
     }
-
 
 
 }

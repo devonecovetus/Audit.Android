@@ -7,14 +7,18 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -71,12 +75,42 @@ public class ActivityLogin extends Activity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+
+        mEditPassword.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    CommonUtils.closeKeyBoard(ActivityLogin.this);
+                    CommonUtils.OnClick(ActivityLogin.this, mLayoutSignIn);
+                    mStrUserName = mEditUserName.getText().toString();
+                    mStrPassword = mEditPassword.getText().toString();
+                     /*login validation*/
+                    if (mStrUserName.length() <= 0) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_error_enter_email), ActivityLogin.this);
+                        return false;
+                    } else if (!mStrUserName.matches(emailPattern)) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_error_valid_email), ActivityLogin.this);
+                        return false;
+                    } else if (mStrPassword.length() <= 0) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_error_enter_password), ActivityLogin.this);
+                        return false;
+                    }
+                    CommonUtils.show(ActivityLogin.this);
+                    mToDoLogin();
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
     }
 
     /*click to login*/
     @OnClick(R.id.mLayoutSignIn)
     public void mLayoutSignIn() {
-            CommonUtils.closeKeyBoard(ActivityLogin.this);
+        CommonUtils.closeKeyBoard(ActivityLogin.this);
         CommonUtils.OnClick(ActivityLogin.this, mLayoutSignIn);
         mStrUserName = mEditUserName.getText().toString();
         mStrPassword = mEditPassword.getText().toString();
@@ -119,50 +153,50 @@ public class ActivityLogin extends Activity {
     /*click to view forget password screen*/
     @OnClick(R.id.mTxtForgetPassword)
     public void mTxtGoForForget() {
-       Intent intent = new Intent(ActivityLogin.this,ActivityForgetPassword.class);
-       startActivity(intent);
+        Intent intent = new Intent(ActivityLogin.this, ActivityForgetPassword.class);
+        startActivity(intent);
     }
-
 
 
     /*api call to login*/
     void mToDoLogin() {
-        StringRequest strRequest = new StringRequest(Request.Method.POST, CommonUtils.mStrBaseUrl+"auth",
+        StringRequest strRequest = new StringRequest(Request.Method.POST, CommonUtils.mStrBaseUrl + "auth",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String str) {
                         hidePDialog();
                         try {
-                            System.out.println("<><><>"+str);
+                            System.out.println("<><><>" + str);
                             JSONObject response = new JSONObject(str);
                             String mStrStatus = response.getString("status");
-                            if(mStrStatus.equals("1")){
-                            JSONObject jsonObject = response.getJSONObject("response");
-                            String mStrId = jsonObject.getString("id");
-                            String mStrFirstName = jsonObject.getString("firstname");
-                            String mStrLastName = jsonObject.getString("lastname");
-                            String mStrEmail = jsonObject.getString("email");
-                            String mStrPhoto = jsonObject.getString("photo");
-                            String mStrPhone = jsonObject.getString("phone");
-                            String mStrAddressEN = jsonObject.getString("address");
-                            String mStrAuthToken = jsonObject.getString("auth_token");
+                            if (mStrStatus.equals("1")) {
+                                JSONObject jsonObject = response.getJSONObject("response");
+                                String mStrId = jsonObject.getString("id");
+                                String mStrFirstName = jsonObject.getString("firstname");
+                                String mStrLastName = jsonObject.getString("lastname");
+                                String mStrEmail = jsonObject.getString("email");
+                                String mStrPhoto = jsonObject.getString("photo");
+                                String mStrPhone = jsonObject.getString("phone");
+                                String mStrAddressEN = jsonObject.getString("address");
+                                String mStrAuthToken = jsonObject.getString("auth_token");
 
-                            PreferenceManager.setFormiiId(ActivityLogin.this,mStrId);
-                            PreferenceManager.setFormiiFirstName(ActivityLogin.this,mStrFirstName);
-                            PreferenceManager.setFormiiLastName(ActivityLogin.this,mStrLastName);
-                            PreferenceManager.setFormiiEmail(ActivityLogin.this,mStrEmail);
-                            PreferenceManager.setFormiiProfileimg(ActivityLogin.this,mStrPhoto);
-                            PreferenceManager.setFormiiContact(ActivityLogin.this,mStrPhone);
-                            PreferenceManager.setFormiiAddress(ActivityLogin.this,mStrAddressEN);
-                            PreferenceManager.setFormiiFullName(ActivityLogin.this,mStrFirstName+" "+mStrLastName);
-                            PreferenceManager.setFormiiIsLogin(ActivityLogin.this,"1");
-                            PreferenceManager.setFormiiAuthToken(ActivityLogin.this,mStrAuthToken);
+                                PreferenceManager.setFormiiId(ActivityLogin.this, mStrId);
+                                PreferenceManager.setFormiiFirstName(ActivityLogin.this, mStrFirstName);
+                                PreferenceManager.setFormiiLastName(ActivityLogin.this, mStrLastName);
+                                PreferenceManager.setFormiiEmail(ActivityLogin.this, mStrEmail);
+                                PreferenceManager.setFormiiProfileimg(ActivityLogin.this, mStrPhoto);
+                                PreferenceManager.setFormiiContact(ActivityLogin.this, mStrPhone);
+                                PreferenceManager.setFormiiAddress(ActivityLogin.this, mStrAddressEN);
+                                PreferenceManager.setFormiiFullName(ActivityLogin.this, mStrFirstName + " " + mStrLastName);
+                                PreferenceManager.setFormiiIsLogin(ActivityLogin.this, "1");
+                                PreferenceManager.setFormiiAuthToken(ActivityLogin.this, mStrAuthToken);
 
-                            Intent intent = new Intent(ActivityLogin.this,ActivityTabHostMain.class);
-                            intent.putExtra("mStrCurrentTab","0");
-                            startActivity(intent);
-                            }else {
-                            CommonUtils.mShowAlert(response.getString("message"), ActivityLogin.this);
+                                Intent intent = new Intent(ActivityLogin.this, ActivityTabHostMain.class);
+                                intent.putExtra("mStrCurrentTab", "0");
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                CommonUtils.mShowAlert(response.getString("message"), ActivityLogin.this);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -173,23 +207,23 @@ public class ActivityLogin extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         hidePDialog();
-                        System.out.println("<><><>error"+ error.toString());
+                        System.out.println("<><><>error" + error.toString());
                         Toast.makeText(ActivityLogin.this, getString(R.string.mTextFile_error_something_went_wrong), Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("email",mStrUserName);
-                params.put("password",mStrPassword);
-                params.put("platform","ANDROID");
-                params.put("devicetoken","kykyyrykryyyyryryryyryy");
-                if(userStatus==0){
-                params.put("role","Auditor");
-                }else{
-                params.put("role","Inspector");
+                params.put("email", mStrUserName);
+                params.put("password", mStrPassword);
+                params.put("platform", "android");
+                params.put("devicetoken", PreferenceManager.getFormiiDeviceId(ActivityLogin.this));
+                if (userStatus == 0) {
+                    params.put("role", getString(R.string.mTextFile_auditor));
+                } else {
+                    params.put("role", getString(R.string.mTextFile_inspector));
                 }
-                System.out.println("<><><>param"+params);
+                System.out.println("<><><>param" + params);
                 return params;
             }
         };

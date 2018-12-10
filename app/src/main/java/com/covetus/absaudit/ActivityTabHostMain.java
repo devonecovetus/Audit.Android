@@ -1,9 +1,14 @@
 package com.covetus.absaudit;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,29 +16,48 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.util.ArrayList;
+
+import ABS_HELPER.CommonUtils;
+import ABS_HELPER.NotificationUtils;
 
 /**
  * Created by admin1 on 12/10/18.
  */
 
 public class ActivityTabHostMain extends FragmentActivity {
-    private FragmentTabHost mTabHost;
+
     ArrayList<Integer> mArrayListActive = new ArrayList<>();
     ArrayList<Integer> mArrayListDeactive = new ArrayList<>();
     boolean doubleBackToExitPressedOnce = false;
     String mStrCurrentTab;
-
-
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private FragmentTabHost mTabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabhost_main);
+
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(CommonUtils.REGISTRATION_COMPLETE)) {
+                    FirebaseMessaging.getInstance().subscribeToTopic(CommonUtils.TOPIC_GLOBAL);
+                } else if (intent.getAction().equals(CommonUtils.PUSH_NOTIFICATION)) {
+                    mStrCurrentTab = intent.getStringExtra("mStrCurrentTab");
+
+                    System.out.println("<><><mStrCurrentTab" + mStrCurrentTab);
+                }
+            }
+        };
        /* fo getting cuurenttab value*/
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
-         mStrCurrentTab = bundle.getString("mStrCurrentTab");
+        if (bundle != null) {
+            mStrCurrentTab = bundle.getString("mStrCurrentTab");
         }
         inStart();
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
@@ -58,8 +82,7 @@ public class ActivityTabHostMain extends FragmentActivity {
             ImageView img = v.findViewById(R.id.mImgTab);
             if (i == 0) {
                 img.setImageResource(mArrayListActive.get(i));
-            }
-            else {
+            } else {
                 img.setImageResource(mArrayListDeactive.get(i));
             }
         }
@@ -74,8 +97,7 @@ public class ActivityTabHostMain extends FragmentActivity {
                     ImageView img = v.findViewById(R.id.mImgTab);
                     if (i == mTabHost.getCurrentTab()) {
                         img.setImageResource(mArrayListActive.get(i));
-                    }
-                    else {
+                    } else {
                         img.setImageResource(mArrayListDeactive.get(i));
                     }
                 }
@@ -94,7 +116,7 @@ public class ActivityTabHostMain extends FragmentActivity {
     }
 
     /*icon add in bottom tab bar*/
-    void inStart(){
+    void inStart() {
 
 
         mArrayListActive.add(R.mipmap.ic_tabbar_home_active);
@@ -132,5 +154,35 @@ public class ActivityTabHostMain extends FragmentActivity {
     }
 
 
+    @Override
+    protected void onResume() {
 
+        if(mStrCurrentTab.equals("4")){
+
+        }else {
+            int a = mTabHost.getCurrentTab();
+            if (a == 4) {
+                mTabHost.invalidate();
+                mTabHost.setCurrentTab(a);
+                FragmentAuditList.reload();
+            } else if (a == 2) {
+                mTabHost.invalidate();
+                mTabHost.setCurrentTab(a);
+                FragmentDraft.reload();
+            }
+        }
+
+
+        System.out.println("<><><> " + mTabHost.getCurrentTab());
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(CommonUtils.REGISTRATION_COMPLETE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(CommonUtils.PUSH_NOTIFICATION));
+        NotificationUtils.clearNotifications(getApplicationContext());
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
+    }
 }

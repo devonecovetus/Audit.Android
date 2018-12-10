@@ -3,20 +3,24 @@ package com.covetus.absaudit;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -28,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +60,7 @@ import ABS_GET_SET.Audit;
 import ABS_HELPER.AppController;
 import ABS_HELPER.CommonUtils;
 import ABS_HELPER.DatabaseHelper;
+import ABS_HELPER.NotificationUtils;
 import ABS_HELPER.PreferenceManager;
 import ABS_HELPER.RecyclerItemClickListener;
 import butterknife.BindView;
@@ -73,7 +79,6 @@ public class ActivityAuditDetail extends Activity {
     RelativeLayout mLayoutReject;
     @BindView(R.id.mLayoutAccept)
     RelativeLayout mLayoutAccept;
-
     @BindView(R.id.mTxtAuditTitle)
     TextViewBold mTxtAuditTitle;
     @BindView(R.id.mTxtAuditDetail)
@@ -92,7 +97,6 @@ public class ActivityAuditDetail extends Activity {
     TextViewSemiBold mTxtAgentName;
     @BindView(R.id.mTxtAgentEmail)
     TextViewSemiBold mTxtAgentEmail;
-
     @BindView(R.id.mTxtAgentNumber)
     TextViewSemiBold mTxtAgentNumber;
     @BindView(R.id.mTxtClientAddress)
@@ -109,22 +113,17 @@ public class ActivityAuditDetail extends Activity {
     TextViewSemiBold mTxtClientName;
     @BindView(R.id.mImageBack)
     ImageView mImageBack;
-
     @BindView(R.id.mImgCall)
     ImageView mImgCall;
     @BindView(R.id.mLayoutGetPdf)
     RelativeLayout mLayoutGetPdf;
-
     String mStrNotifyId;
     String mStrType;
     String mStrId, mStrTitle, mDueDate, mStrAssignBy, mStrAgentNumber;
-
     ArrayList<String> listPdf = new ArrayList<>();
     HashMap<String, String> listPdfUrl = new HashMap<String, String>();
-
     DocumentList documentList;
     ArrayList<String> mListItems = new ArrayList<>();
-
     /*permission list*/
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = new String[]{
@@ -132,6 +131,32 @@ public class ActivityAuditDetail extends Activity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+
+    /*getting day formate*/
+    public static String mTogetDay(String date) throws ParseException {
+        Date dateTime = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        DateFormat responceDate = new SimpleDateFormat("dd MM yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateTime);
+        Calendar today = Calendar.getInstance();
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+            return "Today";
+        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+            return "Yesterday";
+        } else {
+            return responceDate.format(dateTime);
+        }
+    }
+
+    /*getting am pm formate*/
+    public static String mTogetTime(String date) throws ParseException {
+        Date dateTime = new SimpleDateFormat("hh:mm:ss").parse(date);
+        DateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
+        return timeFormatter.format(dateTime);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +174,18 @@ public class ActivityAuditDetail extends Activity {
         if (!hasPermissions(ActivityAuditDetail.this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(ActivityAuditDetail.this, PERMISSIONS, PERMISSION_ALL);
         }
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(CommonUtils.REGISTRATION_COMPLETE)) {
+                    FirebaseMessaging.getInstance().subscribeToTopic(CommonUtils.TOPIC_GLOBAL);
+                } else if (intent.getAction().equals(CommonUtils.PUSH_NOTIFICATION)) {
+                    mStrNotifyId = intent.getStringExtra("mStrNotifyId");
+                    mStrType = intent.getStringExtra("mStrType");
+                }
+            }
+        };
 
         /*to get id and type from previous screen*/
         Bundle bundle = getIntent().getExtras();
@@ -195,7 +232,7 @@ public class ActivityAuditDetail extends Activity {
                                 @Override
                                 public void onItemClick(View view, int position) {
                                     dialog.dismiss();
-                                    mShowAlert("Please wait file is downloading...", ActivityAuditDetail.this);
+                                    mShowAlert(getString(R.string.mTextFile_file_downloading), ActivityAuditDetail.this);
                                     /*Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(listPdfUrl.get(listPdf.get(position))));
                                     startActivity(browserIntent);*/
 
@@ -203,13 +240,13 @@ public class ActivityAuditDetail extends Activity {
                                     String mFileType = listPdfUrl.get(listPdf.get(position));
                                     System.out.println("<><><>mFileType" + mFileType);
                                     if (mFileType.contains(".pdf")) {
-                                        downloadFile(listPdfUrl.get(listPdf.get(position)), "PDF", ".pdf");
+                                        downloadFile(listPdfUrl.get(listPdf.get(position)), getString(R.string.mTextFile_filefolder), ".pdf");
                                     } else if (mFileType.contains(".docx") || mFileType.contains(".doc")) {
-                                        downloadFile(listPdfUrl.get(listPdf.get(position)), "Document", ".doc");
+                                        downloadFile(listPdfUrl.get(listPdf.get(position)), getString(R.string.mTextFile_filefolder), ".doc");
                                     } else if (mFileType.contains(".png") || mFileType.contains(".jpg") || mFileType.contains(".jpeg")) {
-                                        downloadFile(listPdfUrl.get(listPdf.get(position)), "Images", ".png");
+                                        downloadFile(listPdfUrl.get(listPdf.get(position)), getString(R.string.mTextFile_mediaFolder), ".png");
                                     } else if (mFileType.contains(".xls") || mFileType.contains(".xlsx")) {
-                                        downloadFile(listPdfUrl.get(listPdf.get(position)), "Excel", ".xls");
+                                        downloadFile(listPdfUrl.get(listPdf.get(position)), getString(R.string.mTextFile_filefolder), ".xls");
                                     }
                                 }
 
@@ -277,15 +314,15 @@ public class ActivityAuditDetail extends Activity {
                                 mDueDate = jsonObjectAudit.getString("end_date");
                                 mTxtAuditTitle.setText(jsonObjectAudit.getString("title"));
                                 mTxtAuditDetail.setText(jsonObjectAudit.getString("description"));
-                                mTxtAuditDate.setText("Date: " + mTogetDay(jsonObjectAudit.getString("start_date")));
-                                mTxtAuditTime.setText("Time: " + mTogetTime(jsonObjectAudit.getString("time")));
-                                mTxtAuditDeuDate.setText("Due Date: " + mTogetDay(jsonObjectAudit.getString("end_date")));
-                                mTxtAuditArea.setText("Area: " + jsonObjectAudit.getString("city"));
+                                mTxtAuditDate.setText(getString(R.string.mTextFile_date) + mTogetDay(jsonObjectAudit.getString("start_date")));
+                                mTxtAuditTime.setText(getString(R.string.mTextFile_time) + mTogetTime(jsonObjectAudit.getString("time")));
+                                mTxtAuditDeuDate.setText(getString(R.string.mTextFile_due_date) + mTogetDay(jsonObjectAudit.getString("end_date")));
+                                mTxtAuditArea.setText(getString(R.string.mTextFile_area) + jsonObjectAudit.getString("city"));
 
                                 JSONObject jsonObjectAgent = jsonObject.getJSONObject("agentDetails");
                                 mStrAssignBy = jsonObjectAgent.getString("fulname");
-                                mTxtAgentName.setText("Name: " + jsonObjectAgent.getString("fulname"));
-                                mTxtAgentEmail.setText("Email: " + jsonObjectAgent.getString("email"));
+                                mTxtAgentName.setText(getString(R.string.mTextFile_name) + jsonObjectAgent.getString("fulname"));
+                                mTxtAgentEmail.setText(getString(R.string.mTextFile_email) + jsonObjectAgent.getString("email"));
                                 Glide.with(ActivityAuditDetail.this).load(jsonObjectAgent.getString("photo")).asBitmap().centerCrop().placeholder(R.drawable.placeholder_user_profile).into(new BitmapImageViewTarget(mImgAgentProfile) {
                                     @Override
                                     protected void setResource(Bitmap resource) {
@@ -295,13 +332,13 @@ public class ActivityAuditDetail extends Activity {
                                     }
                                 });
                                 mStrAgentNumber = jsonObjectAgent.getString("phone");
-                                mTxtAgentNumber.setText("Number: " + jsonObjectAgent.getString("phone"));
+                                mTxtAgentNumber.setText(getString(R.string.mTextFile_number) + jsonObjectAgent.getString("phone"));
                                 JSONObject jsonObjectContact = jsonObject.getJSONObject("contactPerson");
-                                mTxtClientName.setText("Name: " + jsonObjectContact.getString("name"));
-                                mTxtClientAddress.setText("Address: " + jsonObjectContact.getString("address"));
-                                mTxtClientNumber.setText("Number: " + jsonObjectContact.getString("phone"));
-                                mTxtClientLandmark.setText("Landmark: " + jsonObjectContact.getString("landmark"));
-                                mTxtClientPinCode.setText("Pin Code: " + jsonObjectContact.getString("pincode"));
+                                mTxtClientName.setText(getString(R.string.mTextFile_name) + jsonObjectContact.getString("name"));
+                                mTxtClientAddress.setText(getString(R.string.mTextFile_address) + jsonObjectContact.getString("address"));
+                                mTxtClientNumber.setText(getString(R.string.mTextFile_number) + jsonObjectContact.getString("phone"));
+                                mTxtClientLandmark.setText(getString(R.string.mTextFile_landmark) + jsonObjectContact.getString("landmark"));
+                                mTxtClientPinCode.setText(getString(R.string.mTextFile_pincode) + jsonObjectContact.getString("pincode"));
                                 Object intervention = jsonObjectContact.get("document");
                                 if (intervention instanceof JSONArray) {
                                     JSONArray jsonArray = jsonObjectContact.getJSONArray("document");
@@ -415,31 +452,6 @@ public class ActivityAuditDetail extends Activity {
         AppController.getInstance().addToRequestQueue(strRequest);
     }
 
-    /*getting day formate*/
-    public static String mTogetDay(String date) throws ParseException {
-        Date dateTime = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-        DateFormat responceDate = new SimpleDateFormat("dd MMMM yyyy");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateTime);
-        Calendar today = Calendar.getInstance();
-        Calendar yesterday = Calendar.getInstance();
-        yesterday.add(Calendar.DATE, -1);
-        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
-            return "Today";
-        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
-            return "Yesterday";
-        } else {
-            return responceDate.format(dateTime);
-        }
-    }
-
-    /*getting am pm formate*/
-    public static String mTogetTime(String date) throws ParseException {
-        Date dateTime = new SimpleDateFormat("hh:mm:ss").parse(date);
-        DateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
-        return timeFormatter.format(dateTime);
-    }
-
     /*downloading file*/
     private void downloadFile(String urlString, String mFolder, String mExtension) {
         try {
@@ -465,7 +477,7 @@ public class ActivityAuditDetail extends Activity {
             is.close();
             //openfile
             openFile(outputFile, mExtension);
-            Toast.makeText(this, " A new file is downloaded successfully", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.mTextfile_new_download, Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -495,8 +507,47 @@ public class ActivityAuditDetail extends Activity {
                 startActivity(intentExcel);
             }
         } catch (Exception e) {
-            Toast.makeText(ActivityAuditDetail.this, "No handler for this type of file.", Toast.LENGTH_LONG).show();
+            Toast.makeText(ActivityAuditDetail.this, R.string.mTextFile_no_handler, Toast.LENGTH_LONG).show();
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(CommonUtils.REGISTRATION_COMPLETE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(CommonUtils.PUSH_NOTIFICATION));
+        NotificationUtils.clearNotifications(getApplicationContext());
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        for (String permission : permissions) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                //denied
+                if (!hasPermissions(ActivityAuditDetail.this, PERMISSIONS)) {
+                    ActivityCompat.requestPermissions(ActivityAuditDetail.this, PERMISSIONS, PERMISSION_ALL);
+                }
+                mShowAlert(getString(R.string.mTextFile_deny_permission), ActivityAuditDetail.this);
+            } else {
+                if (ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+                    //allowed
+                } else {
+                    //set to never ask again
+                    if (!hasPermissions(ActivityAuditDetail.this, PERMISSIONS)) {
+                        ActivityCompat.requestPermissions(ActivityAuditDetail.this, PERMISSIONS, PERMISSION_ALL);
+                    }
+                }
+            }
         }
     }
 }

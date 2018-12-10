@@ -62,6 +62,31 @@ public class ActivityNotificationList extends Activity {
     ImageView mImageBack;
     NotificationList notificationList;
 
+    /* date formate for getting days*/
+    public static String mTogetDay(String date) throws ParseException {
+        Date dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date);
+        DateFormat responceDate = new SimpleDateFormat("dd MMM yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateTime);
+        Calendar today = Calendar.getInstance();
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+        return "Today";
+        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+            return "Yesterday";
+        } else {
+            return responceDate.format(dateTime);
+        }
+    }
+
+    /* date formate for getting am pm*/
+    public static String mTogetTime(String date) throws ParseException {
+        Date dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date);
+        DateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
+        return timeFormatter.format(dateTime);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +109,10 @@ public class ActivityNotificationList extends Activity {
 
         });
     }
+
+    // yyyy-MM-dd hh:mm:ss
+   // dd MMM yyyy
+    // hh:mm a
 
    /* click for going back */
     @OnClick(R.id.mImageBack)
@@ -141,7 +170,7 @@ public class ActivityNotificationList extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         hidePDialog();
-                        Toast.makeText(ActivityNotificationList.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ActivityNotificationList.this, getString(R.string.mTextFile_error_something_went_wrong), Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
@@ -155,35 +184,6 @@ public class ActivityNotificationList extends Activity {
         };
         strRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 48, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(strRequest);
-    }
-
-    // yyyy-MM-dd hh:mm:ss
-   // dd MMM yyyy
-    // hh:mm a
-
-    /* date formate for getting days*/
-    public static String mTogetDay(String date) throws ParseException {
-        Date dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date);
-        DateFormat responceDate = new SimpleDateFormat("dd MMM yyyy");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateTime);
-        Calendar today = Calendar.getInstance();
-        Calendar yesterday = Calendar.getInstance();
-        yesterday.add(Calendar.DATE, -1);
-        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
-        return "Today";
-        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
-            return "Yesterday";
-        } else {
-            return responceDate.format(dateTime);
-        }
-    }
-
-    /* date formate for getting am pm*/
-    public static String mTogetTime(String date) throws ParseException {
-        Date dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date);
-        DateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
-        return timeFormatter.format(dateTime);
     }
 
 

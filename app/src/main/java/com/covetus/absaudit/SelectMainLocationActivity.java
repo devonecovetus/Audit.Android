@@ -36,27 +36,58 @@ public class SelectMainLocationActivity extends Activity implements Listener {
     public static HashMap<String, String> meMapDesc = new HashMap<String, String>();
     public static HashMap<String, String> meMapServerId = new HashMap<String, String>();
     public static HashMap<String, String> meMapLocalId = new HashMap<String, String>();
+    public static TextViewRegular mTxtLocationDesc;
+    public static TextViewSemiBold mTextNormal;
     @BindView(R.id.tvEmptyListTop)
     TextView tvEmptyListTop;
     @BindView(R.id.tvEmptyListBottom)
     TextView tvEmptyListBottom;
     @BindView(R.id.mLayoutDelete)
     RelativeLayout mLayoutDelete;
-
     @BindView(R.id.mLayoutNext)
     RelativeLayout mLayoutNext;
     @BindView(R.id.mImageBack)
     ImageView mImageBack;
-
-
-    public static TextViewRegular mTxtLocationDesc;
-
-    public static TextViewSemiBold mTextNormal;
-
     ArrayList<AuditMainLocation> mListArry = new ArrayList<>();
     DatabaseHelper db;
     String mAuditId;
 
+    public static int getCount(){
+    DragListAdapter adapterSource = (DragListAdapter) rvTop.getAdapter();
+    List<String> listSource = adapterSource.getList();
+    return listSource.size();
+    }
+
+    public static void getRemove(int position) {
+        String title1 = ((TextView) rvTop.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.text)).getText().toString();
+        DragListAdapter adapterSource = (DragListAdapter) rvTop.getAdapter();
+        String list = adapterSource.getList().get(position);
+        List<String> listSource = adapterSource.getList();
+        SelectMainLocationActivity.meMap.put(listSource.get(position), "0");
+        listSource.remove(position);
+        adapterSource.updateList(listSource);
+        adapterSource.notifyDataSetChanged();
+
+
+        //add
+        //mStrDelete = "0";
+        DragListAdapter adapterTarget = (DragListAdapter) rvBottom.getAdapter();
+        List<String> customListTarget = adapterTarget.getList();
+        customListTarget.add(title1);
+        //countList.add("0");
+        adapterTarget.updateList(customListTarget);
+        adapterTarget.notifyDataSetChanged();
+
+        DragListAdapter adapterSo = (DragListAdapter) rvTop.getAdapter();
+        List<String> listSo = adapterSo.getList();
+        System.out.println("<><><>" + listSo.size());
+        if (listSo.size() == 0) {
+            mTextNormal.setText(R.string.mtextFile_delete);
+            mStrDelete = "0";
+        }
+
+
+    }
 
     @OnClick(R.id.mImageBack)
     public void goBack() {
@@ -70,7 +101,7 @@ public class SelectMainLocationActivity extends Activity implements Listener {
     if(listSource.size()>0){
         for(int i = 0;i<listSource.size();i++){
         if(meMap.get(listSource.get(i)).equals("0") || meMap.get(listSource.get(i)).equals("")){
-            CommonUtils.mShowAlert("Please give count of "+listSource.get(i)+" location",SelectMainLocationActivity.this);
+            CommonUtils.mShowAlert(getString(R.string.mTextFile_give_count)+listSource.get(i)+getString(R.string.mTextFile_location),SelectMainLocationActivity.this);
             return;
         }
         }
@@ -97,10 +128,9 @@ public class SelectMainLocationActivity extends Activity implements Listener {
         Intent intent = new Intent(SelectMainLocationActivity.this,LocationSubFolder.class);
         intent.putExtra("mAuditId",mAuditId);
         startActivity(intent);
-        finish();
+        //finish();
     }
     }
-
 
     @OnClick(R.id.mLayoutDelete)
     public void mLayoutDelete() {
@@ -108,24 +138,17 @@ public class SelectMainLocationActivity extends Activity implements Listener {
         List<String> listSource = adapterSource.getList();
         if (listSource.size() > 0) {
             if (mStrDelete.equals("0")) {
-                mTextNormal.setText("Done");
+                mTextNormal.setText(R.string.mtextFile_done);
                 mStrDelete = "1";
                 adapterSource.notifyDataSetChanged();
             } else {
-                mTextNormal.setText("Delete");
+                mTextNormal.setText(R.string.mtextFile_delete);
                 mStrDelete = "0";
                 adapterSource.notifyDataSetChanged();
             }
         }
 
     }
-
-    public static int getCount(){
-    DragListAdapter adapterSource = (DragListAdapter) rvTop.getAdapter();
-    List<String> listSource = adapterSource.getList();
-    return listSource.size();
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +171,11 @@ public class SelectMainLocationActivity extends Activity implements Listener {
     }
 
     private void initTopRecyclerView() {
+        mListArry.clear();
+        meMap.clear();
+        meMapDesc.clear();
+        meMapServerId.clear();
+        meMapLocalId.clear();
         mListArry = db.get_all_tb_audit_main_location(mAuditId);
         List<String> topList = new ArrayList<>();
         for (int i = 0; i<mListArry.size();i++){
@@ -166,7 +194,6 @@ public class SelectMainLocationActivity extends Activity implements Listener {
         rvBottom.setOnDragListener(topListAdapter.getDragInstance());
     }
 
-
     private void initBottomRecyclerView() {
         rvTop.setLayoutManager(new GridLayoutManager(this, 2));
         ArrayList<SelectedLocation> mAuditList = db.get_all_tb_selected_main_location(mAuditId);
@@ -184,39 +211,6 @@ public class SelectMainLocationActivity extends Activity implements Listener {
         rvTop.setOnDragListener(bottomListAdapter.getDragInstance());
     }
 
-
-
-    public static void getRemove(int position) {
-        String title1 = ((TextView) rvTop.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.text)).getText().toString();
-        DragListAdapter adapterSource = (DragListAdapter) rvTop.getAdapter();
-        String list = adapterSource.getList().get(position);
-        List<String> listSource = adapterSource.getList();
-        SelectMainLocationActivity.meMap.put(listSource.get(position), "0");
-        listSource.remove(position);
-        adapterSource.updateList(listSource);
-        adapterSource.notifyDataSetChanged();
-
-
-        //add
-        //mStrDelete = "0";
-        DragListAdapter adapterTarget = (DragListAdapter) rvBottom.getAdapter();
-        List<String> customListTarget = adapterTarget.getList();
-        customListTarget.add(title1);
-        //countList.add("0");
-        adapterTarget.updateList(customListTarget);
-        adapterTarget.notifyDataSetChanged();
-
-        DragListAdapter adapterSo = (DragListAdapter) rvTop.getAdapter();
-        List<String> listSo = adapterSo.getList();
-        System.out.println("<><><>" + listSo.size());
-        if (listSo.size() == 0) {
-            mTextNormal.setText("Delete");
-            mStrDelete = "0";
-        }
-
-
-    }
-
     @Override
     public void setEmptyListTop(boolean visibility) {
         //tvEmptyListTop.setVisibility(visibility ? View.VISIBLE : View.GONE);
@@ -227,5 +221,15 @@ public class SelectMainLocationActivity extends Activity implements Listener {
     public void setEmptyListBottom(boolean visibility) {
         //tvEmptyListBottom.setVisibility(visibility ? View.VISIBLE : View.GONE);
         //rvBottom.setVisibility(visibility ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    protected void onResume() {
+        initTopRecyclerView();
+        initBottomRecyclerView();
+        tvEmptyListTop.setVisibility(View.GONE);
+        tvEmptyListBottom.setVisibility(View.GONE);
+        super.onResume();
+
     }
 }

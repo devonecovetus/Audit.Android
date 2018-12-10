@@ -31,11 +31,11 @@ import butterknife.ButterKnife;
 class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolder>
         implements View.OnTouchListener, View.OnLongClickListener {
 
-    private List<String> list;
-    private Listener listener;
     String mStatus;
     String mAudit;
     Activity context;
+    private List<String> list;
+    private Listener listener;
 
     DragListAdapter(Activity context, List<String> list, Listener listener, String mStr, String mAudit) {
         this.list = list;
@@ -89,15 +89,16 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
                 DatabaseHelper db = new DatabaseHelper(context);
                 if (!db.isExistNotification(SelectMainLocationActivity.meMapLocalId.get(list.get(position)))) {
                     SelectMainLocationActivity.getRemove(position);
-                }else {
+                } else {
                     final Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                     dialog.setContentView(R.layout.dialog_confirmation_delete_data_exp);
-                    TextViewRegular mTxtMsg = (TextViewRegular)dialog.findViewById(R.id.mTxtMsg);
-                    RelativeLayout mConfirm = (RelativeLayout)dialog.findViewById(R.id.mConfirm);
-                    RelativeLayout mCancel = (RelativeLayout)dialog.findViewById(R.id.mCancel);
-                    mTxtMsg.setText("This will delete "+list.get(position)+" Folder and Sub folders including associated questions,Do you want to proceed ?");
+                    TextViewRegular mTxtMsg = (TextViewRegular) dialog.findViewById(R.id.mTxtMsg);
+                    RelativeLayout mConfirm = (RelativeLayout) dialog.findViewById(R.id.mConfirm);
+                    RelativeLayout mCancel = (RelativeLayout) dialog.findViewById(R.id.mCancel);
+                    mTxtMsg.setText(context.getString(R.string.mtextFile_this) + list.get(position) + context.getString(R.string.mtextFile_foldr_msg));
+//                    mTxtMsg.setText(context.getString(R.string.mtextFile_this)+list.get(position)+" Folder and Sub folders including associated questions,Do you want to proceed ?");
 
                     mCancel.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -113,8 +114,8 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
                             dbase.delete_tb_location_sub_folder(SelectMainLocationActivity.meMapLocalId.get(list.get(position)));
                             dbase.delete_tb_sub_folder_explation_list_all(SelectMainLocationActivity.meMapLocalId.get(list.get(position)));
                             SelectMainLocationActivity.getRemove(position);
-                            if(SelectMainLocationActivity.getCount()==0){
-                            dbase.update_tb_list_audit(mAudit,"0");
+                            if (SelectMainLocationActivity.getCount() == 0) {
+                                dbase.update_tb_list_audit(mAudit, "0");
                             }
                             dialog.dismiss();
                         }
@@ -165,11 +166,11 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                         dialog.setContentView(R.layout.dialog_confirmation_delete_data_exp);
-                        TextViewRegular mTxtMsg = (TextViewRegular)dialog.findViewById(R.id.mTxtMsg);
-                        RelativeLayout mConfirm = (RelativeLayout)dialog.findViewById(R.id.mConfirm);
-                        RelativeLayout mCancel = (RelativeLayout)dialog.findViewById(R.id.mCancel);
-                        mTxtMsg.setText("This will delete "+list.get(position)+" Folder and Sub folders including associated questions,Do you want to proceed ?");
-
+                        TextViewRegular mTxtMsg = (TextViewRegular) dialog.findViewById(R.id.mTxtMsg);
+                        RelativeLayout mConfirm = (RelativeLayout) dialog.findViewById(R.id.mConfirm);
+                        RelativeLayout mCancel = (RelativeLayout) dialog.findViewById(R.id.mCancel);
+//                        mTxtMsg.setText("This will delete " + list.get(position) + " Folder and Sub folders including associated questions,Do you want to proceed ?");
+                        mTxtMsg.setText(context.getString(R.string.mtextFile_this) + list.get(position) + context.getString(R.string.mtextFile_foldr_msg));
                         mCancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -193,7 +194,6 @@ class DragListAdapter extends RecyclerView.Adapter<DragListAdapter.ListViewHolde
                             }
                         });
                         dialog.show();
-
 
 
                         //alert and delete from selected location and sub folder

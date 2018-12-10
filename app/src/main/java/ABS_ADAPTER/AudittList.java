@@ -23,13 +23,14 @@ import java.util.ArrayList;
 import ABS_CUSTOM_VIEW.TextViewSemiBold;
 import ABS_GET_SET.Audit;
 import ABS_GET_SET.SideMenu;
+import ABS_HELPER.CommonUtils;
 import ABS_HELPER.DatabaseHelper;
 
 
 public class AudittList extends BaseAdapter {
 
-    private ArrayList<Audit> mListItems = new ArrayList<>();
     Activity context;
+    private ArrayList<Audit> mListItems = new ArrayList<>();
 
 
     public AudittList(Activity context, ArrayList<Audit> mListItems) {
@@ -62,38 +63,49 @@ public class AudittList extends BaseAdapter {
             holder.mTxtAuditDate = (TextViewSemiBold) convertView.findViewById(R.id.mTxtAuditDate);
             holder.mTxtAuditTitle = (TextViewSemiBold) convertView.findViewById(R.id.mTxtAuditTitle);
             holder.mTxtAgentName = (TextViewSemiBold) convertView.findViewById(R.id.mTxtAgentName);
-            holder.mLayoutViewAudit = (RelativeLayout) convertView.findViewById(R.id.mLayoutViewAudit);
+            holder.mLayoutViewAudit = (ImageView) convertView.findViewById(R.id.mLayoutViewAudit);
             holder.mLayoutMain = (RelativeLayout) convertView.findViewById(R.id.mLayoutMain);
-            final Audit audit = mListItems.get(position);
-            holder.mTxtAuditDate.setText(audit.getmDueDate());
-            holder.mTxtAuditTitle.setText(audit.getmTitle());
-            holder.mTxtAgentName.setText(audit.getmAssignBy());
-            if(audit.getmStatus().equals("0")){
-            holder.mLayoutMain.setBackground(context.getResources().getDrawable(R.drawable.red_border));
-            }else {
-            holder.mLayoutMain.setBackground(context.getResources().getDrawable(R.drawable.yellow_border));
-            }
-            holder.mLayoutViewAudit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DatabaseHelper db = new DatabaseHelper(context);
-                    String mAuditId = audit.getmAuditId();
-                    if(db.get_data_count_tb_selected_main_location(mAuditId)>0){
-                        Intent intent = new Intent(context,SelectMainLocationActivity.class);
-                        intent.putExtra("mAuditId",mAuditId);
-                        context.startActivity(intent);
-                    }else {
-                        Intent intent = new Intent(context,ActivitySelectCountryStandard.class);
-                        intent.putExtra("mAuditId",mAuditId);
-                        context.startActivity(intent);
-                    }
-                }
-            });
-          convertView.setTag(holder);
+
+
+            convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        final Audit audit = mListItems.get(position);
+        holder.mTxtAuditDate.setText(audit.getmDueDate());
+        holder.mTxtAuditTitle.setText(audit.getmTitle());
+        holder.mTxtAgentName.setText(audit.getmAssignBy());
+        if (audit.getmStatus().equals("0")) {
+            holder.mLayoutMain.setBackground(context.getResources().getDrawable(R.drawable.red_border));
+        } else {
+            holder.mLayoutMain.setBackground(context.getResources().getDrawable(R.drawable.yellow_border));
+        }
+        holder.mLayoutViewAudit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseHelper db = new DatabaseHelper(context);
+                String mAuditId = audit.getmAuditId();
+
+
+                if (db.get_data_count_tb_list_audit_status("1") > 0) {
+                    CommonUtils.mShowAlert("Please synchronize before starting new audit", context);
+                } else {
+                    System.out.println("<><><># " + mAuditId);
+                    if (db.get_data_count_tb_selected_main_location(mAuditId) > 0) {
+                        Intent intent = new Intent(context, SelectMainLocationActivity.class);
+                        intent.putExtra("mAuditId", mAuditId);
+                        context.startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(context, ActivitySelectCountryStandard.class);
+                        intent.putExtra("mAuditId", mAuditId);
+                        context.startActivity(intent);
+                    }
+                }
+
+
+            }
+        });
         return convertView;
     }
 
@@ -102,7 +114,7 @@ public class AudittList extends BaseAdapter {
         TextViewSemiBold mTxtAuditDate;
         TextViewSemiBold mTxtAuditTitle;
         TextViewSemiBold mTxtAgentName;
-        RelativeLayout mLayoutViewAudit;
+        ImageView mLayoutViewAudit;
         RelativeLayout mLayoutMain;
     }
 

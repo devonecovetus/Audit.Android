@@ -120,7 +120,7 @@ public class FragmentDashboard extends Fragment {
                 } else if (pos == 4) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.mText_logout)
-                            .setIcon(R.mipmap.ic_app_icon)
+                            .setIcon(R.drawable.ic_access4mii_logo)
                             .setMessage(R.string.mTextAlert_logout)
                             .setPositiveButton(R.string.mText_yes, new DialogInterface.OnClickListener() {
                                 @Override

@@ -4,31 +4,36 @@
 package ABS_ADAPTER;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.covetus.absaudit.R;
 
 import java.util.ArrayList;
 
 import ABS_CUSTOM_VIEW.TextViewRegular;
 import ABS_CUSTOM_VIEW.TextViewSemiBold;
-import ABS_GET_SET.SideMenu;
+import ABS_GET_SET.Message;
+
+import static ABS_HELPER.CommonUtils.covertTimeToText;
 
 
 public class ChatList extends BaseAdapter {
 
-    private ArrayList<SideMenu> mListItems = new ArrayList<>();
     Context context;
     int selectedPos;
+    private ArrayList<Message> mListItems = new ArrayList<>();
 
 
-    public ChatList(Context context, ArrayList<SideMenu> mListItems) {
+    public ChatList(Context context, ArrayList<Message> mListItems) {
         this.mListItems = mListItems;
         this.context = context;
     }
@@ -50,16 +55,30 @@ public class ChatList extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             LayoutInflater mInflater = LayoutInflater.from(context);
             convertView = mInflater.inflate(R.layout.item_chat_list, null);
             holder = new ViewHolder();
-            holder.mImgChatUser = (ImageView)convertView.findViewById(R.id.mImgChatUser);
+            holder.mImgChatUser = (ImageView) convertView.findViewById(R.id.mImgChatUser);
             holder.mTextUserName = (TextViewSemiBold) convertView.findViewById(R.id.mTextUserName);
             holder.mTextUserLastMsg = (TextViewRegular) convertView.findViewById(R.id.mTextUserLastMsg);
             holder.mTextUserLastMsgDate = (TextViewRegular) convertView.findViewById(R.id.mTextUserLastMsgDate);
-
+            Message messageChat = mListItems.get(position);
+            System.out.println("<><><name" + messageChat.getmUserName());
+            System.out.println("<><><pic" + messageChat.getmUserPhoto());
+            holder.mTextUserLastMsg.setText(messageChat.getmUserLastMsg());
+            holder.mTextUserName.setText(messageChat.getmUserName());
+            holder.mTextUserLastMsgDate.setText(covertTimeToText(messageChat.getmUserMsgDate()));
+            Glide.with(context).load(messageChat.getmUserPhoto()).asBitmap().centerCrop().placeholder(R.drawable.placeholder_user_profile).into(new BitmapImageViewTarget(holder.mImgChatUser) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                    circularBitmapDrawable.setCircular(true);
+                    holder.mImgChatUser.setImageDrawable(circularBitmapDrawable);
+                }
+            });
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -69,6 +88,10 @@ public class ChatList extends BaseAdapter {
         return convertView;
     }
 
+    public void mSetSelection(int i) {
+        selectedPos = i;
+        notifyDataSetChanged();
+    }
 
     private class ViewHolder {
 
@@ -77,10 +100,5 @@ public class ChatList extends BaseAdapter {
         TextViewRegular mTextUserLastMsg;
         TextViewRegular mTextUserLastMsgDate;
 
-    }
-
-    public void mSetSelection(int i){
-    selectedPos = i;
-    notifyDataSetChanged();
     }
 }

@@ -31,8 +31,8 @@ import ABS_HELPER.DatabaseHelper;
 
 public class LayerListAdapter extends BaseAdapter {
 
-    private ArrayList<LayerList> mListItems = new ArrayList<>();
     Activity context;
+    private ArrayList<LayerList> mListItems = new ArrayList<>();
 
 
     public LayerListAdapter(Activity context, ArrayList<LayerList> mListItems) {
@@ -65,27 +65,33 @@ public class LayerListAdapter extends BaseAdapter {
             holder.mTxtTitle = (TextViewSemiBold) convertView.findViewById(R.id.mTxtTitle);
             holder.mTxtDecs = (TextViewSemiBold) convertView.findViewById(R.id.mTxtDecs);
             holder.mImgUpdateData = (ImageView) convertView.findViewById(R.id.mImgUpdateData);
-            final LayerList layerList = mListItems.get(position);
-            holder.mTxtTitle.setText(layerList.getmStrLayerTitle());
-            holder.mTxtDecs.setText(layerList.getmStrLayerDesc());
+            holder.mImgDelete = (ImageView) convertView.findViewById(R.id.mImgDelete);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-            holder.mImgUpdateData.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setContentView(R.layout.dialog_update_layer_title_desc);
-                    final EditTextSemiBold mEditLayerTitle = (EditTextSemiBold)dialog.findViewById(R.id.mEditLayerTitle);
-                    final EditTextSemiBold mEditLayerDescription = (EditTextSemiBold)dialog.findViewById(R.id.mEditLayerDescription);
-                    TextViewBold mTxtUpdateButton = (TextViewBold)dialog.findViewById(R.id.mTxtUpdateButton);
-                    mEditLayerTitle.setText(holder.mTxtTitle.getText());
-                    mEditLayerDescription.setText(holder.mTxtDecs.getText());
-                    mTxtUpdateButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+
+        final LayerList layerList = mListItems.get(position);
+        holder.mTxtTitle.setText(layerList.getmStrLayerTitle());
+        holder.mTxtDecs.setText(layerList.getmStrLayerDesc());
+        holder.mImgUpdateData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_update_layer_title_desc);
+                final EditTextSemiBold mEditLayerTitle = (EditTextSemiBold) dialog.findViewById(R.id.mEditLayerTitle);
+                final EditTextSemiBold mEditLayerDescription = (EditTextSemiBold) dialog.findViewById(R.id.mEditLayerDescription);
+                TextViewBold mTxtUpdateButton = (TextViewBold) dialog.findViewById(R.id.mTxtUpdateButton);
+                mEditLayerTitle.setText(holder.mTxtTitle.getText());
+                mEditLayerDescription.setText(holder.mTxtDecs.getText());
+                mTxtUpdateButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         DatabaseHelper databaseHelper = new DatabaseHelper(context);
-                        String mTitle =  mEditLayerTitle.getText().toString();
-                        String mDescription =  mEditLayerDescription.getText().toString();
+                        String mTitle = mEditLayerTitle.getText().toString();
+                        String mDescription = mEditLayerDescription.getText().toString();
                         holder.mTxtTitle.setText(mTitle);
                         holder.mTxtDecs.setText(mDescription);
                         LayerList layerUpdateList = new LayerList();
@@ -94,18 +100,23 @@ public class LayerListAdapter extends BaseAdapter {
                         layerUpdateList.setmStrId(layerList.getmStrId());
                         databaseHelper.update_tb_sub_folder_explation_list(layerUpdateList);
                         dialog.dismiss();
-                        }
-                    });
-
-                    dialog.show();
+                    }
+                });
 
 
-                }
-            });
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+                dialog.show();
+            }
+        });
+
+        /*holder.mImgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                databaseHelper.delete_tb_sub_folder_single_row(layerList.getmStrId());
+                notifyDataSetChanged();
+            }
+        });*/
         return convertView;
     }
 
@@ -113,7 +124,7 @@ public class LayerListAdapter extends BaseAdapter {
     private class ViewHolder {
         TextViewSemiBold mTxtTitle;
         TextViewSemiBold mTxtDecs;
-        ImageView mImgUpdateData;
+        ImageView mImgUpdateData, mImgDelete;
     }
 
 

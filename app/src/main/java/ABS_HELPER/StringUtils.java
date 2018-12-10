@@ -80,7 +80,26 @@ public class StringUtils {
 
 
 
+    //Keys For tb_chat_list
+    public static String tb_chat_user_list = "tb_chat_user_list";
+    public static String chat_from_id = "from_id";
+    public static String chat_to_id = "to_id";
+    public static String chat_user_id = "chat_user_id";
+    public static String chat_user_name = "user_name";
+    public static String chat_user_photo = "user_photo";
+    public static String chat_user_msg = "user_msg";
+    public static String chat_user_time = "user_time";
+    public static String chat_user_role = "user_role";
+    public static String chat_user_email = "user_email";
+    public static String chat_user_phone = "user_phone";
 
+
+    //Keys For tb_chat_msg_list
+    public static String tb_chat_msg_list = "tb_chat_msg_list";
+    public static String chat_room_id = "chat_room_id";
+    public static String chat_msg = "msg";
+    public static String chat_msg_time = "msg_time";
+    public static String chat_msg_type = "msg_type";
 
 
 
@@ -93,6 +112,8 @@ public class StringUtils {
     public static String ct_tb_location_sub_folder = "CREATE TABLE "+tb_location_sub_folder+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_main_location_id+" TEXT NOT NULL, "+audit_sub_folder_name+" TEXT NOT NULL, "+audit_sub_folder_count+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL )";
     public static String ct_tb_selected_main_location = "CREATE TABLE "+tb_selected_main_location+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_main_location_id+" TEXT NOT NULL, "+audit_main_location_title+" TEXT NOT NULL, "+audit_main_location_server_id+" TEXT NOT NULL, "+audit_main_location_count+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+audit_main_location_decs+" TEXT NOT NULL )";
     public static String ct_tb_sub_folder_explation_list = "CREATE TABLE "+tb_sub_folder_explation_list+" ( "+id+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "+audit_main_location_id+" TEXT NOT NULL, "+audit_main_location_title+" TEXT NOT NULL, "+audit_sub_folder_id+" TEXT NOT NULL, "+audit_sub_folder_title+" TEXT NOT NULL, "+audit_layer_title+" TEXT NOT NULL, "+audit_layer_desc+" TEXT NOT NULL, "+audit_id+" TEXT NOT NULL, "+user_id+" TEXT NOT NULL )";
+    public static String ct_tb_chat_user_list = "CREATE TABLE " + tb_chat_user_list + " ( " + id + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " + user_id + " TEXT NOT NULL, " + chat_from_id + " TEXT NOT NULL, " + chat_to_id + " TEXT NOT NULL, " + chat_user_id + " TEXT NOT NULL, " + chat_user_name + " TEXT NOT NULL, " + chat_user_photo + " TEXT NOT NULL, " + chat_user_msg + " TEXT NOT NULL, " + chat_user_time + " TEXT NOT NULL, " + chat_user_email + " TEXT NOT NULL, " + chat_user_phone + " TEXT NOT NULL, " + chat_user_role + " TEXT NOT NULL )";
+    public static String ct_tb_chat_msg_list = "CREATE TABLE " + tb_chat_msg_list + " ( " + id + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " + user_id + " TEXT NOT NULL, " + chat_room_id + " TEXT NOT NULL, "+ chat_user_id + " TEXT NOT NULL, "+ chat_from_id + " TEXT NOT NULL, " + chat_msg + " TEXT NOT NULL, " + chat_msg_time + " TEXT NOT NULL, " + chat_msg_type + " TEXT NOT NULL )";
 
 
 
@@ -100,10 +121,11 @@ public class StringUtils {
 
 
 
-            
 
 
-            
+
+
+
 
 
 }

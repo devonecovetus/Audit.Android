@@ -31,8 +31,8 @@ import static ABS_HELPER.CommonUtils.mStrBaseUrlImage;
 
 public class NotificationList extends BaseAdapter {
 
-    private ArrayList<Notification> mListItems = new ArrayList<>();
     Context context;
+    private ArrayList<Notification> mListItems = new ArrayList<>();
 
 
     public NotificationList(Context context, ArrayList<Notification> mListItems) {
@@ -62,7 +62,7 @@ public class NotificationList extends BaseAdapter {
             LayoutInflater mInflater = LayoutInflater.from(context);
             convertView = mInflater.inflate(R.layout.item_notification_list, null);
             holder = new ViewHolder();
-            holder.mImgUserProfile = (ImageView)convertView.findViewById(R.id.mImgUserProfile);
+            holder.mImgUserProfile = (ImageView) convertView.findViewById(R.id.mImgUserProfile);
             holder.mTxtTitle = (TextViewSemiBold) convertView.findViewById(R.id.mTxtTitle);
             holder.mTxtTime = (TextViewSemiBold) convertView.findViewById(R.id.mTxtTime);
             holder.mTxtDay = (TextViewRegular) convertView.findViewById(R.id.mTxtDay);
@@ -92,7 +92,6 @@ public class NotificationList extends BaseAdapter {
         return convertView;
     }
 
-
     private class ViewHolder {
         ImageView mImgUserProfile;
         TextViewSemiBold mTxtTitle;
@@ -101,6 +100,4 @@ public class NotificationList extends BaseAdapter {
         TextViewSemiBold mTxtCount;
         TextViewRegular mTxtDesc;
     }
-
-
 }

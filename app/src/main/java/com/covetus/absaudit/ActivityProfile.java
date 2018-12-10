@@ -47,6 +47,8 @@ public class ActivityProfile extends Activity {
     TextViewBold mTxtUserEmail;
     @BindView(R.id.mLayoutUpdateDetails)
     LinearLayout mLayoutUpdateDetails;
+    @BindView(R.id.mLayoutChatWithAdmin)
+    LinearLayout mLayoutChatWithAdmin;
     @BindView(R.id.mImageBack)
     ImageView mImageBack;
     @BindView(R.id.mImgUserProfile)
@@ -60,7 +62,7 @@ public class ActivityProfile extends Activity {
 
     }
 
-  /*update profile image when image is updated*/
+    /*update profile image when image is updated*/
     @Override
     protected void onResume() {
         mTxtUserName.setText(PreferenceManager.getFormiiFullName(ActivityProfile.this));
@@ -81,14 +83,23 @@ public class ActivityProfile extends Activity {
     @OnClick(R.id.mLayoutUpdateDetails)
     public void mLayoutGoToUpdateProfile() {
         //CommonUtils.OnClick(ActivityProfile.this, mLayoutUpdateDetails);
-        Intent intent = new Intent(ActivityProfile.this,ActivityUpdateProfile.class);
+        Intent intent = new Intent(ActivityProfile.this, ActivityUpdateProfile.class);
         startActivity(intent);
         //finish();
+    }
+
+    /* click for going to update profile screen */
+    @OnClick(R.id.mLayoutChatWithAdmin)
+    public void mLayoutChatWithAdmin() {
+        //CommonUtils.OnClick(ActivityProfile.this, mLayoutUpdateDetails);
+        Intent intent = new Intent(ActivityProfile.this, ActivityChatWithAdmin.class);
+        startActivity(intent);
+
     }
 
     /* click for going back */
     @OnClick(R.id.mImageBack)
     public void mGoBack() {
-       finish();
+        finish();
     }
 }

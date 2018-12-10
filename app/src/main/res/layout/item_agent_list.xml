@@ -1,31 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout
-    android:elevation="2dp"
-    android:padding="5dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <LinearLayout
+
+        android:id="@+id/mHeaderLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <ABS_CUSTOM_VIEW.TextViewSemiBold
+            android:id="@+id/mTextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="A"
+            android:textAllCaps="true"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="5dp"
+            android:background="@color/colorDarkGrey" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/mSectionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="10dp">
 
         <ImageView
             android:id="@+id/mImgChatUser"
-            android:src="@mipmap/ic_placeholder_user"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_placeholder_user" />
 
 
         <ABS_CUSTOM_VIEW.TextViewSemiBold
             android:id="@+id/mTextUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/mImgChatUser"
-            android:textSize="25dp"
-            android:layout_centerVertical="true"
-            android:textColor="@color/black"
             android:text="Akhilesh Pathak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+        <ImageView
+            android:id="@+id/mImgChat"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_msg_chat" />
 
 
+    </RelativeLayout>
 
 
-</RelativeLayout>
+</LinearLayout>
+

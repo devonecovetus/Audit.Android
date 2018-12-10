@@ -21,24 +21,9 @@ import ABS_CUSTOM_VIEW.TextViewSemiBold;
 
 public class DocumentList extends RecyclerView.Adapter<DocumentList.MyViewHolder> {
 
-    private ArrayList<String> mListItems = new ArrayList<>();
     Context context;
     int selectedPos;
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout mLayoutDoc;
-        TextViewSemiBold mTextDoc;
-        ImageView mFileImg;
-
-
-        public MyViewHolder(View convertView) {
-            super(convertView);
-            mLayoutDoc = (LinearLayout) convertView.findViewById(R.id.mLayoutDoc);
-            mTextDoc = (TextViewSemiBold) convertView.findViewById(R.id.mTextDoc);
-            mFileImg = (ImageView) convertView.findViewById(R.id.mFileImg);
-
-        }
-    }
+    private ArrayList<String> mListItems = new ArrayList<>();
 
     public DocumentList(Context mContext, ArrayList<String> mListItems) {
         this.context = mContext;
@@ -56,7 +41,6 @@ public class DocumentList extends RecyclerView.Adapter<DocumentList.MyViewHolder
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         holder.mTextDoc.setText(mListItems.get(position).toString());
         String mFileType = mListItems.get(position).toString();
-        System.out.println("<><><filetype" + mFileType);
 
         /*file type check*/
         if (mFileType.contains(".pdf")) {
@@ -70,8 +54,24 @@ public class DocumentList extends RecyclerView.Adapter<DocumentList.MyViewHolder
         }
 
     }
+
     @Override
     public int getItemCount() {
         return mListItems.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout mLayoutDoc;
+        TextViewSemiBold mTextDoc;
+        ImageView mFileImg;
+
+
+        public MyViewHolder(View convertView) {
+            super(convertView);
+            mLayoutDoc = (LinearLayout) convertView.findViewById(R.id.mLayoutDoc);
+            mTextDoc = (TextViewSemiBold) convertView.findViewById(R.id.mTextDoc);
+            mFileImg = (ImageView) convertView.findViewById(R.id.mFileImg);
+
+        }
     }
 }

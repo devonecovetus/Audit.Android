@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -33,6 +37,7 @@ import static ABS_HELPER.CommonUtils.hidePDialog;
 public class ActivityResetPassword extends Activity {
 
 
+    private static int SPLASH_TIME_OUT = 3000;
     @BindView(R.id.mEditNewPassword)
     EditTextRegular mEditNewPassword;
     @BindView(R.id.mEditConfirmPassword)
@@ -44,13 +49,50 @@ public class ActivityResetPassword extends Activity {
     @BindView(R.id.mImageBack)
     ImageView mImageBack;
     String mStrNewPassword, mStrConfirmPassword, mStrOldPassword;
-    private static int SPLASH_TIME_OUT = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
         ButterKnife.bind(this);
+
+
+        mEditConfirmPassword.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    CommonUtils.closeKeyBoard(ActivityResetPassword.this);
+                    CommonUtils.OnClick(ActivityResetPassword.this, mLayoutSignIn);
+                    mStrNewPassword = mEditNewPassword.getText().toString();
+                    mStrConfirmPassword = mEditConfirmPassword.getText().toString();
+                    mStrOldPassword = mEditOldPassword.getText().toString();
+                   /*validation for reset password*/
+                    if (mStrOldPassword.length() <= 0) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_current_password), ActivityResetPassword.this);
+                        return false;
+                    } else if (mStrNewPassword.length() <= 0) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_new_password), ActivityResetPassword.this);
+                        return false;
+                    } else if (mStrConfirmPassword.length() <= 0) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_reenetr_password), ActivityResetPassword.this);
+                        return false;
+                    } else if (mStrNewPassword.length() < 6) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_character), ActivityResetPassword.this);
+                        return false;
+                    } else if (mStrConfirmPassword.length() < 6) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_character), ActivityResetPassword.this);
+                        return false;
+                    } else if (!mStrConfirmPassword.equals(mStrNewPassword)) {
+                        CommonUtils.mShowAlert(getString(R.string.mTextFile_password_not_match), ActivityResetPassword.this);
+                        return false;
+                    }
+                    CommonUtils.show(ActivityResetPassword.this);
+                    mToDoForget();
+                    return true;
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -70,30 +112,30 @@ public class ActivityResetPassword extends Activity {
         mStrConfirmPassword = mEditConfirmPassword.getText().toString();
         mStrOldPassword = mEditOldPassword.getText().toString();
         /*validation for reset password*/
-        if(mStrOldPassword.length() <= 0) {
-            CommonUtils.mShowAlert("Please enter your current password.", ActivityResetPassword.this);
+        if (mStrOldPassword.length() <= 0) {
+            CommonUtils.mShowAlert(getString(R.string.mTextFile_current_password), ActivityResetPassword.this);
             return;
-        }else if (mStrNewPassword.length() <= 0) {
-            CommonUtils.mShowAlert("Please enter your new password.", ActivityResetPassword.this);
+        } else if (mStrNewPassword.length() <= 0) {
+            CommonUtils.mShowAlert(getString(R.string.mTextFile_new_password), ActivityResetPassword.this);
             return;
-        }else if (mStrConfirmPassword.length() <= 0) {
-            CommonUtils.mShowAlert("Please re-enter your new password.", ActivityResetPassword.this);
+        } else if (mStrConfirmPassword.length() <= 0) {
+            CommonUtils.mShowAlert(getString(R.string.mTextFile_reenetr_password), ActivityResetPassword.this);
             return;
-        }else if (mStrNewPassword.length() < 6) {
-            CommonUtils.mShowAlert("Password must contain at least 6 characters.", ActivityResetPassword.this);
+        } else if (mStrNewPassword.length() < 6) {
+            CommonUtils.mShowAlert(getString(R.string.mTextFile_character), ActivityResetPassword.this);
             return;
-        }else if (mStrConfirmPassword.length() < 6) {
-            CommonUtils.mShowAlert("Password must contain at least 6 characters.", ActivityResetPassword.this);
+        } else if (mStrConfirmPassword.length() < 6) {
+            CommonUtils.mShowAlert(getString(R.string.mTextFile_character), ActivityResetPassword.this);
             return;
-        }else if (!mStrConfirmPassword.equals(mStrNewPassword)) {
-            CommonUtils.mShowAlert("New and confirm password does not match.", ActivityResetPassword.this);
+        } else if (!mStrConfirmPassword.equals(mStrNewPassword)) {
+            CommonUtils.mShowAlert(getString(R.string.mTextFile_password_not_match), ActivityResetPassword.this);
             return;
         }
         CommonUtils.show(ActivityResetPassword.this);
         mToDoForget();
-        }
+    }
 
-        /*api call for change password*/
+    /*api call for change password*/
     void mToDoForget() {
         StringRequest strRequest = new StringRequest(Request.Method.POST, CommonUtils.mStrBaseUrl + "changePassword",
                 new Response.Listener<String>() {
@@ -119,7 +161,7 @@ public class ActivityResetPassword extends Activity {
                                 }, SPLASH_TIME_OUT);
 
 
-                            }else if(mStrStatus.equals("2")) {
+                            } else if (mStrStatus.equals("2")) {
                                 CommonUtils.showSessionExp(ActivityResetPassword.this);
                             } else {
                                 CommonUtils.mShowAlert(response.getString("message"), ActivityResetPassword.this);
